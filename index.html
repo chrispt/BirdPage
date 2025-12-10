@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>The CPTs BirdWeather PUC</title>
     <style>
         * {
@@ -442,26 +445,232 @@
             text-decoration: none;
         }
 
-        @media (max-width: 600px) {
+        /* Tablet styles */
+        @media (max-width: 900px) {
+            .container {
+                padding: 15px;
+            }
+
             h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .stat-card {
+                padding: 20px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
             }
 
             .detections-grid {
                 grid-template-columns: 1fr;
             }
+        }
+
+        /* Mobile styles */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            header {
+                padding: 20px 0;
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                gap: 10px;
+            }
+
+            .bird-icon {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 0.95rem;
+            }
+
+            .status-bar {
+                padding: 12px 15px;
+                gap: 12px;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .status-item {
+                font-size: 0.9rem;
+            }
+
+            .refresh-btn {
+                width: 100%;
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
 
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 15px 10px;
+            }
+
+            .stat-number {
+                font-size: 1.6rem;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
             }
 
             .view-selector {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .view-dropdown {
+                width: 100%;
+                min-width: unset;
+                padding: 12px 15px;
             }
 
             .time-range-note {
                 margin-left: 0;
+                text-align: center;
+            }
+
+            .detections-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .species-card {
+                border-radius: 12px;
+            }
+
+            .species-image {
+                height: 180px;
+            }
+
+            .species-content {
+                padding: 15px;
+            }
+
+            .bird-name {
+                font-size: 1.1rem;
+            }
+
+            .scientific-name {
+                font-size: 0.85rem;
+                margin-bottom: 10px;
+            }
+
+            .detection-count-badge {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+
+            .wiki-link {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+            }
+
+            .detections-toggle {
+                padding: 12px 15px;
+            }
+
+            .detection-item {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+
+            .detection-item-audio audio {
+                height: 36px;
+            }
+
+            footer {
+                padding: 20px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Extra small mobile styles */
+        @media (max-width: 380px) {
+            h1 {
+                font-size: 1.3rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .bird-icon {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stat-number {
+                font-size: 1.4rem;
+            }
+
+            .stat-label {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .species-card:hover {
+                transform: none;
+            }
+
+            .stat-card:hover {
+                transform: none;
+            }
+
+            .refresh-btn,
+            .detections-toggle,
+            .wiki-link {
+                min-height: 44px;
+            }
+
+            .detection-item {
+                min-height: 44px;
+            }
+        }
+
+        /* Landscape mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            header {
+                padding: 15px 0;
+                margin-bottom: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .stat-card {
+                padding: 10px;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
             }
         }
     </style>
