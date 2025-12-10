@@ -129,31 +129,46 @@
 
         .detections-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 20px;
         }
 
-        .detection-card {
+        .species-card {
             background: rgba(255,255,255,0.05);
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
         }
 
-        .detection-card:hover {
+        .species-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 40px rgba(78, 204, 163, 0.2);
         }
 
-        .detection-image {
+        .detection-count-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(78, 204, 163, 0.9);
+            color: #1a1a2e;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .species-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
             background: rgba(0,0,0,0.3);
         }
 
-        .detection-content {
+        .species-content {
             padding: 20px;
         }
 
@@ -171,10 +186,11 @@
             margin-bottom: 15px;
         }
 
-        .detection-meta {
+        .species-meta {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            margin-bottom: 15px;
         }
 
         .meta-tag {
@@ -211,13 +227,122 @@
             transition: width 0.5s ease;
         }
 
-        .audio-player {
+        .wiki-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #4ecca3;
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: rgba(78, 204, 163, 0.1);
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .wiki-link:hover {
+            background: rgba(78, 204, 163, 0.25);
+            text-decoration: none;
+        }
+
+        .bird-name-link {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .bird-name-link:hover {
+            color: #4ecca3;
+        }
+
+        /* Detections List Styles */
+        .detections-toggle {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #4ecca3;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            width: 100%;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .detections-toggle:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .detections-toggle .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .detections-toggle.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+        .detections-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .detections-list.expanded {
+            max-height: 1000px;
+        }
+
+        .detections-list-inner {
+            padding: 15px 0 0 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
             margin-top: 15px;
         }
 
-        .audio-player audio {
+        .detection-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .detection-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detection-item-time {
+            color: #e8e8e8;
+            font-size: 0.9rem;
+        }
+
+        .detection-item-confidence {
+            color: #4ecca3;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .detection-item-certainty {
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+
+        .detection-item-audio {
             width: 100%;
-            height: 40px;
+            margin-top: 8px;
+        }
+
+        .detection-item-audio audio {
+            width: 100%;
+            height: 32px;
         }
 
         .loading {
@@ -264,6 +389,46 @@
             background: #45b7aa;
         }
 
+        .view-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .view-selector label {
+            color: #a8a8a8;
+            font-size: 0.95rem;
+        }
+
+        .view-dropdown {
+            background: rgba(255,255,255,0.1);
+            color: #e8e8e8;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            min-width: 200px;
+        }
+
+        .view-dropdown:focus {
+            outline: none;
+            border-color: #4ecca3;
+        }
+
+        .view-dropdown option {
+            background: #1a1a2e;
+            color: #e8e8e8;
+        }
+
+        .time-range-note {
+            color: #a8a8a8;
+            font-size: 0.9rem;
+            margin-left: auto;
+        }
+
         footer {
             text-align: center;
             padding: 30px;
@@ -288,6 +453,15 @@
 
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .view-selector {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .time-range-note {
+                margin-left: 0;
             }
         }
     </style>
@@ -319,7 +493,7 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-number" id="totalDetections">--</div>
-                <div class="stat-label">Detections Today</div>
+                <div class="stat-label">Detections (24h)</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="uniqueSpecies">--</div>
@@ -336,8 +510,17 @@
         </div>
 
         <h2 class="section-title">
-            <span>&#x1F50A;</span> Recent Detections
+            <span>&#x1F50A;</span> <span id="sectionTitleText">Species Detected</span>
         </h2>
+
+        <div class="view-selector">
+            <label for="viewMode">Sort by:</label>
+            <select id="viewMode" class="view-dropdown" onchange="changeViewMode()">
+                <option value="recent">Most Recent</option>
+                <option value="mostDetected">Most Detected</option>
+            </select>
+            <span class="time-range-note">Showing last 24 hours</span>
+        </div>
 
         <div id="detections" class="detections-grid">
             <div class="loading">
@@ -359,6 +542,8 @@
 
         let countdownSeconds = 15 * 60;
         let countdownInterval;
+        let currentDetections = [];
+        let currentViewMode = 'recent';
 
         function formatTime(date) {
             return date.toLocaleTimeString('en-US', {
@@ -368,13 +553,25 @@
             });
         }
 
-        function formatDate(date) {
+        function formatDateTime(date) {
             return date.toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit'
             });
+        }
+
+        function formatRelativeTime(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMins / 60);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} min${diffMins !== 1 ? 's' : ''} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+            return formatDateTime(date);
         }
 
         function updateCountdown() {
@@ -410,9 +607,14 @@
             `;
 
             try {
-                // Fetch recent detections
+                // Calculate 24 hours ago in ISO format
+                const now = new Date();
+                const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+                const fromDate = twentyFourHoursAgo.toISOString();
+
+                // Fetch detections from last 24 hours
                 const response = await fetch(
-                    `${API_BASE}/stations/${STATION_TOKEN}/detections?limit=50`,
+                    `${API_BASE}/stations/${STATION_TOKEN}/detections?limit=100&from=${fromDate}`,
                     {
                         headers: {
                             'Accept': 'application/json'
@@ -430,13 +632,19 @@
                     throw new Error('Invalid response from API');
                 }
 
-                const detections = data.detections;
+                // Filter to ensure only last 24 hours
+                const detections = data.detections.filter(d => {
+                    const detectionDate = new Date(d.timestamp);
+                    return detectionDate >= twentyFourHoursAgo;
+                });
+
+                currentDetections = detections;
 
                 // Update stats
                 updateStats(detections);
 
-                // Render detections
-                renderDetections(detections);
+                // Render based on current view mode
+                renderCurrentView();
 
                 // Update last update time
                 document.getElementById('lastUpdate').textContent = formatTime(new Date());
@@ -459,15 +667,6 @@
         }
 
         function updateStats(detections) {
-            // Get today's detections
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            const todayDetections = detections.filter(d => {
-                const detectionDate = new Date(d.timestamp);
-                return detectionDate >= today;
-            });
-
             // Count unique species
             const uniqueSpecies = new Set(detections.map(d => d.species?.id)).size;
 
@@ -482,74 +681,37 @@
                 ? Math.max(...detections.map(d => d.confidence || 0))
                 : 0;
 
-            document.getElementById('totalDetections').textContent = todayDetections.length;
+            document.getElementById('totalDetections').textContent = detections.length;
             document.getElementById('uniqueSpecies').textContent = uniqueSpecies;
             document.getElementById('latestTime').textContent = latestTime;
             document.getElementById('topConfidence').textContent =
                 topConfidence > 0 ? `${(topConfidence * 100).toFixed(0)}%` : '--';
         }
 
-        function renderDetections(detections) {
-            const container = document.getElementById('detections');
+        function changeViewMode() {
+            currentViewMode = document.getElementById('viewMode').value;
+            renderCurrentView();
+        }
 
-            if (detections.length === 0) {
-                container.innerHTML = `
-                    <div class="loading">
-                        <p>No recent detections found.</p>
-                    </div>
-                `;
-                return;
+        function renderCurrentView() {
+            if (currentViewMode === 'recent') {
+                document.getElementById('sectionTitleText').textContent = 'Species Detected';
+                renderSpeciesCards(currentDetections, 'recent');
+            } else if (currentViewMode === 'mostDetected') {
+                document.getElementById('sectionTitleText').textContent = 'Most Detected Species';
+                renderSpeciesCards(currentDetections, 'count');
             }
+        }
 
-            container.innerHTML = detections.map(detection => {
-                const species = detection.species || {};
-                const timestamp = new Date(detection.timestamp);
-                const confidence = detection.confidence || 0;
-                const certainty = detection.certainty || 'unknown';
-                const soundscape = detection.soundscape || {};
-
-                return `
-                    <div class="detection-card">
-                        <img
-                            class="detection-image"
-                            src="${species.image_url || species.imageUrl || 'https://via.placeholder.com/400x200?text=No+Image'}"
-                            alt="${species.common_name || species.commonName || 'Unknown Bird'}"
-                            onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'"
-                        >
-                        <div class="detection-content">
-                            <div class="bird-name">${species.common_name || species.commonName || 'Unknown Species'}</div>
-                            <div class="scientific-name">${species.scientific_name || species.scientificName || 'Unknown'}</div>
-
-                            <div class="detection-meta">
-                                <span class="meta-tag">${formatDate(timestamp)}</span>
-                                <span class="meta-tag" style="background: ${getCertaintyColor(certainty)}20; color: ${getCertaintyColor(certainty)}">
-                                    ${formatCertainty(certainty)}
-                                </span>
-                            </div>
-
-                            <div class="confidence-bar">
-                                <div class="confidence-label">
-                                    <span>Confidence</span>
-                                    <span>${(confidence * 100).toFixed(1)}%</span>
-                                </div>
-                                <div class="confidence-track">
-                                    <div class="confidence-fill" style="width: ${confidence * 100}%"></div>
-                                </div>
-                            </div>
-
-                            ${soundscape.url ? `
-                                <div class="audio-player">
-                                    <audio controls preload="none">
-                                        <source src="${soundscape.url}" type="audio/flac">
-                                        <source src="${soundscape.url}" type="audio/wav">
-                                        Your browser does not support audio playback.
-                                    </audio>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
+        function getWikipediaUrl(species) {
+            if (species.wikipedia_url || species.wikipediaUrl) {
+                return species.wikipedia_url || species.wikipediaUrl;
+            }
+            const commonName = species.common_name || species.commonName || '';
+            if (commonName) {
+                return `https://en.wikipedia.org/wiki/${encodeURIComponent(commonName.replace(/ /g, '_'))}`;
+            }
+            return null;
         }
 
         function getCertaintyColor(certainty) {
@@ -574,6 +736,159 @@
                 'unknown': 'Unknown'
             };
             return labels[certainty] || certainty;
+        }
+
+        function toggleDetectionsList(speciesId) {
+            const list = document.getElementById(`detections-list-${speciesId}`);
+            const button = document.getElementById(`toggle-btn-${speciesId}`);
+
+            if (list && button) {
+                list.classList.toggle('expanded');
+                button.classList.toggle('expanded');
+            }
+        }
+
+        function renderSpeciesCards(detections, sortBy) {
+            const container = document.getElementById('detections');
+
+            if (detections.length === 0) {
+                container.innerHTML = `
+                    <div class="loading">
+                        <p>No detections found in the last 24 hours.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Group detections by species
+            const speciesMap = {};
+            detections.forEach(detection => {
+                const species = detection.species || {};
+                const speciesId = species.id;
+                if (speciesId) {
+                    if (!speciesMap[speciesId]) {
+                        speciesMap[speciesId] = {
+                            species: species,
+                            detections: [],
+                            highestConfidence: 0,
+                            latestTimestamp: null
+                        };
+                    }
+                    speciesMap[speciesId].detections.push(detection);
+
+                    const confidence = detection.confidence || 0;
+                    if (confidence > speciesMap[speciesId].highestConfidence) {
+                        speciesMap[speciesId].highestConfidence = confidence;
+                    }
+
+                    const timestamp = new Date(detection.timestamp);
+                    if (!speciesMap[speciesId].latestTimestamp || timestamp > speciesMap[speciesId].latestTimestamp) {
+                        speciesMap[speciesId].latestTimestamp = timestamp;
+                    }
+                }
+            });
+
+            // Convert to array and sort
+            let speciesArray = Object.values(speciesMap);
+
+            if (sortBy === 'count') {
+                speciesArray.sort((a, b) => b.detections.length - a.detections.length);
+            } else {
+                // Sort by most recent detection
+                speciesArray.sort((a, b) => b.latestTimestamp - a.latestTimestamp);
+            }
+
+            container.innerHTML = speciesArray.map(item => {
+                const species = item.species;
+                const speciesId = species.id;
+                const wikiUrl = getWikipediaUrl(species);
+                const count = item.detections.length;
+
+                // Sort detections by timestamp (most recent first)
+                const sortedDetections = [...item.detections].sort((a, b) =>
+                    new Date(b.timestamp) - new Date(a.timestamp)
+                );
+
+                // Build detections list HTML
+                const detectionsListHtml = sortedDetections.map(det => {
+                    const timestamp = new Date(det.timestamp);
+                    const confidence = det.confidence || 0;
+                    const certainty = det.certainty || 'unknown';
+                    const soundscape = det.soundscape || {};
+                    const certaintyColor = getCertaintyColor(certainty);
+
+                    return `
+                        <div class="detection-item">
+                            <span class="detection-item-time">${formatRelativeTime(timestamp)}</span>
+                            <span class="detection-item-confidence">${(confidence * 100).toFixed(1)}%</span>
+                            <span class="detection-item-certainty" style="background: ${certaintyColor}20; color: ${certaintyColor}">
+                                ${formatCertainty(certainty)}
+                            </span>
+                            ${soundscape.url ? `
+                                <div class="detection-item-audio">
+                                    <audio controls preload="none">
+                                        <source src="${soundscape.url}" type="audio/flac">
+                                        <source src="${soundscape.url}" type="audio/wav">
+                                    </audio>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="species-card">
+                        <div class="detection-count-badge">${count}</div>
+                        <img
+                            class="species-image"
+                            src="${species.image_url || species.imageUrl || 'https://via.placeholder.com/400x200?text=No+Image'}"
+                            alt="${species.common_name || species.commonName || 'Unknown Bird'}"
+                            onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'"
+                        >
+                        <div class="species-content">
+                            <div class="bird-name">
+                                ${wikiUrl ? `<a href="${wikiUrl}" target="_blank" class="bird-name-link">${species.common_name || species.commonName || 'Unknown Species'}</a>` : (species.common_name || species.commonName || 'Unknown Species')}
+                            </div>
+                            <div class="scientific-name">${species.scientific_name || species.scientificName || 'Unknown'}</div>
+
+                            <div class="species-meta">
+                                <span class="meta-tag">Last seen: ${formatRelativeTime(item.latestTimestamp)}</span>
+                            </div>
+
+                            <div class="confidence-bar">
+                                <div class="confidence-label">
+                                    <span>Highest Confidence</span>
+                                    <span>${(item.highestConfidence * 100).toFixed(1)}%</span>
+                                </div>
+                                <div class="confidence-track">
+                                    <div class="confidence-fill" style="width: ${item.highestConfidence * 100}%"></div>
+                                </div>
+                            </div>
+
+                            ${wikiUrl ? `
+                                <a href="${wikiUrl}" target="_blank" class="wiki-link">
+                                    <span>&#x1F4D6;</span> Learn more on Wikipedia
+                                </a>
+                            ` : ''}
+
+                            <button
+                                id="toggle-btn-${speciesId}"
+                                class="detections-toggle"
+                                onclick="toggleDetectionsList('${speciesId}')"
+                            >
+                                <span>View all ${count} detection${count !== 1 ? 's' : ''}</span>
+                                <span class="arrow">&#x25BC;</span>
+                            </button>
+
+                            <div id="detections-list-${speciesId}" class="detections-list">
+                                <div class="detections-list-inner">
+                                    ${detectionsListHtml}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         // Initial load
