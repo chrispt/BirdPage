@@ -766,33 +766,6 @@
             gap: 8px;
         }
 
-        .fun-fact-box {
-            background: rgba(78, 204, 163, 0.1);
-            border-left: 3px solid #4ecca3;
-            padding: 15px;
-            border-radius: 0 10px 10px 0;
-            color: #e8e8e8;
-            line-height: 1.6;
-        }
-
-        .range-map-container {
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .range-map-container img {
-            max-width: 100%;
-            border-radius: 8px;
-        }
-
-        .range-map-note {
-            color: #a8a8a8;
-            font-size: 0.85rem;
-            margin-top: 10px;
-        }
-
         .bird-call-btn {
             display: inline-flex;
             align-items: center;
@@ -1359,21 +1332,15 @@
                 </div>
 
                 <div class="modal-section">
-                    <h3 class="modal-section-title"><span>&#x1F4A1;</span> Fun Fact</h3>
-                    <div id="modalFunFact" class="fun-fact-box"></div>
-                </div>
-
-                <div class="modal-section">
                     <h3 class="modal-section-title"><span>&#x1F5FA;</span> Range Map</h3>
-                    <div class="range-map-container">
-                        <img id="modalRangeMap" src="" alt="Range Map">
-                        <p class="range-map-note">Range map showing typical distribution</p>
-                    </div>
+                    <button id="modalRangeMapBtn" class="bird-call-btn" onclick="openRangeMap()">
+                        <span>&#x1F5FA;</span> View Range Map on Cornell
+                    </button>
                 </div>
 
                 <div class="modal-section">
-                    <a id="modalWikiLink" href="#" target="_blank" class="wiki-link" style="display:inline-flex; font-size: 1rem;">
-                        <span>&#x1F4D6;</span> Learn more on Wikipedia
+                    <a id="modalCornellLink" href="#" target="_blank" class="wiki-link" style="display:inline-flex; font-size: 1rem;">
+                        <span>&#x1F4D6;</span> Learn more on All About Birds
                     </a>
                 </div>
             </div>
@@ -1404,7 +1371,7 @@
                 <div class="whats-new-title">
                     <span>&#x2728;</span>
                     What's New
-                    <span class="whats-new-badge">5 Features</span>
+                    <span class="whats-new-badge">4 Features</span>
                 </div>
                 <span class="whats-new-arrow">&#x25BC;</span>
             </div>
@@ -1432,17 +1399,10 @@
                         </div>
                     </div>
                     <div class="feature-item">
-                        <span class="feature-icon">&#x1F4A1;</span>
-                        <div class="feature-info">
-                            <div class="feature-name">Fun Facts</div>
-                            <div class="feature-desc">Learn interesting facts about each bird species in the details modal</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
                         <span class="feature-icon">&#x1F5FA;</span>
                         <div class="feature-info">
                             <div class="feature-name">Range Maps</div>
-                            <div class="feature-desc">See where each species typically lives with distribution maps</div>
+                            <div class="feature-desc">See where each species typically lives via Cornell's All About Birds</div>
                         </div>
                     </div>
                 </div>
@@ -1531,54 +1491,6 @@
         let notificationsEnabled = localStorage.getItem('notificationsEnabled') === 'true';
         let currentModalSpecies = null;
 
-        // Fun facts database for common birds
-        const birdFunFacts = {
-            'Northern Cardinal': 'Unlike most songbirds, both male and female cardinals sing. The female often sings from the nest, possibly to tell the male to bring food.',
-            'Blue Jay': 'Blue Jays are known for their intelligence and tight family bonds. They can mimic the calls of hawks to scare away other birds from feeders.',
-            'American Robin': 'Robins can produce three successful broods in one year. They are one of the first birds to start singing at dawn.',
-            'House Sparrow': 'House Sparrows take frequent dust baths. They throw soil and dust over their bodies and fluff their feathers to get the dust deep into their plumage.',
-            'American Goldfinch': 'Goldfinches are strict vegetarians and one of the few birds that feed their young only plant matter.',
-            'Black-capped Chickadee': 'Chickadees can remember thousands of hiding places where they\'ve stored seeds. Their hippocampus (memory center) actually grows larger in fall!',
-            'Carolina Chickadee': 'Carolina Chickadees are so similar to Black-capped Chickadees that even experts sometimes struggle to tell them apart. They can hybridize where their ranges overlap.',
-            'Mourning Dove': 'Mourning Doves can drink water without lifting their heads, unlike most birds that have to tilt their heads back to swallow.',
-            'Downy Woodpecker': 'Downy Woodpeckers drum on trees to communicate, creating sounds that can be heard a quarter mile away.',
-            'Red-bellied Woodpecker': 'Despite its name, the red belly is often hard to see. They can stick out their tongue nearly 2 inches past the tip of their beak!',
-            'Hairy Woodpecker': 'Hairy Woodpeckers look almost identical to Downy Woodpeckers but are about 30% larger. They often follow Pileated Woodpeckers to feed on insects exposed by the larger bird.',
-            'Pileated Woodpecker': 'The Pileated Woodpecker is the largest woodpecker in North America. Its rectangular holes in trees are so distinctive that they inspired Woody Woodpecker!',
-            'White-breasted Nuthatch': 'Nuthatches walk headfirst down tree trunks, giving them a unique perspective to find insects that other birds miss.',
-            'Red-breasted Nuthatch': 'Red-breasted Nuthatches apply sticky conifer resin around the entrance of their nest cavity, possibly to deter predators or competitors.',
-            'Tufted Titmouse': 'Titmice are known to pluck hair from live animals, including humans, to line their nests!',
-            'House Finch': 'Male House Finches get their red coloring from pigments in the foods they eat. The more red pigment in their diet, the brighter they become.',
-            'Purple Finch': 'Purple Finches aren\'t actually purple - they\'re raspberry red. Roger Tory Peterson described them as "a sparrow dipped in raspberry juice."',
-            'Song Sparrow': 'Male Song Sparrows learn their songs from neighboring males and can sing over 20 different song variations.',
-            'White-throated Sparrow': 'White-throated Sparrows have two color morphs (tan-striped and white-striped) and almost always mate with the opposite morph.',
-            'Chipping Sparrow': 'Chipping Sparrows often line their nests with animal hair. Before horses became rare, they commonly used horsehair.',
-            'Dark-eyed Junco': 'Juncos are sometimes called "snowbirds" because they seem to bring snowy weather with them when they migrate south.',
-            'European Starling': 'Starlings can mimic sounds including car alarms, human speech, and other bird songs. A flock is called a "murmuration."',
-            'Common Grackle': 'Grackles practice "anting" - they let ants crawl through their feathers, using the formic acid as a natural pesticide.',
-            'Red-winged Blackbird': 'Male Red-winged Blackbirds fiercely defend their territories and will attack much larger birds, even horses and humans!',
-            'Brown-headed Cowbird': 'Brown-headed Cowbirds are brood parasites - they lay their eggs in other birds\' nests and let other species raise their young.',
-            'Carolina Wren': 'Despite their small size, Carolina Wrens have one of the loudest songs of any bird their size.',
-            'House Wren': 'House Wrens are fierce competitors for nest sites and will puncture the eggs of other cavity-nesting birds, even their own species.',
-            'American Crow': 'Crows can recognize human faces and will remember people who have threatened them, teaching their families to avoid those individuals.',
-            'Blue-gray Gnatcatcher': 'This tiny bird builds an elaborate nest that looks like a tree knot, often decorating it with lichen.',
-            'Ruby-throated Hummingbird': 'Ruby-throated Hummingbirds can beat their wings up to 80 times per second and are the only hummingbird species that breeds in eastern North America.',
-            'Northern Mockingbird': 'Northern Mockingbirds can learn over 200 different songs in their lifetime, including other bird calls, car alarms, and even cell phone ringtones.',
-            'Gray Catbird': 'Gray Catbirds get their name from their distinctive cat-like mewing call. They can sing for up to 10 minutes straight without repeating themselves.',
-            'Brown Thrasher': 'Brown Thrashers have the largest song repertoire of any North American bird, with over 1,100 documented song types.',
-            'Eastern Bluebird': 'Eastern Bluebirds nearly went extinct in the mid-20th century due to habitat loss, but nest box programs have helped their populations recover dramatically.',
-            'American Woodcock': 'American Woodcocks have eyes positioned so far back on their heads that they have 360-degree vision, allowing them to watch for predators while probing the soil.',
-            'Wild Turkey': 'Wild Turkeys can run up to 25 mph and fly up to 55 mph. Benjamin Franklin admired them so much he suggested they be the national bird instead of the Bald Eagle.',
-            'Cedar Waxwing': 'Cedar Waxwings are one of the few North American birds that specialize in eating fruit year-round. They sometimes become intoxicated from eating fermented berries!',
-            'Yellow-rumped Warbler': 'Yellow-rumped Warblers can digest the waxy coating on bayberries, allowing them to winter farther north than most warblers.',
-            'Pine Warbler': 'Pine Warblers are one of the few warblers that regularly visit bird feeders, especially for suet and sunflower seeds during winter.',
-            'Northern Flicker': 'Unlike most woodpeckers, Northern Flickers prefer to forage on the ground, where they use their long tongues to lap up ants.',
-            'Cooper\'s Hawk': 'Cooper\'s Hawks are skilled aerial hunters that specialize in catching other birds. They\'ve adapted well to urban areas and often hunt at bird feeders.',
-            'Sharp-shinned Hawk': 'Sharp-shinned Hawks are the smallest hawks in North America. They\'re so agile they can chase prey through dense forest understory.',
-            'Red-tailed Hawk': 'Red-tailed Hawks are the most common hawk in North America. The distinctive scream of a Red-tailed Hawk is often used as a sound effect for eagles in movies.',
-            'default': 'This fascinating bird species has adapted perfectly to its environment. Each species plays a unique role in the local ecosystem.'
-        };
-
         // Initialize notification toggle state
         document.addEventListener('DOMContentLoaded', () => {
             const toggle = document.getElementById('notificationToggle');
@@ -1660,43 +1572,12 @@
             document.getElementById('modalHighestConf').textContent = `${(speciesData.highestConfidence * 100).toFixed(0)}%`;
             document.getElementById('modalLastSeen').textContent = formatRelativeTime(speciesData.latestTimestamp);
 
-            // Set fun fact - normalize bird name for lookup
-            const birdName = species.common_name || species.commonName || '';
-            // Try exact match first, then try trimmed/normalized match
-            let funFact = birdFunFacts[birdName];
-            if (!funFact) {
-                // Try case-insensitive match
-                const normalizedName = birdName.trim();
-                for (const [key, value] of Object.entries(birdFunFacts)) {
-                    if (key.toLowerCase() === normalizedName.toLowerCase()) {
-                        funFact = value;
-                        break;
-                    }
-                }
-            }
-            if (!funFact) {
-                funFact = birdFunFacts['default'];
-            }
-            document.getElementById('modalFunFact').textContent = funFact;
-
-            // Set range map (using Wikipedia/iNaturalist style URL)
-            const scientificName = species.scientific_name || species.scientificName || '';
-            const rangeMapUrl = `https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/${encodeURIComponent(scientificName.replace(/ /g, '_'))}_map.png/400px-${encodeURIComponent(scientificName.replace(/ /g, '_'))}_map.png`;
-            const modalRangeMap = document.getElementById('modalRangeMap');
-            modalRangeMap.src = rangeMapUrl;
-            modalRangeMap.onerror = function() {
-                this.src = 'https://via.placeholder.com/400x250?text=Range+Map+Not+Available';
-            };
-
-            // Set Wikipedia link
-            const wikiUrl = getWikipediaUrl(species);
-            const wikiLink = document.getElementById('modalWikiLink');
-            if (wikiUrl) {
-                wikiLink.href = wikiUrl;
-                wikiLink.style.display = 'inline-flex';
-            } else {
-                wikiLink.style.display = 'none';
-            }
+            // Set Cornell All About Birds link
+            const commonName = species.common_name || species.commonName || '';
+            const urlName = commonName.replace(/ /g, '_').replace(/'/g, '');
+            const cornellUrl = `https://www.allaboutbirds.org/guide/${urlName}`;
+            const cornellLink = document.getElementById('modalCornellLink');
+            cornellLink.href = cornellUrl;
 
             // Setup bird call button - links to Cornell's All About Birds
             const playBtn = document.getElementById('modalPlayCall');
@@ -1733,6 +1614,24 @@
 
             // Open Cornell's All About Birds sounds page in new tab
             window.open(soundsUrl, '_blank');
+        }
+
+        function openRangeMap() {
+            if (!currentModalSpecies) return;
+
+            const species = currentModalSpecies.species;
+            const commonName = species.common_name || species.commonName || '';
+
+            if (!commonName) {
+                return;
+            }
+
+            // Convert bird name to URL format for All About Birds (Cornell Lab)
+            const urlName = commonName.replace(/ /g, '_').replace(/'/g, '');
+            const mapsUrl = `https://www.allaboutbirds.org/guide/${urlName}/maps-range`;
+
+            // Open Cornell's All About Birds maps page in new tab
+            window.open(mapsUrl, '_blank');
         }
 
         // Close modal with Escape key
@@ -1910,17 +1809,6 @@
             }
         }
 
-        function getWikipediaUrl(species) {
-            if (species.wikipedia_url || species.wikipediaUrl) {
-                return species.wikipedia_url || species.wikipediaUrl;
-            }
-            const commonName = species.common_name || species.commonName || '';
-            if (commonName) {
-                return `https://en.wikipedia.org/wiki/${encodeURIComponent(commonName.replace(/ /g, '_'))}`;
-            }
-            return null;
-        }
-
         function getCertaintyColor(certainty) {
             const colors = {
                 'almost_certain': '#4ecca3',
@@ -2066,7 +1954,7 @@
                                 </div>
                             </div>
 
-                            <p class="click-hint">Click for more details, fun facts & bird calls</p>
+                            <p class="click-hint">Click for more details, bird calls & range maps</p>
 
                             <button
                                 id="toggle-btn-${speciesId}"
