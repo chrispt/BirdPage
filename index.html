@@ -1899,7 +1899,6 @@
             container.innerHTML = speciesArray.map(item => {
                 const species = item.species;
                 const speciesId = species.id;
-                const wikiUrl = getWikipediaUrl(species);
                 const count = item.detections.length;
 
                 // Sort detections by timestamp (most recent first)
