@@ -1405,7 +1405,7 @@
                 <div class="whats-new-title">
                     <span>&#x2728;</span>
                     What's New
-                    <span class="whats-new-badge">8 Features</span>
+                    <span class="whats-new-badge">5 Features</span>
                 </div>
                 <span class="whats-new-arrow">&#x25BC;</span>
             </div>
@@ -1416,20 +1416,6 @@
                         <div class="feature-info">
                             <div class="feature-name">Bird Details Modal</div>
                             <div class="feature-desc">Click any bird card to see detailed info, stats, and more in a beautiful popup</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">&#x1F4CA;</span>
-                        <div class="feature-info">
-                            <div class="feature-name">Activity Chart</div>
-                            <div class="feature-desc">Visual bar chart showing bird activity by hour over the last 24 hours</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">&#x1F525;</span>
-                        <div class="feature-info">
-                            <div class="feature-name">Activity Heatmap</div>
-                            <div class="feature-desc">Day-by-hour heatmap to spot patterns in bird feeding times</div>
                         </div>
                     </div>
                     <div class="feature-item">
@@ -1458,13 +1444,6 @@
                         <div class="feature-info">
                             <div class="feature-name">Range Maps</div>
                             <div class="feature-desc">See where each species typically lives with distribution maps</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">&#x1F343;</span>
-                        <div class="feature-info">
-                            <div class="feature-name">Seasonal Bird Guide</div>
-                            <div class="feature-desc">Browse birds to expect during each season with migration info</div>
                         </div>
                     </div>
                 </div>
@@ -1513,46 +1492,6 @@
             <span class="notification-label">Enable notifications for rare or new species</span>
         </div>
 
-        <!-- Activity Chart -->
-        <div class="chart-section">
-            <h2 class="section-title">
-                <span>&#x1F4CA;</span> Activity Over Time (24h)
-            </h2>
-            <div class="chart-container">
-                <div id="activityChart" class="chart-bars"></div>
-                <div id="chartTooltip" class="chart-tooltip"></div>
-            </div>
-        </div>
-
-        <!-- Heatmap -->
-        <div class="chart-section">
-            <h2 class="section-title">
-                <span>&#x1F525;</span> Activity Heatmap by Hour
-            </h2>
-            <div class="heatmap-container">
-                <div id="heatmapGrid" class="heatmap-grid"></div>
-                <div class="heatmap-legend">
-                    <span>Less active</span>
-                    <div class="heatmap-legend-gradient"></div>
-                    <span>More active</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Seasonal Guide -->
-        <div class="seasonal-guide">
-            <h2 class="section-title">
-                <span>&#x1F343;</span> Seasonal Bird Guide
-            </h2>
-            <div class="season-tabs">
-                <button class="season-tab active" onclick="showSeason('winter')">Winter</button>
-                <button class="season-tab" onclick="showSeason('spring')">Spring</button>
-                <button class="season-tab" onclick="showSeason('summer')">Summer</button>
-                <button class="season-tab" onclick="showSeason('fall')">Fall</button>
-            </div>
-            <div id="seasonalBirdsGrid" class="seasonal-birds-grid"></div>
-        </div>
-
         <h2 class="section-title">
             <span>&#x1F50A;</span> <span id="sectionTitleText">Species Detected</span>
         </h2>
@@ -1592,7 +1531,6 @@
         let previousSpeciesIds = new Set();
         let notificationsEnabled = localStorage.getItem('notificationsEnabled') === 'true';
         let currentModalSpecies = null;
-        let currentSeason = 'winter';
 
         // Fun facts database for common birds
         const birdFunFacts = {
@@ -1619,49 +1557,12 @@
             'default': 'This fascinating bird species has adapted perfectly to its environment. Each species plays a unique role in the local ecosystem.'
         };
 
-        // Seasonal bird data
-        const seasonalBirds = {
-            winter: [
-                { name: 'Dark-eyed Junco', icon: '&#x2744;', status: 'Common winter visitor' },
-                { name: 'White-throated Sparrow', icon: '&#x1F426;', status: 'Winter resident' },
-                { name: 'American Tree Sparrow', icon: '&#x2744;', status: 'Arctic visitor' },
-                { name: 'Northern Cardinal', icon: '&#x2764;', status: 'Year-round, bright in snow' },
-                { name: 'Pine Siskin', icon: '&#x1F332;', status: 'Irruptive winter finch' },
-                { name: 'Cedar Waxwing', icon: '&#x1F352;', status: 'Berry-loving flocks' }
-            ],
-            spring: [
-                { name: 'American Robin', icon: '&#x1F331;', status: 'Early spring arrival' },
-                { name: 'Ruby-throated Hummingbird', icon: '&#x1F338;', status: 'Returns in April' },
-                { name: 'Baltimore Oriole', icon: '&#x1F34A;', status: 'Breeding season begins' },
-                { name: 'Indigo Bunting', icon: '&#x1F499;', status: 'Stunning blue males' },
-                { name: 'Rose-breasted Grosbeak', icon: '&#x1F33A;', status: 'Spring migrant' },
-                { name: 'Barn Swallow', icon: '&#x1F54A;', status: 'Aerial insect hunter' }
-            ],
-            summer: [
-                { name: 'American Goldfinch', icon: '&#x2600;', status: 'Peak breeding plumage' },
-                { name: 'House Wren', icon: '&#x1F3E0;', status: 'Nesting in cavities' },
-                { name: 'Common Yellowthroat', icon: '&#x1F49B;', status: 'Wetland warbler' },
-                { name: 'Eastern Bluebird', icon: '&#x1F535;', status: 'Raising young' },
-                { name: 'Purple Martin', icon: '&#x1F7E3;', status: 'Colonial nester' },
-                { name: 'Chimney Swift', icon: '&#x1F4A8;', status: 'Aerial acrobat' }
-            ],
-            fall: [
-                { name: 'White-crowned Sparrow', icon: '&#x1F342;', status: 'Fall migrant' },
-                { name: 'Yellow-rumped Warbler', icon: '&#x1F49B;', status: 'Late season warbler' },
-                { name: 'Golden-crowned Kinglet', icon: '&#x1F451;', status: 'Tiny fall visitor' },
-                { name: 'Fox Sparrow', icon: '&#x1F98A;', status: 'Scratching through leaves' },
-                { name: 'Hermit Thrush', icon: '&#x1F343;', status: 'Last thrush to migrate' },
-                { name: 'Purple Finch', icon: '&#x1F7E3;', status: 'Irregular fall visitor' }
-            ]
-        };
-
         // Initialize notification toggle state
         document.addEventListener('DOMContentLoaded', () => {
             const toggle = document.getElementById('notificationToggle');
             if (toggle) {
                 toggle.checked = notificationsEnabled;
             }
-            showSeason(currentSeason);
         });
 
         function formatTime(date) {
@@ -1846,102 +1747,6 @@
             }
         });
 
-        // ==================== CHART FUNCTIONS ====================
-        function renderActivityChart(detections) {
-            const container = document.getElementById('activityChart');
-            const tooltip = document.getElementById('chartTooltip');
-
-            // Group detections by hour
-            const hourCounts = {};
-            for (let i = 0; i < 24; i++) {
-                hourCounts[i] = 0;
-            }
-
-            detections.forEach(d => {
-                const hour = new Date(d.timestamp).getHours();
-                hourCounts[hour]++;
-            });
-
-            const maxCount = Math.max(...Object.values(hourCounts), 1);
-
-            container.innerHTML = Object.entries(hourCounts).map(([hour, count]) => {
-                const height = (count / maxCount) * 100;
-                const hourNum = parseInt(hour);
-                const label = hourNum === 0 ? '12a' : hourNum < 12 ? `${hourNum}a` : hourNum === 12 ? '12p' : `${hourNum - 12}p`;
-
-                return `
-                    <div class="chart-bar-wrapper"
-                         onmouseover="showChartTooltip(event, '${label}: ${count} detection${count !== 1 ? 's' : ''}')"
-                         onmouseout="hideChartTooltip()">
-                        <div class="chart-bar" style="height: ${height}%" data-count="${count}"></div>
-                        <div class="chart-label">${hourNum % 3 === 0 ? label : ''}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function showChartTooltip(event, text) {
-            const tooltip = document.getElementById('chartTooltip');
-            tooltip.textContent = text;
-            tooltip.style.opacity = '1';
-            tooltip.style.left = `${event.pageX - event.currentTarget.closest('.chart-container').offsetLeft}px`;
-            tooltip.style.top = `${event.pageY - event.currentTarget.closest('.chart-container').offsetTop - 40}px`;
-        }
-
-        function hideChartTooltip() {
-            document.getElementById('chartTooltip').style.opacity = '0';
-        }
-
-        // ==================== HEATMAP FUNCTIONS ====================
-        function renderHeatmap(detections) {
-            const container = document.getElementById('heatmapGrid');
-            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-            // Create hour-day matrix
-            const matrix = {};
-            days.forEach((day, dayIndex) => {
-                matrix[dayIndex] = {};
-                for (let h = 0; h < 24; h++) {
-                    matrix[dayIndex][h] = 0;
-                }
-            });
-
-            // Fill matrix with detection counts
-            detections.forEach(d => {
-                const date = new Date(d.timestamp);
-                const day = date.getDay();
-                const hour = date.getHours();
-                matrix[day][hour]++;
-            });
-
-            // Find max for normalization
-            let maxVal = 1;
-            Object.values(matrix).forEach(hours => {
-                Object.values(hours).forEach(count => {
-                    if (count > maxVal) maxVal = count;
-                });
-            });
-
-            // Build HTML
-            let html = '<div class="heatmap-row-label"></div>';
-            for (let h = 0; h < 24; h++) {
-                const label = h === 0 ? '12a' : h < 12 ? `${h}a` : h === 12 ? '12p' : `${h - 12}p`;
-                html += `<div class="heatmap-col-label">${label}</div>`;
-            }
-
-            days.forEach((day, dayIndex) => {
-                html += `<div class="heatmap-row-label">${day}</div>`;
-                for (let h = 0; h < 24; h++) {
-                    const count = matrix[dayIndex][h];
-                    const intensity = count / maxVal;
-                    const color = `rgba(78, 204, 163, ${0.1 + intensity * 0.9})`;
-                    html += `<div class="heatmap-cell" style="background: ${color}" title="${day} ${h}:00 - ${count} detection${count !== 1 ? 's' : ''}"></div>`;
-                }
-            });
-
-            container.innerHTML = html;
-        }
-
         // ==================== NOTIFICATION FUNCTIONS ====================
         function toggleNotifications() {
             notificationsEnabled = document.getElementById('notificationToggle').checked;
@@ -2000,29 +1805,6 @@
             box.classList.toggle('expanded');
         }
 
-        // ==================== SEASONAL GUIDE FUNCTIONS ====================
-        function showSeason(season) {
-            currentSeason = season;
-            const container = document.getElementById('seasonalBirdsGrid');
-            const birds = seasonalBirds[season] || [];
-
-            // Update active tab
-            document.querySelectorAll('.season-tab').forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.textContent.toLowerCase() === season) {
-                    tab.classList.add('active');
-                }
-            });
-
-            container.innerHTML = birds.map(bird => `
-                <div class="seasonal-bird-card">
-                    <div class="seasonal-bird-icon">${bird.icon}</div>
-                    <div class="seasonal-bird-name">${bird.name}</div>
-                    <div class="seasonal-bird-status">${bird.status}</div>
-                </div>
-            `).join('');
-        }
-
         async function fetchData() {
             const detectionsContainer = document.getElementById('detections');
 
@@ -2069,10 +1851,6 @@
 
                 // Update stats
                 updateStats(detections);
-
-                // Render charts and heatmap
-                renderActivityChart(detections);
-                renderHeatmap(detections);
 
                 // Check for new species (notifications)
                 checkForNewSpecies(detections);
