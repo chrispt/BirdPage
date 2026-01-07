@@ -659,9 +659,737 @@
                 font-size: 1.5rem;
             }
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            position: relative;
+            padding: 0;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            background: rgba(0,0,0,0.5);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.6);
+            border: none;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,82,82,0.8);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-bird-name {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .modal-scientific-name {
+            font-style: italic;
+            color: #a8a8a8;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section-title {
+            font-size: 1.1rem;
+            color: #4ecca3;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fun-fact-box {
+            background: rgba(78, 204, 163, 0.1);
+            border-left: 3px solid #4ecca3;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            color: #e8e8e8;
+            line-height: 1.6;
+        }
+
+        .range-map-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .range-map-container img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .range-map-note {
+            color: #a8a8a8;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .bird-call-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #4ecca3 0%, #45b7aa 100%);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .bird-call-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(78, 204, 163, 0.4);
+        }
+
+        .bird-call-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .bird-call-btn.playing {
+            animation: pulse-btn 1s infinite;
+        }
+
+        @keyframes pulse-btn {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(78, 204, 163, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(78, 204, 163, 0); }
+        }
+
+        .modal-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .modal-stat {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .modal-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4ecca3;
+        }
+
+        .modal-stat-label {
+            color: #a8a8a8;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        /* Activity Chart Styles */
+        .chart-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 200px;
+            margin-top: 15px;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 160px;
+            padding: 0 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .chart-bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 40px;
+        }
+
+        .chart-bar {
+            width: 100%;
+            max-width: 30px;
+            background: linear-gradient(180deg, #4ecca3 0%, #45b7aa 100%);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease, opacity 0.3s ease;
+            cursor: pointer;
+            min-height: 2px;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+
+        .chart-label {
+            font-size: 0.7rem;
+            color: #a8a8a8;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .chart-tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.9);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 100;
+        }
+
+        /* Heatmap Styles */
+        .heatmap-container {
+            margin-top: 15px;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: 50px repeat(24, 1fr);
+            gap: 2px;
+        }
+
+        .heatmap-row-label {
+            font-size: 0.75rem;
+            color: #a8a8a8;
+            display: flex;
+            align-items: center;
+            padding-right: 10px;
+        }
+
+        .heatmap-col-labels {
+            display: contents;
+        }
+
+        .heatmap-col-label {
+            font-size: 0.65rem;
+            color: #a8a8a8;
+            text-align: center;
+            padding: 5px 0;
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            min-height: 20px;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+
+        .heatmap-legend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #a8a8a8;
+        }
+
+        .heatmap-legend-gradient {
+            width: 150px;
+            height: 12px;
+            background: linear-gradient(90deg, rgba(78,204,163,0.1) 0%, rgba(78,204,163,0.5) 50%, #4ecca3 100%);
+            border-radius: 6px;
+        }
+
+        /* Notification Banner */
+        .notification-banner {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4ecca3 0%, #45b7aa 100%);
+            color: #1a1a2e;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 2000;
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+            max-width: 350px;
+        }
+
+        .notification-banner.show {
+            transform: translateX(0);
+        }
+
+        .notification-banner-title {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification-banner-body {
+            font-size: 0.9rem;
+        }
+
+        .notification-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.2);
+            border: none;
+            color: #1a1a2e;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* Seasonal Guide */
+        .seasonal-guide {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .season-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .season-tab {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #a8a8a8;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .season-tab:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .season-tab.active {
+            background: #4ecca3;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+
+        .seasonal-birds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .seasonal-bird-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .seasonal-bird-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .seasonal-bird-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .seasonal-bird-name {
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        .seasonal-bird-status {
+            font-size: 0.75rem;
+            color: #4ecca3;
+            margin-top: 5px;
+        }
+
+        /* Notification Settings */
+        .notification-settings {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255,255,255,0.05);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .notification-toggle {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .notification-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .notification-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.2);
+            transition: 0.4s;
+            border-radius: 26px;
+        }
+
+        .notification-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        .notification-toggle input:checked + .notification-slider {
+            background-color: #4ecca3;
+        }
+
+        .notification-toggle input:checked + .notification-slider:before {
+            transform: translateX(24px);
+        }
+
+        .notification-label {
+            color: #e8e8e8;
+            font-size: 0.95rem;
+        }
+
+        /* Card click hint */
+        .species-card {
+            cursor: pointer;
+        }
+
+        .click-hint {
+            font-size: 0.8rem;
+            color: #a8a8a8;
+            text-align: center;
+            margin-top: 10px;
+            opacity: 0.7;
+        }
+
+        /* What's New Box */
+        .whats-new-box {
+            background: linear-gradient(135deg, rgba(78, 204, 163, 0.15) 0%, rgba(69, 183, 170, 0.1) 100%);
+            border: 1px solid rgba(78, 204, 163, 0.3);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .whats-new-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .whats-new-header:hover {
+            background: rgba(78, 204, 163, 0.1);
+        }
+
+        .whats-new-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #4ecca3;
+        }
+
+        .whats-new-badge {
+            background: #4ecca3;
+            color: #1a1a2e;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .whats-new-arrow {
+            color: #4ecca3;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .whats-new-box.expanded .whats-new-arrow {
+            transform: rotate(180deg);
+        }
+
+        .whats-new-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .whats-new-box.expanded .whats-new-content {
+            max-height: 600px;
+        }
+
+        .whats-new-list {
+            padding: 0 20px 20px 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            font-size: 1.3rem;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .feature-info {
+            flex: 1;
+        }
+
+        .feature-name {
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .feature-desc {
+            color: #a8a8a8;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        /* Mobile modal styles */
+        @media (max-width: 600px) {
+            .modal-content {
+                margin: 10px;
+                max-height: 95vh;
+            }
+
+            .modal-image {
+                height: 200px;
+            }
+
+            .modal-body {
+                padding: 20px 15px;
+            }
+
+            .modal-bird-name {
+                font-size: 1.4rem;
+            }
+
+            .modal-stats-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .chart-container {
+                height: 150px;
+            }
+
+            .chart-bars {
+                height: 120px;
+            }
+
+            .heatmap-grid {
+                grid-template-columns: 40px repeat(12, 1fr);
+            }
+
+            .heatmap-col-label:nth-child(odd) {
+                display: none;
+            }
+
+            .notification-banner {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+
+            .seasonal-birds-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Bird Details Modal -->
+    <div id="birdModal" class="modal-overlay" onclick="closeBirdModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <img id="modalImage" class="modal-image" src="" alt="">
+                <button class="modal-close" onclick="closeBirdModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h2 id="modalBirdName" class="modal-bird-name"></h2>
+                <p id="modalScientificName" class="modal-scientific-name"></p>
+
+                <div class="modal-section">
+                    <div class="modal-stats-grid">
+                        <div class="modal-stat">
+                            <div id="modalDetectionCount" class="modal-stat-value">0</div>
+                            <div class="modal-stat-label">Detections (24h)</div>
+                        </div>
+                        <div class="modal-stat">
+                            <div id="modalHighestConf" class="modal-stat-value">0%</div>
+                            <div class="modal-stat-label">Highest Confidence</div>
+                        </div>
+                        <div class="modal-stat">
+                            <div id="modalLastSeen" class="modal-stat-value">--</div>
+                            <div class="modal-stat-label">Last Seen</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3 class="modal-section-title"><span>&#x1F3B5;</span> Listen to Bird Call</h3>
+                    <button id="modalPlayCall" class="bird-call-btn" onclick="playBirdCall()">
+                        <span>&#x25B6;</span> Play Call
+                    </button>
+                    <audio id="birdAudio" style="display:none;"></audio>
+                </div>
+
+                <div class="modal-section">
+                    <h3 class="modal-section-title"><span>&#x1F4A1;</span> Fun Fact</h3>
+                    <div id="modalFunFact" class="fun-fact-box"></div>
+                </div>
+
+                <div class="modal-section">
+                    <h3 class="modal-section-title"><span>&#x1F5FA;</span> Range Map</h3>
+                    <div class="range-map-container">
+                        <img id="modalRangeMap" src="" alt="Range Map">
+                        <p class="range-map-note">Range map showing typical distribution</p>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <a id="modalWikiLink" href="#" target="_blank" class="wiki-link" style="display:inline-flex; font-size: 1rem;">
+                        <span>&#x1F4D6;</span> Learn more on Wikipedia
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Banner -->
+    <div id="notificationBanner" class="notification-banner">
+        <button class="notification-close" onclick="hideNotification()">&times;</button>
+        <div class="notification-banner-title">
+            <span>&#x1F426;</span> <span id="notificationTitle">New Bird Detected!</span>
+        </div>
+        <div id="notificationBody" class="notification-banner-body"></div>
+    </div>
+
     <div class="container">
         <header>
             <h1>
@@ -670,6 +1398,78 @@
             </h1>
             <p class="subtitle">Station #19553 - Live Bird Detections</p>
         </header>
+
+        <!-- What's New Box -->
+        <div id="whatsNewBox" class="whats-new-box">
+            <div class="whats-new-header" onclick="toggleWhatsNew()">
+                <div class="whats-new-title">
+                    <span>&#x2728;</span>
+                    What's New
+                    <span class="whats-new-badge">8 Features</span>
+                </div>
+                <span class="whats-new-arrow">&#x25BC;</span>
+            </div>
+            <div class="whats-new-content">
+                <div class="whats-new-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">&#x1F4CB;</span>
+                        <div class="feature-info">
+                            <div class="feature-name">Bird Details Modal</div>
+                            <div class="feature-desc">Click any bird card to see detailed info, stats, and more in a beautiful popup</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">&#x1F4CA;</span>
+                        <div class="feature-info">
+                            <div class="feature-name">Activity Chart</div>
+                            <div class="feature-desc">Visual bar chart showing bird activity by hour over the last 24 hours</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">&#x1F525;</span>
+                        <div class="feature-info">
+                            <div class="feature-name">Activity Heatmap</div>
+                            <div class="feature-desc">Day-by-hour heatmap to spot patterns in bird feeding times</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">&#x1F3B5;</span>
+                        <div class="feature-info">
+                            <div class="feature-name">Bird Call Playback</div>
+                            <div class="feature-desc">Listen to bird songs and calls directly from the modal via xeno-canto</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">&#x1F514;</span>
+                        <div class="feature-info">
+                            <div class="feature-name">New Species Notifications</div>
+                            <div class="feature-desc">Get alerted when a new bird species visits your feeder</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">&#x1F4A1;</span>
+                        <div class="feature-info">
+                            <div class="feature-name">Fun Facts</div>
+                            <div class="feature-desc">Learn interesting facts about each bird species in the details modal</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">&#x1F5FA;</span>
+                        <div class="feature-info">
+                            <div class="feature-name">Range Maps</div>
+                            <div class="feature-desc">See where each species typically lives with distribution maps</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">&#x1F343;</span>
+                        <div class="feature-info">
+                            <div class="feature-name">Seasonal Bird Guide</div>
+                            <div class="feature-desc">Browse birds to expect during each season with migration info</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="status-bar">
             <div class="status-item">
@@ -702,6 +1502,55 @@
                 <div class="stat-number" id="topConfidence">--</div>
                 <div class="stat-label">Top Confidence</div>
             </div>
+        </div>
+
+        <!-- Notification Settings -->
+        <div class="notification-settings">
+            <label class="notification-toggle">
+                <input type="checkbox" id="notificationToggle" onchange="toggleNotifications()">
+                <span class="notification-slider"></span>
+            </label>
+            <span class="notification-label">Enable notifications for rare or new species</span>
+        </div>
+
+        <!-- Activity Chart -->
+        <div class="chart-section">
+            <h2 class="section-title">
+                <span>&#x1F4CA;</span> Activity Over Time (24h)
+            </h2>
+            <div class="chart-container">
+                <div id="activityChart" class="chart-bars"></div>
+                <div id="chartTooltip" class="chart-tooltip"></div>
+            </div>
+        </div>
+
+        <!-- Heatmap -->
+        <div class="chart-section">
+            <h2 class="section-title">
+                <span>&#x1F525;</span> Activity Heatmap by Hour
+            </h2>
+            <div class="heatmap-container">
+                <div id="heatmapGrid" class="heatmap-grid"></div>
+                <div class="heatmap-legend">
+                    <span>Less active</span>
+                    <div class="heatmap-legend-gradient"></div>
+                    <span>More active</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seasonal Guide -->
+        <div class="seasonal-guide">
+            <h2 class="section-title">
+                <span>&#x1F343;</span> Seasonal Bird Guide
+            </h2>
+            <div class="season-tabs">
+                <button class="season-tab active" onclick="showSeason('winter')">Winter</button>
+                <button class="season-tab" onclick="showSeason('spring')">Spring</button>
+                <button class="season-tab" onclick="showSeason('summer')">Summer</button>
+                <button class="season-tab" onclick="showSeason('fall')">Fall</button>
+            </div>
+            <div id="seasonalBirdsGrid" class="seasonal-birds-grid"></div>
         </div>
 
         <h2 class="section-title">
@@ -739,6 +1588,81 @@
         let countdownInterval;
         let currentDetections = [];
         let currentViewMode = 'recent';
+        let speciesDataMap = {};
+        let previousSpeciesIds = new Set();
+        let notificationsEnabled = localStorage.getItem('notificationsEnabled') === 'true';
+        let currentModalSpecies = null;
+        let currentSeason = 'winter';
+
+        // Fun facts database for common birds
+        const birdFunFacts = {
+            'Northern Cardinal': 'Unlike most songbirds, both male and female cardinals sing. The female often sings from the nest, possibly to tell the male to bring food.',
+            'Blue Jay': 'Blue Jays are known for their intelligence and tight family bonds. They can mimic the calls of hawks to scare away other birds from feeders.',
+            'American Robin': 'Robins can produce three successful broods in one year. They are one of the first birds to start singing at dawn.',
+            'House Sparrow': 'House Sparrows take frequent dust baths. They throw soil and dust over their bodies and fluff their feathers to get the dust deep into their plumage.',
+            'American Goldfinch': 'Goldfinches are strict vegetarians and one of the few birds that feed their young only plant matter.',
+            'Black-capped Chickadee': 'Chickadees can remember thousands of hiding places where they\'ve stored seeds. Their hippocampus (memory center) actually grows larger in fall!',
+            'Mourning Dove': 'Mourning Doves can drink water without lifting their heads, unlike most birds that have to tilt their heads back to swallow.',
+            'Downy Woodpecker': 'Downy Woodpeckers drum on trees to communicate, creating sounds that can be heard a quarter mile away.',
+            'Red-bellied Woodpecker': 'Despite its name, the red belly is often hard to see. They can stick out their tongue nearly 2 inches past the tip of their beak!',
+            'White-breasted Nuthatch': 'Nuthatches walk headfirst down tree trunks, giving them a unique perspective to find insects that other birds miss.',
+            'Tufted Titmouse': 'Titmice are known to pluck hair from live animals, including humans, to line their nests!',
+            'House Finch': 'Male House Finches get their red coloring from pigments in the foods they eat. The more red pigment in their diet, the brighter they become.',
+            'Song Sparrow': 'Male Song Sparrows learn their songs from neighboring males and can sing over 20 different song variations.',
+            'Dark-eyed Junco': 'Juncos are sometimes called "snowbirds" because they seem to bring snowy weather with them when they migrate south.',
+            'European Starling': 'Starlings can mimic sounds including car alarms, human speech, and other bird songs. A flock is called a "murmuration."',
+            'Common Grackle': 'Grackles practice "anting" - they let ants crawl through their feathers, using the formic acid as a natural pesticide.',
+            'Red-winged Blackbird': 'Male Red-winged Blackbirds fiercely defend their territories and will attack much larger birds, even horses and humans!',
+            'Carolina Wren': 'Despite their small size, Carolina Wrens have one of the loudest songs of any bird their size.',
+            'American Crow': 'Crows can recognize human faces and will remember people who have threatened them, teaching their families to avoid those individuals.',
+            'Blue-gray Gnatcatcher': 'This tiny bird builds an elaborate nest that looks like a tree knot, often decorating it with lichen.',
+            'default': 'This fascinating bird species has adapted perfectly to its environment. Each species plays a unique role in the local ecosystem.'
+        };
+
+        // Seasonal bird data
+        const seasonalBirds = {
+            winter: [
+                { name: 'Dark-eyed Junco', icon: '&#x2744;', status: 'Common winter visitor' },
+                { name: 'White-throated Sparrow', icon: '&#x1F426;', status: 'Winter resident' },
+                { name: 'American Tree Sparrow', icon: '&#x2744;', status: 'Arctic visitor' },
+                { name: 'Northern Cardinal', icon: '&#x2764;', status: 'Year-round, bright in snow' },
+                { name: 'Pine Siskin', icon: '&#x1F332;', status: 'Irruptive winter finch' },
+                { name: 'Cedar Waxwing', icon: '&#x1F352;', status: 'Berry-loving flocks' }
+            ],
+            spring: [
+                { name: 'American Robin', icon: '&#x1F331;', status: 'Early spring arrival' },
+                { name: 'Ruby-throated Hummingbird', icon: '&#x1F338;', status: 'Returns in April' },
+                { name: 'Baltimore Oriole', icon: '&#x1F34A;', status: 'Breeding season begins' },
+                { name: 'Indigo Bunting', icon: '&#x1F499;', status: 'Stunning blue males' },
+                { name: 'Rose-breasted Grosbeak', icon: '&#x1F33A;', status: 'Spring migrant' },
+                { name: 'Barn Swallow', icon: '&#x1F54A;', status: 'Aerial insect hunter' }
+            ],
+            summer: [
+                { name: 'American Goldfinch', icon: '&#x2600;', status: 'Peak breeding plumage' },
+                { name: 'House Wren', icon: '&#x1F3E0;', status: 'Nesting in cavities' },
+                { name: 'Common Yellowthroat', icon: '&#x1F49B;', status: 'Wetland warbler' },
+                { name: 'Eastern Bluebird', icon: '&#x1F535;', status: 'Raising young' },
+                { name: 'Purple Martin', icon: '&#x1F7E3;', status: 'Colonial nester' },
+                { name: 'Chimney Swift', icon: '&#x1F4A8;', status: 'Aerial acrobat' }
+            ],
+            fall: [
+                { name: 'White-crowned Sparrow', icon: '&#x1F342;', status: 'Fall migrant' },
+                { name: 'Yellow-rumped Warbler', icon: '&#x1F49B;', status: 'Late season warbler' },
+                { name: 'Golden-crowned Kinglet', icon: '&#x1F451;', status: 'Tiny fall visitor' },
+                { name: 'Fox Sparrow', icon: '&#x1F98A;', status: 'Scratching through leaves' },
+                { name: 'Hermit Thrush', icon: '&#x1F343;', status: 'Last thrush to migrate' },
+                { name: 'Purple Finch', icon: '&#x1F7E3;', status: 'Irregular fall visitor' }
+            ]
+        };
+
+        // Initialize notification toggle state
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.getElementById('notificationToggle');
+            if (toggle) {
+                toggle.checked = notificationsEnabled;
+            }
+            showSeason(currentSeason);
+        });
 
         function formatTime(date) {
             return date.toLocaleTimeString('en-US', {
@@ -791,6 +1715,314 @@
             countdownInterval = setInterval(updateCountdown, 1000);
         }
 
+        // ==================== MODAL FUNCTIONS ====================
+        function openBirdModal(speciesId) {
+            const speciesData = speciesDataMap[speciesId];
+            if (!speciesData) return;
+
+            currentModalSpecies = speciesData;
+            const species = speciesData.species;
+            const modal = document.getElementById('birdModal');
+
+            // Set image
+            document.getElementById('modalImage').src = species.image_url || species.imageUrl || 'https://via.placeholder.com/400x300?text=No+Image';
+            document.getElementById('modalImage').alt = species.common_name || species.commonName || 'Bird';
+
+            // Set names
+            document.getElementById('modalBirdName').textContent = species.common_name || species.commonName || 'Unknown Species';
+            document.getElementById('modalScientificName').textContent = species.scientific_name || species.scientificName || 'Unknown';
+
+            // Set stats
+            document.getElementById('modalDetectionCount').textContent = speciesData.detections.length;
+            document.getElementById('modalHighestConf').textContent = `${(speciesData.highestConfidence * 100).toFixed(0)}%`;
+            document.getElementById('modalLastSeen').textContent = formatRelativeTime(speciesData.latestTimestamp);
+
+            // Set fun fact
+            const birdName = species.common_name || species.commonName || '';
+            const funFact = birdFunFacts[birdName] || birdFunFacts['default'];
+            document.getElementById('modalFunFact').textContent = funFact;
+
+            // Set range map (using Wikipedia/iNaturalist style URL)
+            const scientificName = species.scientific_name || species.scientificName || '';
+            const rangeMapUrl = `https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/${encodeURIComponent(scientificName.replace(/ /g, '_'))}_map.png/400px-${encodeURIComponent(scientificName.replace(/ /g, '_'))}_map.png`;
+            const modalRangeMap = document.getElementById('modalRangeMap');
+            modalRangeMap.src = rangeMapUrl;
+            modalRangeMap.onerror = function() {
+                this.src = 'https://via.placeholder.com/400x250?text=Range+Map+Not+Available';
+            };
+
+            // Set Wikipedia link
+            const wikiUrl = getWikipediaUrl(species);
+            const wikiLink = document.getElementById('modalWikiLink');
+            if (wikiUrl) {
+                wikiLink.href = wikiUrl;
+                wikiLink.style.display = 'inline-flex';
+            } else {
+                wikiLink.style.display = 'none';
+            }
+
+            // Setup bird call button
+            const playBtn = document.getElementById('modalPlayCall');
+            const audio = document.getElementById('birdAudio');
+            // Use xeno-canto API for bird calls
+            const xenoCantoUrl = `https://xeno-canto.org/api/2/recordings?query=${encodeURIComponent(scientificName)}`;
+            playBtn.disabled = false;
+            playBtn.innerHTML = '<span>&#x25B6;</span> Play Call';
+            playBtn.classList.remove('playing');
+            audio.src = '';
+
+            // Show modal
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBirdModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('birdModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+
+            // Stop any playing audio
+            const audio = document.getElementById('birdAudio');
+            audio.pause();
+            audio.src = '';
+        }
+
+        async function playBirdCall() {
+            const playBtn = document.getElementById('modalPlayCall');
+            const audio = document.getElementById('birdAudio');
+
+            if (audio.src && !audio.paused) {
+                audio.pause();
+                playBtn.innerHTML = '<span>&#x25B6;</span> Play Call';
+                playBtn.classList.remove('playing');
+                return;
+            }
+
+            if (!currentModalSpecies) return;
+
+            const species = currentModalSpecies.species;
+            const scientificName = species.scientific_name || species.scientificName || '';
+
+            if (!scientificName) {
+                playBtn.innerHTML = '<span>&#x274C;</span> No Call Available';
+                return;
+            }
+
+            playBtn.innerHTML = '<span>&#x23F3;</span> Loading...';
+            playBtn.disabled = true;
+
+            try {
+                const response = await fetch(`https://xeno-canto.org/api/2/recordings?query=${encodeURIComponent(scientificName)}&cnt=1`);
+                const data = await response.json();
+
+                if (data.recordings && data.recordings.length > 0) {
+                    const recording = data.recordings[0];
+                    audio.src = recording.file;
+                    audio.play();
+                    playBtn.innerHTML = '<span>&#x23F8;</span> Stop';
+                    playBtn.classList.add('playing');
+                    playBtn.disabled = false;
+
+                    audio.onended = () => {
+                        playBtn.innerHTML = '<span>&#x25B6;</span> Play Call';
+                        playBtn.classList.remove('playing');
+                    };
+                } else {
+                    playBtn.innerHTML = '<span>&#x274C;</span> No Call Available';
+                    playBtn.disabled = true;
+                }
+            } catch (error) {
+                console.error('Error fetching bird call:', error);
+                playBtn.innerHTML = '<span>&#x274C;</span> Error Loading';
+                playBtn.disabled = true;
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeBirdModal();
+            }
+        });
+
+        // ==================== CHART FUNCTIONS ====================
+        function renderActivityChart(detections) {
+            const container = document.getElementById('activityChart');
+            const tooltip = document.getElementById('chartTooltip');
+
+            // Group detections by hour
+            const hourCounts = {};
+            for (let i = 0; i < 24; i++) {
+                hourCounts[i] = 0;
+            }
+
+            detections.forEach(d => {
+                const hour = new Date(d.timestamp).getHours();
+                hourCounts[hour]++;
+            });
+
+            const maxCount = Math.max(...Object.values(hourCounts), 1);
+
+            container.innerHTML = Object.entries(hourCounts).map(([hour, count]) => {
+                const height = (count / maxCount) * 100;
+                const hourNum = parseInt(hour);
+                const label = hourNum === 0 ? '12a' : hourNum < 12 ? `${hourNum}a` : hourNum === 12 ? '12p' : `${hourNum - 12}p`;
+
+                return `
+                    <div class="chart-bar-wrapper"
+                         onmouseover="showChartTooltip(event, '${label}: ${count} detection${count !== 1 ? 's' : ''}')"
+                         onmouseout="hideChartTooltip()">
+                        <div class="chart-bar" style="height: ${height}%" data-count="${count}"></div>
+                        <div class="chart-label">${hourNum % 3 === 0 ? label : ''}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showChartTooltip(event, text) {
+            const tooltip = document.getElementById('chartTooltip');
+            tooltip.textContent = text;
+            tooltip.style.opacity = '1';
+            tooltip.style.left = `${event.pageX - event.currentTarget.closest('.chart-container').offsetLeft}px`;
+            tooltip.style.top = `${event.pageY - event.currentTarget.closest('.chart-container').offsetTop - 40}px`;
+        }
+
+        function hideChartTooltip() {
+            document.getElementById('chartTooltip').style.opacity = '0';
+        }
+
+        // ==================== HEATMAP FUNCTIONS ====================
+        function renderHeatmap(detections) {
+            const container = document.getElementById('heatmapGrid');
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+            // Create hour-day matrix
+            const matrix = {};
+            days.forEach((day, dayIndex) => {
+                matrix[dayIndex] = {};
+                for (let h = 0; h < 24; h++) {
+                    matrix[dayIndex][h] = 0;
+                }
+            });
+
+            // Fill matrix with detection counts
+            detections.forEach(d => {
+                const date = new Date(d.timestamp);
+                const day = date.getDay();
+                const hour = date.getHours();
+                matrix[day][hour]++;
+            });
+
+            // Find max for normalization
+            let maxVal = 1;
+            Object.values(matrix).forEach(hours => {
+                Object.values(hours).forEach(count => {
+                    if (count > maxVal) maxVal = count;
+                });
+            });
+
+            // Build HTML
+            let html = '<div class="heatmap-row-label"></div>';
+            for (let h = 0; h < 24; h++) {
+                const label = h === 0 ? '12a' : h < 12 ? `${h}a` : h === 12 ? '12p' : `${h - 12}p`;
+                html += `<div class="heatmap-col-label">${label}</div>`;
+            }
+
+            days.forEach((day, dayIndex) => {
+                html += `<div class="heatmap-row-label">${day}</div>`;
+                for (let h = 0; h < 24; h++) {
+                    const count = matrix[dayIndex][h];
+                    const intensity = count / maxVal;
+                    const color = `rgba(78, 204, 163, ${0.1 + intensity * 0.9})`;
+                    html += `<div class="heatmap-cell" style="background: ${color}" title="${day} ${h}:00 - ${count} detection${count !== 1 ? 's' : ''}"></div>`;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ==================== NOTIFICATION FUNCTIONS ====================
+        function toggleNotifications() {
+            notificationsEnabled = document.getElementById('notificationToggle').checked;
+            localStorage.setItem('notificationsEnabled', notificationsEnabled);
+
+            if (notificationsEnabled && 'Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+
+        function checkForNewSpecies(detections) {
+            if (!notificationsEnabled) return;
+
+            const currentSpeciesIds = new Set(detections.map(d => d.species?.id).filter(Boolean));
+
+            // Check for new species not seen before
+            currentSpeciesIds.forEach(speciesId => {
+                if (!previousSpeciesIds.has(speciesId) && previousSpeciesIds.size > 0) {
+                    const detection = detections.find(d => d.species?.id === speciesId);
+                    if (detection) {
+                        const speciesName = detection.species?.common_name || detection.species?.commonName || 'Unknown Bird';
+                        showNotification('New Species Detected!', `A ${speciesName} was just spotted at the feeder!`);
+                    }
+                }
+            });
+
+            // Update previous species set
+            previousSpeciesIds = currentSpeciesIds;
+        }
+
+        function showNotification(title, body) {
+            // Show in-page banner
+            const banner = document.getElementById('notificationBanner');
+            document.getElementById('notificationTitle').textContent = title;
+            document.getElementById('notificationBody').textContent = body;
+            banner.classList.add('show');
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                hideNotification();
+            }, 5000);
+
+            // Also show browser notification if permitted
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, { body: body, icon: '&#x1F426;' });
+            }
+        }
+
+        function hideNotification() {
+            document.getElementById('notificationBanner').classList.remove('show');
+        }
+
+        // ==================== WHAT'S NEW BOX ====================
+        function toggleWhatsNew() {
+            const box = document.getElementById('whatsNewBox');
+            box.classList.toggle('expanded');
+        }
+
+        // ==================== SEASONAL GUIDE FUNCTIONS ====================
+        function showSeason(season) {
+            currentSeason = season;
+            const container = document.getElementById('seasonalBirdsGrid');
+            const birds = seasonalBirds[season] || [];
+
+            // Update active tab
+            document.querySelectorAll('.season-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent.toLowerCase() === season) {
+                    tab.classList.add('active');
+                }
+            });
+
+            container.innerHTML = birds.map(bird => `
+                <div class="seasonal-bird-card">
+                    <div class="seasonal-bird-icon">${bird.icon}</div>
+                    <div class="seasonal-bird-name">${bird.name}</div>
+                    <div class="seasonal-bird-status">${bird.status}</div>
+                </div>
+            `).join('');
+        }
+
         async function fetchData() {
             const detectionsContainer = document.getElementById('detections');
 
@@ -837,6 +2069,13 @@
 
                 // Update stats
                 updateStats(detections);
+
+                // Render charts and heatmap
+                renderActivityChart(detections);
+                renderHeatmap(detections);
+
+                // Check for new species (notifications)
+                checkForNewSpecies(detections);
 
                 // Render based on current view mode
                 renderCurrentView();
@@ -983,6 +2222,9 @@
                 }
             });
 
+            // Store species data globally for modal access
+            speciesDataMap = speciesMap;
+
             // Convert to array and sort
             let speciesArray = Object.values(speciesMap);
 
@@ -1023,7 +2265,7 @@
                 }).join('');
 
                 return `
-                    <div class="species-card">
+                    <div class="species-card" onclick="openBirdModal('${speciesId}')">
                         <div class="detection-count-badge">${count}</div>
                         <img
                             class="species-image"
@@ -1033,7 +2275,7 @@
                         >
                         <div class="species-content">
                             <div class="bird-name">
-                                ${wikiUrl ? `<a href="${wikiUrl}" target="_blank" class="bird-name-link">${species.common_name || species.commonName || 'Unknown Species'}</a>` : (species.common_name || species.commonName || 'Unknown Species')}
+                                ${species.common_name || species.commonName || 'Unknown Species'}
                             </div>
                             <div class="scientific-name">${species.scientific_name || species.scientificName || 'Unknown'}</div>
 
@@ -1051,22 +2293,18 @@
                                 </div>
                             </div>
 
-                            ${wikiUrl ? `
-                                <a href="${wikiUrl}" target="_blank" class="wiki-link">
-                                    <span>&#x1F4D6;</span> Learn more on Wikipedia
-                                </a>
-                            ` : ''}
+                            <p class="click-hint">Click for more details, fun facts & bird calls</p>
 
                             <button
                                 id="toggle-btn-${speciesId}"
                                 class="detections-toggle"
-                                onclick="toggleDetectionsList('${speciesId}')"
+                                onclick="event.stopPropagation(); toggleDetectionsList('${speciesId}')"
                             >
                                 <span>View all ${count} detection${count !== 1 ? 's' : ''}</span>
                                 <span class="arrow">&#x25BC;</span>
                             </button>
 
-                            <div id="detections-list-${speciesId}" class="detections-list">
+                            <div id="detections-list-${speciesId}" class="detections-list" onclick="event.stopPropagation()">
                                 <div class="detections-list-inner">
                                     ${detectionsListHtml}
                                 </div>
