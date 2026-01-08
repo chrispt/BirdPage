@@ -554,10 +554,42 @@
             cursor: pointer;
             font-weight: bold;
             transition: background 0.3s ease;
+            min-height: 44px;
         }
 
         .refresh-btn:hover {
             background: var(--accent-hover);
+        }
+
+        .refresh-btn:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .refresh-btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .refresh-btn.loading {
+            opacity: 0.7;
+            cursor: wait;
+        }
+
+        .refresh-btn.loading::after {
+            content: '';
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            margin-left: 8px;
+            border: 2px solid var(--bg-primary);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .view-selector {
@@ -895,8 +927,8 @@
             background: rgba(0,0,0,0.6);
             border: none;
             color: #fff;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 1.5rem;
@@ -908,6 +940,16 @@
 
         .modal-close:hover {
             background: rgba(255,82,82,0.8);
+        }
+
+        .modal-close:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .modal-close:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
         }
 
         .modal-body {
@@ -1047,111 +1089,133 @@
             font-size: 1rem;
         }
 
-        /* Notification Settings */
-        /* Settings Row */
-        .settings-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .setting-item {
+        /* Fixed Corner Toggles */
+        .corner-toggle {
+            position: fixed;
+            top: 20px;
+            z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             background: var(--card-bg);
-            padding: 15px 20px;
-            border-radius: 12px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 10px 16px;
+            border-radius: 25px;
             border: 1px solid var(--card-border);
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-
-        .notification-settings {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: var(--card-bg);
-            padding: 15px 20px;
-            border-radius: 12px;
-            border: 1px solid var(--card-border);
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-
-        /* Night Mode Toggle */
-        .night-mode-toggle {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
             cursor: pointer;
-            user-select: none;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            min-height: 44px;
+            min-width: 44px;
         }
 
-        .night-mode-toggle input {
-            display: none;
+        .corner-toggle:hover {
+            border-color: var(--accent);
+            transform: scale(1.02);
         }
 
-        .night-mode-switch {
-            position: relative;
-            width: 56px;
-            height: 28px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 14px;
-            transition: background 0.3s ease;
-            overflow: hidden;
+        .corner-toggle:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
         }
 
-        .night-mode-switch::before {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 22px;
-            height: 22px;
-            background: #fff;
-            border-radius: 50%;
-            transition: transform 0.3s ease, background 0.3s ease;
-            z-index: 2;
+        .corner-toggle:focus:not(:focus-visible) {
+            outline: none;
         }
 
-        .night-mode-toggle input:checked + .night-mode-switch {
-            background: var(--accent);
+        .corner-toggle:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
         }
 
-        .night-mode-toggle input:checked + .night-mode-switch::before {
-            transform: translateX(28px);
-            background: var(--bg-primary);
+        .corner-toggle.left {
+            left: 20px;
         }
 
-        .night-mode-icon {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-            transition: opacity 0.3s ease;
+        .corner-toggle.right {
+            right: 20px;
         }
 
-        .night-mode-icon.sun {
-            left: 6px;
-            opacity: 1;
-        }
-
-        .night-mode-icon.moon {
-            right: 6px;
-            opacity: 0.5;
-        }
-
-        .night-mode-toggle input:checked + .night-mode-switch .sun {
-            opacity: 0.5;
-        }
-
-        .night-mode-toggle input:checked + .night-mode-switch .moon {
-            opacity: 1;
-        }
-
-        .night-mode-label {
+        .corner-toggle-label {
             color: var(--text-primary);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .corner-toggle-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Small toggle switch for corners */
+        .mini-toggle {
+            position: relative;
+            width: 40px;
+            height: 22px;
+        }
+
+        .mini-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .mini-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.2);
+            transition: 0.3s;
+            border-radius: 22px;
+        }
+
+        .mini-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        .mini-toggle input:checked + .mini-slider {
+            background-color: var(--accent);
+        }
+
+        .mini-toggle input:checked + .mini-slider:before {
+            transform: translateX(18px);
+        }
+
+        /* Mobile adjustments for corner toggles */
+        @media (max-width: 600px) {
+            .corner-toggle {
+                top: 10px;
+                padding: 8px 12px;
+            }
+
+            .corner-toggle.left {
+                left: 10px;
+            }
+
+            .corner-toggle.right {
+                right: 10px;
+            }
+
+            .corner-toggle-label {
+                display: none;
+            }
+
+            .corner-toggle-icon {
+                font-size: 1.2rem;
+            }
         }
 
         .notification-toggle {
@@ -1231,6 +1295,37 @@
 
         .whats-new-header:hover {
             background: rgba(78, 204, 163, 0.1);
+        }
+
+        .whats-new-box.hidden {
+            display: none;
+        }
+
+        .whats-new-close {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--text-secondary);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease, color 0.3s ease;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        .whats-new-close:hover {
+            background: rgba(255,82,82,0.3);
+            color: #ff5252;
+        }
+
+        .whats-new-close:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
         }
 
         .whats-new-title {
@@ -1344,12 +1439,31 @@
     </style>
 </head>
 <body>
+    <!-- Corner Toggles -->
+    <button class="corner-toggle left" onclick="document.getElementById('notificationToggle').click()" aria-label="Toggle notifications">
+        <span class="corner-toggle-icon" aria-hidden="true">&#x1F514;</span>
+        <span class="corner-toggle-label">Notifications</span>
+        <label class="mini-toggle" onclick="event.stopPropagation()">
+            <input type="checkbox" id="notificationToggle" onchange="toggleNotifications()" aria-label="Enable notifications">
+            <span class="mini-slider"></span>
+        </label>
+    </button>
+
+    <button class="corner-toggle right" onclick="document.getElementById('nightModeToggle').click()" aria-label="Toggle night mode">
+        <span class="corner-toggle-icon" id="nightModeIcon" aria-hidden="true">&#x1F31E;</span>
+        <span class="corner-toggle-label">Night Mode</span>
+        <label class="mini-toggle" onclick="event.stopPropagation()">
+            <input type="checkbox" id="nightModeToggle" onchange="toggleNightMode()" aria-label="Enable night mode">
+            <span class="mini-slider"></span>
+        </label>
+    </button>
+
     <!-- Bird Details Modal -->
-    <div id="birdModal" class="modal-overlay" onclick="closeBirdModal(event)">
+    <div id="birdModal" class="modal-overlay" onclick="closeBirdModal(event)" role="dialog" aria-modal="true" aria-labelledby="modalBirdName">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <img id="modalImage" class="modal-image" src="" alt="" loading="lazy" decoding="async">
-                <button class="modal-close" onclick="closeBirdModal()">&times;</button>
+                <button class="modal-close" onclick="closeBirdModal()" aria-label="Close modal">&times;</button>
             </div>
             <div class="modal-body">
                 <h2 id="modalBirdName" class="modal-bird-name"></h2>
@@ -1417,11 +1531,14 @@
         <div id="whatsNewBox" class="whats-new-box">
             <div class="whats-new-header" onclick="toggleWhatsNew()">
                 <div class="whats-new-title">
-                    <span>&#x2728;</span>
+                    <span aria-hidden="true">&#x2728;</span>
                     What's New
                     <span class="whats-new-badge">4 Features</span>
                 </div>
-                <span class="whats-new-arrow">&#x25BC;</span>
+                <div style="display: flex; align-items: center;">
+                    <span class="whats-new-arrow" aria-hidden="true">&#x25BC;</span>
+                    <button class="whats-new-close" onclick="event.stopPropagation(); dismissWhatsNew()" aria-label="Dismiss What's New">&times;</button>
+                </div>
             </div>
             <div class="whats-new-content">
                 <div class="whats-new-list">
@@ -1468,49 +1585,25 @@
             <div class="status-item">
                 <span>Next refresh in: <span id="countdown" class="countdown">15:00</span></span>
             </div>
-            <button class="refresh-btn" onclick="fetchData()">Refresh Now</button>
+            <button class="refresh-btn" id="refreshBtn" onclick="fetchData()" aria-label="Refresh bird detection data">Refresh Now</button>
         </div>
 
-        <div class="stats-grid">
+        <div class="stats-grid" aria-live="polite" aria-atomic="false">
             <div class="stat-card">
-                <div class="stat-number" id="totalDetections">--</div>
+                <div class="stat-number" id="totalDetections" aria-label="Total detections in last 24 hours">--</div>
                 <div class="stat-label">Detections (24h)</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="uniqueSpecies">--</div>
+                <div class="stat-number" id="uniqueSpecies" aria-label="Number of unique species">--</div>
                 <div class="stat-label">Unique Species</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="latestTime">--</div>
+                <div class="stat-number" id="latestTime" aria-label="Time of latest detection">--</div>
                 <div class="stat-label">Latest Detection</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="topConfidence">--</div>
+                <div class="stat-number" id="topConfidence" aria-label="Highest detection confidence">--</div>
                 <div class="stat-label">Top Confidence</div>
-            </div>
-        </div>
-
-        <!-- Settings Row -->
-        <div class="settings-row">
-            <!-- Night Mode Toggle -->
-            <div class="setting-item">
-                <label class="night-mode-toggle">
-                    <input type="checkbox" id="nightModeToggle" onchange="toggleNightMode()">
-                    <span class="night-mode-switch">
-                        <span class="night-mode-icon sun">&#x2600;</span>
-                        <span class="night-mode-icon moon">&#x1F319;</span>
-                    </span>
-                </label>
-                <span class="night-mode-label">Night Mode</span>
-            </div>
-
-            <!-- Notification Settings -->
-            <div class="setting-item">
-                <label class="notification-toggle">
-                    <input type="checkbox" id="notificationToggle" onchange="toggleNotifications()">
-                    <span class="notification-slider"></span>
-                </label>
-                <span class="notification-label">Notifications</span>
             </div>
         </div>
 
@@ -1553,6 +1646,7 @@
         let notificationsEnabled = localStorage.getItem('notificationsEnabled') === 'true';
         let nightModeEnabled = localStorage.getItem('nightModeEnabled') === 'true';
         let currentModalSpecies = null;
+        let previouslyFocusedElement = null;
 
         // Apply night mode immediately if saved
         if (nightModeEnabled) {
@@ -1573,7 +1667,8 @@
             sectionTitleText: null,
             notificationToggle: null,
             birdModal: null,
-            notificationBanner: null
+            notificationBanner: null,
+            refreshBtn: null
         };
 
         // Initialize DOM cache and notification toggle state
@@ -1592,6 +1687,7 @@
             DOM.notificationToggle = document.getElementById('notificationToggle');
             DOM.birdModal = document.getElementById('birdModal');
             DOM.notificationBanner = document.getElementById('notificationBanner');
+            DOM.refreshBtn = document.getElementById('refreshBtn');
 
             // Initialize toggle states
             if (DOM.notificationToggle) {
@@ -1599,7 +1695,15 @@
             }
             if (DOM.nightModeToggle) {
                 DOM.nightModeToggle.checked = nightModeEnabled;
+                // Set initial icon - moon for night mode, sun for day mode
+                const icon = document.getElementById('nightModeIcon');
+                if (icon) {
+                    icon.textContent = nightModeEnabled ? '\uD83C\uDF19' : '\u2600';
+                }
             }
+
+            // Initialize What's New box state
+            initWhatsNew();
         });
 
         function formatTime(date) {
@@ -1635,13 +1739,21 @@
             const minutes = Math.floor(countdownSeconds / 60);
             const seconds = countdownSeconds % 60;
             const el = DOM.countdown || document.getElementById('countdown');
-            if (el) el.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-            if (countdownSeconds > 0) {
-                countdownSeconds--;
-            } else {
+            if (countdownSeconds <= 0) {
+                if (el) el.textContent = 'Refreshing...';
                 countdownSeconds = 15 * 60;
                 fetchData();
+            } else {
+                // Show format like "14:30" with clearer time indication
+                if (el) {
+                    if (minutes > 0) {
+                        el.textContent = `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+                    } else {
+                        el.textContent = `${seconds}s`;
+                    }
+                }
+                countdownSeconds--;
             }
         }
 
@@ -1657,6 +1769,9 @@
         function openBirdModal(speciesId) {
             const speciesData = speciesDataMap[speciesId];
             if (!speciesData) return;
+
+            // Store currently focused element to restore later
+            previouslyFocusedElement = document.activeElement;
 
             currentModalSpecies = speciesData;
             const species = speciesData.species;
@@ -1691,6 +1806,12 @@
             // Show modal
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // Focus the close button for accessibility
+            setTimeout(() => {
+                const closeBtn = modal.querySelector('.modal-close');
+                if (closeBtn) closeBtn.focus();
+            }, 100);
         }
 
         function closeBirdModal(event) {
@@ -1698,6 +1819,12 @@
             const modal = DOM.birdModal || document.getElementById('birdModal');
             modal.classList.remove('active');
             document.body.style.overflow = '';
+
+            // Return focus to the element that opened the modal
+            if (previouslyFocusedElement) {
+                previouslyFocusedElement.focus();
+                previouslyFocusedElement = null;
+            }
         }
 
         function playBirdCall() {
@@ -1737,10 +1864,31 @@
             window.open(mapsUrl, '_blank');
         }
 
-        // Close modal with Escape key
+        // Modal keyboard navigation and focus trap
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
+            const modal = DOM.birdModal || document.getElementById('birdModal');
+            const isModalOpen = modal.classList.contains('active');
+
+            if (e.key === 'Escape' && isModalOpen) {
                 closeBirdModal();
+                return;
+            }
+
+            // Focus trap when modal is open
+            if (isModalOpen && e.key === 'Tab') {
+                const focusableElements = modal.querySelectorAll(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+
+                if (e.shiftKey && document.activeElement === firstElement) {
+                    e.preventDefault();
+                    lastElement.focus();
+                } else if (!e.shiftKey && document.activeElement === lastElement) {
+                    e.preventDefault();
+                    firstElement.focus();
+                }
             }
         });
 
@@ -1750,10 +1898,13 @@
             nightModeEnabled = toggle.checked;
             localStorage.setItem('nightModeEnabled', nightModeEnabled);
 
+            const icon = document.getElementById('nightModeIcon');
             if (nightModeEnabled) {
                 document.body.classList.add('night-mode');
+                if (icon) icon.textContent = '\uD83C\uDF19'; // Moon icon when in night mode
             } else {
                 document.body.classList.remove('night-mode');
+                if (icon) icon.textContent = '\u2600'; // Sun icon when in day mode
             }
         }
 
@@ -1814,8 +1965,30 @@
             box.classList.toggle('expanded');
         }
 
+        function dismissWhatsNew() {
+            const box = document.getElementById('whatsNewBox');
+            box.classList.add('hidden');
+            localStorage.setItem('whatsNewDismissed', 'true');
+        }
+
+        function initWhatsNew() {
+            const isDismissed = localStorage.getItem('whatsNewDismissed') === 'true';
+            if (isDismissed) {
+                const box = document.getElementById('whatsNewBox');
+                if (box) box.classList.add('hidden');
+            }
+        }
+
         async function fetchData() {
             const detectionsContainer = DOM.detections || document.getElementById('detections');
+            const refreshBtn = DOM.refreshBtn || document.getElementById('refreshBtn');
+
+            // Show loading state on refresh button
+            if (refreshBtn) {
+                refreshBtn.classList.add('loading');
+                refreshBtn.disabled = true;
+                refreshBtn.textContent = 'Refreshing';
+            }
 
             detectionsContainer.innerHTML = `
                 <div class="skeleton-grid">
@@ -1901,6 +2074,13 @@
                 // Restart countdown
                 startCountdown();
 
+                // Reset refresh button
+                if (refreshBtn) {
+                    refreshBtn.classList.remove('loading');
+                    refreshBtn.disabled = false;
+                    refreshBtn.textContent = 'Refresh Now';
+                }
+
             } catch (error) {
                 console.error('Error fetching data:', error);
                 detectionsContainer.innerHTML = `
@@ -1912,6 +2092,13 @@
                         </p>
                     </div>
                 `;
+
+                // Reset refresh button on error
+                if (refreshBtn) {
+                    refreshBtn.classList.remove('loading');
+                    refreshBtn.disabled = false;
+                    refreshBtn.textContent = 'Refresh Now';
+                }
             }
         }
 
