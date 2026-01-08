@@ -1617,7 +1617,7 @@
                 <option value="recent">Most Recent</option>
                 <option value="mostDetected">Most Detected</option>
             </select>
-            <span class="time-range-note">Showing last 24 hours</span>
+            <span class="time-range-note">Showing high-certainty detections from last 24 hours</span>
         </div>
 
         <div id="detections" class="detections-grid">
@@ -2051,10 +2051,13 @@
                     throw new Error('Invalid response from API');
                 }
 
-                // Filter to ensure only last 24 hours
+                // Filter to ensure only last 24 hours and high certainty detections
+                const highCertaintyLevels = ['almost_certain', 'highly_likely', 'likely'];
                 const detections = data.detections.filter(d => {
                     const detectionDate = new Date(d.timestamp);
-                    return detectionDate >= twentyFourHoursAgo;
+                    const isRecent = detectionDate >= twentyFourHoursAgo;
+                    const isHighCertainty = highCertaintyLevels.includes(d.certainty);
+                    return isRecent && isHighCertainty;
                 });
 
                 currentDetections = detections;
