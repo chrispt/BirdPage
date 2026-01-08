@@ -6,6 +6,11 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://app.birdweather.com">
+    <link rel="preconnect" href="https://static.cloudflareinsights.com">
+    <link rel="dns-prefetch" href="https://app.birdweather.com">
+    <link rel="dns-prefetch" href="https://via.placeholder.com">
     <title>The CPTs BirdWeather PUC</title>
     <style>
         * {
@@ -14,11 +19,38 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-tertiary: #0f3460;
+            --accent: #4ecca3;
+            --accent-hover: #45b7aa;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a8a8a8;
+            --card-bg: rgba(255,255,255,0.03);
+            --card-border: rgba(255,255,255,0.08);
+            --card-bg-hover: rgba(255,255,255,0.05);
+        }
+
+        body.night-mode {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #0d0d14;
+            --bg-tertiary: #101018;
+            --accent: #3ba582;
+            --accent-hover: #2d8a6a;
+            --text-primary: #b8b8b8;
+            --text-secondary: #707070;
+            --card-bg: rgba(255,255,255,0.02);
+            --card-border: rgba(255,255,255,0.04);
+            --card-bg-hover: rgba(255,255,255,0.03);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
             min-height: 100vh;
-            color: #e8e8e8;
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .container {
@@ -36,7 +68,7 @@
 
         h1 {
             font-size: 2.5rem;
-            color: #4ecca3;
+            color: var(--accent);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -49,7 +81,7 @@
         }
 
         .subtitle {
-            color: #a8a8a8;
+            color: var(--text-secondary);
             font-size: 1.1rem;
         }
 
@@ -57,7 +89,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 15px 25px;
@@ -65,7 +97,8 @@
             margin-bottom: 25px;
             flex-wrap: wrap;
             gap: 15px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--card-border);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .status-item {
@@ -78,7 +111,7 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: #4ecca3;
+            background: var(--accent);
             animation: pulse 2s infinite;
         }
 
@@ -112,7 +145,7 @@
         .countdown {
             font-family: monospace;
             font-size: 1.1rem;
-            color: #4ecca3;
+            color: var(--accent);
         }
 
         .stats-grid {
@@ -123,14 +156,14 @@
         }
 
         .stat-card {
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 25px;
             border-radius: 16px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            border: 1px solid var(--card-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
             position: relative;
             overflow: hidden;
         }
@@ -149,7 +182,7 @@
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            border-color: rgba(78, 204, 163, 0.3);
+            border-color: var(--accent);
         }
 
         .stat-card:hover::before {
@@ -159,17 +192,17 @@
         .stat-number {
             font-size: 2.5rem;
             font-weight: bold;
-            color: #4ecca3;
+            color: var(--accent);
         }
 
         .stat-label {
-            color: #a8a8a8;
+            color: var(--text-secondary);
             margin-top: 5px;
         }
 
         .section-title {
             font-size: 1.5rem;
-            color: #4ecca3;
+            color: var(--accent);
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -183,16 +216,18 @@
         }
 
         .species-card {
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.3s ease;
+            border: 1px solid var(--card-border);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
             position: relative;
             cursor: pointer;
             animation: fadeInUp 0.6s ease backwards;
+            content-visibility: auto;
+            contain-intrinsic-size: 0 500px;
         }
 
         .species-card:nth-child(1) { animation-delay: 0.1s; }
@@ -217,7 +252,7 @@
         .species-card:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 20px 50px rgba(78, 204, 163, 0.25), 0 0 0 1px rgba(78, 204, 163, 0.1);
-            border-color: rgba(78, 204, 163, 0.3);
+            border-color: var(--accent);
         }
 
         .species-card:hover::before {
@@ -333,16 +368,6 @@
             text-decoration: none;
         }
 
-        .bird-name-link {
-            color: #fff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .bird-name-link:hover {
-            color: #4ecca3;
-        }
-
         /* Detections List Styles */
         .detections-toggle {
             background: rgba(255,255,255,0.1);
@@ -426,20 +451,6 @@
             text-align: center;
             padding: 60px;
             color: #a8a8a8;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(78, 204, 163, 0.3);
-            border-top-color: #4ecca3;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
 
         /* Skeleton Loading States */
@@ -535,8 +546,8 @@
         }
 
         .refresh-btn {
-            background: #4ecca3;
-            color: #1a1a2e;
+            background: var(--accent);
+            color: var(--bg-primary);
             border: none;
             padding: 10px 20px;
             border-radius: 8px;
@@ -546,7 +557,7 @@
         }
 
         .refresh-btn:hover {
-            background: #45b7aa;
+            background: var(--accent-hover);
         }
 
         .view-selector {
@@ -989,132 +1000,6 @@
             margin-top: 5px;
         }
 
-        /* Activity Chart Styles */
-        .chart-section {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 200px;
-            margin-top: 15px;
-        }
-
-        .chart-bars {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            height: 160px;
-            padding: 0 5px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .chart-bar-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            max-width: 40px;
-        }
-
-        .chart-bar {
-            width: 100%;
-            max-width: 30px;
-            background: linear-gradient(180deg, #4ecca3 0%, #45b7aa 100%);
-            border-radius: 4px 4px 0 0;
-            transition: height 0.5s ease, opacity 0.3s ease;
-            cursor: pointer;
-            min-height: 2px;
-        }
-
-        .chart-bar:hover {
-            opacity: 0.8;
-        }
-
-        .chart-label {
-            font-size: 0.7rem;
-            color: #a8a8a8;
-            margin-top: 8px;
-            text-align: center;
-        }
-
-        .chart-tooltip {
-            position: absolute;
-            background: rgba(0,0,0,0.9);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            z-index: 100;
-        }
-
-        /* Heatmap Styles */
-        .heatmap-container {
-            margin-top: 15px;
-        }
-
-        .heatmap-grid {
-            display: grid;
-            grid-template-columns: 50px repeat(24, 1fr);
-            gap: 2px;
-        }
-
-        .heatmap-row-label {
-            font-size: 0.75rem;
-            color: #a8a8a8;
-            display: flex;
-            align-items: center;
-            padding-right: 10px;
-        }
-
-        .heatmap-col-labels {
-            display: contents;
-        }
-
-        .heatmap-col-label {
-            font-size: 0.65rem;
-            color: #a8a8a8;
-            text-align: center;
-            padding: 5px 0;
-        }
-
-        .heatmap-cell {
-            aspect-ratio: 1;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            min-height: 20px;
-        }
-
-        .heatmap-cell:hover {
-            transform: scale(1.2);
-            z-index: 10;
-        }
-
-        .heatmap-legend {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-            font-size: 0.8rem;
-            color: #a8a8a8;
-        }
-
-        .heatmap-legend-gradient {
-            width: 150px;
-            height: 12px;
-            background: linear-gradient(90deg, rgba(78,204,163,0.1) 0%, rgba(78,204,163,0.5) 50%, #4ecca3 100%);
-            border-radius: 6px;
-        }
-
         /* Notification Banner */
         .notification-banner {
             position: fixed;
@@ -1162,86 +1047,111 @@
             font-size: 1rem;
         }
 
-        /* Seasonal Guide */
-        .seasonal-guide {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .season-tabs {
+        /* Notification Settings */
+        /* Settings Row */
+        .settings-row {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
-        .season-tab {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: #a8a8a8;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .season-tab:hover {
-            background: rgba(255,255,255,0.15);
-        }
-
-        .season-tab.active {
-            background: #4ecca3;
-            color: #1a1a2e;
-            font-weight: bold;
-        }
-
-        .seasonal-birds-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        .setting-item {
+            display: flex;
+            align-items: center;
             gap: 15px;
-        }
-
-        .seasonal-bird-card {
-            background: rgba(255,255,255,0.05);
+            background: var(--card-bg);
+            padding: 15px 20px;
             border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            transition: transform 0.3s ease;
+            border: 1px solid var(--card-border);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
-        .seasonal-bird-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .seasonal-bird-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .seasonal-bird-name {
-            font-size: 0.9rem;
-            color: #fff;
-        }
-
-        .seasonal-bird-status {
-            font-size: 0.75rem;
-            color: #4ecca3;
-            margin-top: 5px;
-        }
-
-        /* Notification Settings */
         .notification-settings {
             display: flex;
             align-items: center;
             gap: 15px;
-            background: rgba(255,255,255,0.05);
+            background: var(--card-bg);
             padding: 15px 20px;
             border-radius: 12px;
-            margin-bottom: 25px;
+            border: 1px solid var(--card-border);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Night Mode Toggle */
+        .night-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .night-mode-toggle input {
+            display: none;
+        }
+
+        .night-mode-switch {
+            position: relative;
+            width: 56px;
+            height: 28px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 14px;
+            transition: background 0.3s ease;
+            overflow: hidden;
+        }
+
+        .night-mode-switch::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s ease, background 0.3s ease;
+            z-index: 2;
+        }
+
+        .night-mode-toggle input:checked + .night-mode-switch {
+            background: var(--accent);
+        }
+
+        .night-mode-toggle input:checked + .night-mode-switch::before {
+            transform: translateX(28px);
+            background: var(--bg-primary);
+        }
+
+        .night-mode-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            transition: opacity 0.3s ease;
+        }
+
+        .night-mode-icon.sun {
+            left: 6px;
+            opacity: 1;
+        }
+
+        .night-mode-icon.moon {
+            right: 6px;
+            opacity: 0.5;
+        }
+
+        .night-mode-toggle input:checked + .night-mode-switch .sun {
+            opacity: 0.5;
+        }
+
+        .night-mode-toggle input:checked + .night-mode-switch .moon {
+            opacity: 1;
+        }
+
+        .night-mode-label {
+            color: var(--text-primary);
+            font-size: 0.95rem;
         }
 
         .notification-toggle {
@@ -1424,31 +1334,11 @@
                 gap: 10px;
             }
 
-            .chart-container {
-                height: 150px;
-            }
-
-            .chart-bars {
-                height: 120px;
-            }
-
-            .heatmap-grid {
-                grid-template-columns: 40px repeat(12, 1fr);
-            }
-
-            .heatmap-col-label:nth-child(odd) {
-                display: none;
-            }
-
             .notification-banner {
                 top: 10px;
                 right: 10px;
                 left: 10px;
                 max-width: none;
-            }
-
-            .seasonal-birds-grid {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -1458,7 +1348,7 @@
     <div id="birdModal" class="modal-overlay" onclick="closeBirdModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <img id="modalImage" class="modal-image" src="" alt="">
+                <img id="modalImage" class="modal-image" src="" alt="" loading="lazy" decoding="async">
                 <button class="modal-close" onclick="closeBirdModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -1600,13 +1490,28 @@
             </div>
         </div>
 
-        <!-- Notification Settings -->
-        <div class="notification-settings">
-            <label class="notification-toggle">
-                <input type="checkbox" id="notificationToggle" onchange="toggleNotifications()">
-                <span class="notification-slider"></span>
-            </label>
-            <span class="notification-label">Enable notifications for rare or new species</span>
+        <!-- Settings Row -->
+        <div class="settings-row">
+            <!-- Night Mode Toggle -->
+            <div class="setting-item">
+                <label class="night-mode-toggle">
+                    <input type="checkbox" id="nightModeToggle" onchange="toggleNightMode()">
+                    <span class="night-mode-switch">
+                        <span class="night-mode-icon sun">&#x2600;</span>
+                        <span class="night-mode-icon moon">&#x1F319;</span>
+                    </span>
+                </label>
+                <span class="night-mode-label">Night Mode</span>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="setting-item">
+                <label class="notification-toggle">
+                    <input type="checkbox" id="notificationToggle" onchange="toggleNotifications()">
+                    <span class="notification-slider"></span>
+                </label>
+                <span class="notification-label">Notifications</span>
+            </div>
         </div>
 
         <h2 class="section-title">
@@ -1638,7 +1543,6 @@
     <script>
         const STATION_TOKEN = 'mxrqeMuQJYrXp2NeQRcfEnLB';
         const API_BASE = 'https://app.birdweather.com/api/v1';
-        const REFRESH_INTERVAL = 15 * 60 * 1000; // 15 minutes in milliseconds
 
         let countdownSeconds = 15 * 60;
         let countdownInterval;
@@ -1647,13 +1551,54 @@
         let speciesDataMap = {};
         let previousSpeciesIds = new Set();
         let notificationsEnabled = localStorage.getItem('notificationsEnabled') === 'true';
+        let nightModeEnabled = localStorage.getItem('nightModeEnabled') === 'true';
         let currentModalSpecies = null;
 
-        // Initialize notification toggle state
+        // Apply night mode immediately if saved
+        if (nightModeEnabled) {
+            document.body.classList.add('night-mode');
+        }
+
+        // Cache DOM elements for better performance
+        const DOM = {
+            countdown: null,
+            nightModeToggle: null,
+            lastUpdate: null,
+            totalDetections: null,
+            uniqueSpecies: null,
+            latestTime: null,
+            topConfidence: null,
+            detections: null,
+            viewMode: null,
+            sectionTitleText: null,
+            notificationToggle: null,
+            birdModal: null,
+            notificationBanner: null
+        };
+
+        // Initialize DOM cache and notification toggle state
         document.addEventListener('DOMContentLoaded', () => {
-            const toggle = document.getElementById('notificationToggle');
-            if (toggle) {
-                toggle.checked = notificationsEnabled;
+            // Cache frequently accessed elements
+            DOM.countdown = document.getElementById('countdown');
+            DOM.nightModeToggle = document.getElementById('nightModeToggle');
+            DOM.lastUpdate = document.getElementById('lastUpdate');
+            DOM.totalDetections = document.getElementById('totalDetections');
+            DOM.uniqueSpecies = document.getElementById('uniqueSpecies');
+            DOM.latestTime = document.getElementById('latestTime');
+            DOM.topConfidence = document.getElementById('topConfidence');
+            DOM.detections = document.getElementById('detections');
+            DOM.viewMode = document.getElementById('viewMode');
+            DOM.sectionTitleText = document.getElementById('sectionTitleText');
+            DOM.notificationToggle = document.getElementById('notificationToggle');
+            DOM.birdModal = document.getElementById('birdModal');
+            DOM.notificationBanner = document.getElementById('notificationBanner');
+
+            // Initialize toggle states
+            if (DOM.notificationToggle) {
+                DOM.notificationToggle.checked = notificationsEnabled;
+            }
+            if (DOM.nightModeToggle) {
+                DOM.nightModeToggle.checked = nightModeEnabled;
             }
         });
 
@@ -1689,8 +1634,8 @@
         function updateCountdown() {
             const minutes = Math.floor(countdownSeconds / 60);
             const seconds = countdownSeconds % 60;
-            document.getElementById('countdown').textContent =
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            const el = DOM.countdown || document.getElementById('countdown');
+            if (el) el.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
             if (countdownSeconds > 0) {
                 countdownSeconds--;
@@ -1715,7 +1660,7 @@
 
             currentModalSpecies = speciesData;
             const species = speciesData.species;
-            const modal = document.getElementById('birdModal');
+            const modal = DOM.birdModal || document.getElementById('birdModal');
 
             // Set image
             document.getElementById('modalImage').src = species.image_url || species.imageUrl || 'https://via.placeholder.com/400x300?text=No+Image';
@@ -1750,7 +1695,7 @@
 
         function closeBirdModal(event) {
             if (event && event.target !== event.currentTarget) return;
-            const modal = document.getElementById('birdModal');
+            const modal = DOM.birdModal || document.getElementById('birdModal');
             modal.classList.remove('active');
             document.body.style.overflow = '';
         }
@@ -1800,6 +1745,18 @@
         });
 
         // ==================== NOTIFICATION FUNCTIONS ====================
+        function toggleNightMode() {
+            const toggle = DOM.nightModeToggle || document.getElementById('nightModeToggle');
+            nightModeEnabled = toggle.checked;
+            localStorage.setItem('nightModeEnabled', nightModeEnabled);
+
+            if (nightModeEnabled) {
+                document.body.classList.add('night-mode');
+            } else {
+                document.body.classList.remove('night-mode');
+            }
+        }
+
         function toggleNotifications() {
             notificationsEnabled = document.getElementById('notificationToggle').checked;
             localStorage.setItem('notificationsEnabled', notificationsEnabled);
@@ -1831,7 +1788,7 @@
 
         function showNotification(title, body) {
             // Show in-page banner
-            const banner = document.getElementById('notificationBanner');
+            const banner = DOM.notificationBanner || document.getElementById('notificationBanner');
             document.getElementById('notificationTitle').textContent = title;
             document.getElementById('notificationBody').textContent = body;
             banner.classList.add('show');
@@ -1848,7 +1805,7 @@
         }
 
         function hideNotification() {
-            document.getElementById('notificationBanner').classList.remove('show');
+            (DOM.notificationBanner || document.getElementById('notificationBanner')).classList.remove('show');
         }
 
         // ==================== WHAT'S NEW BOX ====================
@@ -1858,7 +1815,7 @@
         }
 
         async function fetchData() {
-            const detectionsContainer = document.getElementById('detections');
+            const detectionsContainer = DOM.detections || document.getElementById('detections');
 
             detectionsContainer.innerHTML = `
                 <div class="skeleton-grid">
@@ -1939,7 +1896,7 @@
                 renderCurrentView();
 
                 // Update last update time
-                document.getElementById('lastUpdate').textContent = formatTime(new Date());
+                (DOM.lastUpdate || document.getElementById('lastUpdate')).textContent = formatTime(new Date());
 
                 // Restart countdown
                 startCountdown();
@@ -1973,24 +1930,25 @@
                 ? Math.max(...detections.map(d => d.confidence || 0))
                 : 0;
 
-            document.getElementById('totalDetections').textContent = detections.length;
-            document.getElementById('uniqueSpecies').textContent = uniqueSpecies;
-            document.getElementById('latestTime').textContent = latestTime;
-            document.getElementById('topConfidence').textContent =
+            (DOM.totalDetections || document.getElementById('totalDetections')).textContent = detections.length;
+            (DOM.uniqueSpecies || document.getElementById('uniqueSpecies')).textContent = uniqueSpecies;
+            (DOM.latestTime || document.getElementById('latestTime')).textContent = latestTime;
+            (DOM.topConfidence || document.getElementById('topConfidence')).textContent =
                 topConfidence > 0 ? `${(topConfidence * 100).toFixed(0)}%` : '--';
         }
 
         function changeViewMode() {
-            currentViewMode = document.getElementById('viewMode').value;
+            currentViewMode = (DOM.viewMode || document.getElementById('viewMode')).value;
             renderCurrentView();
         }
 
         function renderCurrentView() {
+            const titleEl = DOM.sectionTitleText || document.getElementById('sectionTitleText');
             if (currentViewMode === 'recent') {
-                document.getElementById('sectionTitleText').textContent = 'Species Detected';
+                titleEl.textContent = 'Species Detected';
                 renderSpeciesCards(currentDetections, 'recent');
             } else if (currentViewMode === 'mostDetected') {
-                document.getElementById('sectionTitleText').textContent = 'Most Detected Species';
+                titleEl.textContent = 'Most Detected Species';
                 renderSpeciesCards(currentDetections, 'count');
             }
         }
@@ -2030,7 +1988,7 @@
         }
 
         function renderSpeciesCards(detections, sortBy) {
-            const container = document.getElementById('detections');
+            const container = DOM.detections || document.getElementById('detections');
 
             if (detections.length === 0) {
                 container.innerHTML = `
@@ -2118,6 +2076,8 @@
                                 class="species-image"
                                 src="${species.image_url || species.imageUrl || 'https://via.placeholder.com/400x200?text=No+Image'}"
                                 alt="${species.common_name || species.commonName || 'Unknown Bird'}"
+                                loading="lazy"
+                                decoding="async"
                                 onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'"
                             >
                         </div>
