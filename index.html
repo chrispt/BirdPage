@@ -166,6 +166,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
             position: relative;
             overflow: hidden;
+            contain: layout style;
         }
 
         .stat-card::before {
@@ -228,6 +229,7 @@
             animation: fadeInUp 0.6s ease backwards;
             content-visibility: auto;
             contain-intrinsic-size: 0 500px;
+            will-change: transform;
         }
 
         .species-card:nth-child(1) { animation-delay: 0.1s; }
@@ -2037,7 +2039,8 @@
                     {
                         headers: {
                             'Accept': 'application/json'
-                        }
+                        },
+                        priority: 'high'
                     }
                 );
 
@@ -2313,8 +2316,13 @@
             }).join('');
         }
 
-        // Initial load
-        fetchData();
+        // Initial load - use requestIdleCallback for non-blocking initialization
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => fetchData(), { timeout: 1000 });
+        } else {
+            // Fallback for browsers without requestIdleCallback
+            setTimeout(fetchData, 0);
+        }
     </script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "130b95c940124f70ab0dd9665ece37dd"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
