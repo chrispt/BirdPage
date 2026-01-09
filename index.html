@@ -21,6 +21,19 @@
         }
 
         :root {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #e8ecf1;
+            --bg-tertiary: #dce2e9;
+            --accent: #2a9d7c;
+            --accent-hover: #238a6b;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a5568;
+            --card-bg: rgba(255,255,255,0.7);
+            --card-border: rgba(0,0,0,0.1);
+            --card-bg-hover: rgba(255,255,255,0.85);
+        }
+
+        body.night-mode {
             --bg-primary: #1a1a2e;
             --bg-secondary: #16213e;
             --bg-tertiary: #0f3460;
@@ -31,19 +44,6 @@
             --card-bg: rgba(255,255,255,0.03);
             --card-border: rgba(255,255,255,0.08);
             --card-bg-hover: rgba(255,255,255,0.05);
-        }
-
-        body.night-mode {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #0d0d14;
-            --bg-tertiary: #101018;
-            --accent: #3ba582;
-            --accent-hover: #2d8a6a;
-            --text-primary: #b8b8b8;
-            --text-secondary: #707070;
-            --card-bg: rgba(255,255,255,0.02);
-            --card-border: rgba(255,255,255,0.04);
-            --card-bg-hover: rgba(255,255,255,0.03);
         }
 
         body {
@@ -63,7 +63,7 @@
         header {
             text-align: center;
             padding: 30px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--card-border);
             margin-bottom: 30px;
         }
 
@@ -285,7 +285,7 @@
             width: 100%;
             height: 250px;
             object-fit: contain;
-            background: linear-gradient(135deg, rgba(30, 30, 50, 0.9) 0%, rgba(20, 20, 35, 0.95) 50%, rgba(30, 30, 50, 0.9) 100%);
+            background: var(--bg-secondary);
             transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
@@ -300,13 +300,13 @@
         .bird-name {
             font-size: 1.3rem;
             font-weight: bold;
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 5px;
         }
 
         .scientific-name {
             font-style: italic;
-            color: #a8a8a8;
+            color: var(--text-secondary);
             font-size: 0.95rem;
             margin-bottom: 15px;
         }
@@ -335,19 +335,19 @@
             justify-content: space-between;
             margin-bottom: 5px;
             font-size: 0.85rem;
-            color: #a8a8a8;
+            color: var(--text-secondary);
         }
 
         .confidence-track {
             height: 6px;
-            background: rgba(255,255,255,0.1);
+            background: var(--card-border);
             border-radius: 3px;
             overflow: hidden;
         }
 
         .confidence-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4ecca3, #45b7aa);
+            background: linear-gradient(90deg, var(--accent), var(--accent-hover));
             border-radius: 3px;
             transition: width 0.5s ease;
         }
@@ -356,7 +356,7 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            color: #4ecca3;
+            color: var(--accent);
             text-decoration: none;
             font-size: 0.85rem;
             margin-top: 10px;
@@ -373,9 +373,9 @@
 
         /* Detections List Styles */
         .detections-toggle {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: #4ecca3;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--accent);
             padding: 10px 15px;
             border-radius: 8px;
             cursor: pointer;
@@ -390,7 +390,7 @@
         }
 
         .detections-toggle:hover {
-            background: rgba(255,255,255,0.15);
+            background: var(--card-bg-hover);
         }
 
         .detections-toggle .arrow {
@@ -413,12 +413,12 @@
 
         .detections-list-inner {
             padding: 15px 0 0 0;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid var(--card-border);
             margin-top: 15px;
         }
 
         .detection-item {
-            background: rgba(255,255,255,0.05);
+            background: var(--card-bg);
             border-radius: 10px;
             padding: 12px 15px;
             margin-bottom: 10px;
@@ -434,12 +434,12 @@
         }
 
         .detection-item-time {
-            color: #e8e8e8;
+            color: var(--text-primary);
             font-size: 0.9rem;
         }
 
         .detection-item-confidence {
-            color: #4ecca3;
+            color: var(--accent);
             font-size: 0.85rem;
             font-weight: bold;
         }
@@ -453,7 +453,7 @@
         .loading {
             text-align: center;
             padding: 60px;
-            color: #a8a8a8;
+            color: var(--text-secondary);
         }
 
         /* Skeleton Loading States */
@@ -604,14 +604,14 @@
         }
 
         .view-selector label {
-            color: #a8a8a8;
+            color: var(--text-secondary);
             font-size: 0.95rem;
         }
 
         .view-dropdown {
-            background: rgba(255,255,255,0.1);
-            color: #e8e8e8;
-            border: 1px solid rgba(255,255,255,0.2);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
             padding: 10px 15px;
             border-radius: 8px;
             font-size: 1rem;
@@ -621,16 +621,16 @@
 
         .view-dropdown:focus {
             outline: none;
-            border-color: #4ecca3;
+            border-color: var(--accent);
         }
 
         .view-dropdown option {
-            background: #1a1a2e;
-            color: #e8e8e8;
+            background: var(--bg-primary);
+            color: var(--text-primary);
         }
 
         .time-range-note {
-            color: #a8a8a8;
+            color: var(--text-secondary);
             font-size: 0.9rem;
             margin-left: auto;
         }
@@ -638,13 +638,13 @@
         footer {
             text-align: center;
             padding: 30px;
-            color: #666;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+            border-top: 1px solid var(--card-border);
             margin-top: 40px;
         }
 
         footer a {
-            color: #4ecca3;
+            color: var(--accent);
             text-decoration: none;
         }
 
@@ -894,14 +894,14 @@
         }
 
         .modal-content {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
             border-radius: 20px;
             max-width: 800px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             transform: scale(0.9);
             transition: transform 0.3s ease;
         }
@@ -919,7 +919,7 @@
             width: 100%;
             height: 300px;
             object-fit: contain;
-            background: linear-gradient(135deg, rgba(30, 30, 50, 0.9) 0%, rgba(20, 20, 35, 0.95) 50%, rgba(30, 30, 50, 0.9) 100%);
+            background: var(--bg-secondary);
             border-radius: 20px 20px 0 0;
         }
 
@@ -961,13 +961,13 @@
 
         .modal-bird-name {
             font-size: 1.8rem;
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 5px;
         }
 
         .modal-scientific-name {
             font-style: italic;
-            color: #a8a8a8;
+            color: var(--text-secondary);
             font-size: 1.1rem;
             margin-bottom: 20px;
         }
@@ -978,7 +978,7 @@
 
         .modal-section-title {
             font-size: 1.1rem;
-            color: #4ecca3;
+            color: var(--accent);
             margin-bottom: 12px;
             display: flex;
             align-items: center;
@@ -1027,7 +1027,7 @@
         }
 
         .modal-stat {
-            background: rgba(255,255,255,0.05);
+            background: var(--card-bg);
             padding: 15px;
             border-radius: 10px;
             text-align: center;
@@ -1036,11 +1036,11 @@
         .modal-stat-value {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #4ecca3;
+            color: var(--accent);
         }
 
         .modal-stat-label {
-            color: #a8a8a8;
+            color: var(--text-secondary);
             font-size: 0.85rem;
             margin-top: 5px;
         }
