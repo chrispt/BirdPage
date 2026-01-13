@@ -113,7 +113,7 @@
             height: 10px;
             border-radius: 50%;
             background: var(--accent);
-            animation: pulse 2s infinite;
+            animation: pulse 3s infinite;
         }
 
         @keyframes pulse {
@@ -452,7 +452,7 @@
         }
 
         .detection-item:hover {
-            background: var(--input-bg);
+            background: var(--bg-secondary);
             transform: translateX(4px);
         }
 
@@ -2388,7 +2388,9 @@
             if (detections.length === 0) {
                 container.innerHTML = `
                     <div class="loading">
-                        <p>No detections found in the last 24 hours.</p>
+                        <p style="font-size: 2rem; margin-bottom: 10px;">🐦</p>
+                        <p>No bird detections in the last 24 hours.</p>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 10px;">Check back later or try refreshing.</p>
                     </div>
                 `;
                 return;
@@ -2467,7 +2469,7 @@
                 }).join('');
 
                 return `
-                    <div class="species-card" onclick="openBirdModal('${speciesId}')">
+                    <div class="species-card" tabindex="0" role="button" aria-label="View details for ${species.common_name || species.commonName || 'Unknown Bird'}" onclick="openBirdModal('${speciesId}')" onkeydown="if(event.key==='Enter')openBirdModal('${speciesId}')">
                         <div class="detection-count-badge">${count}</div>
                         <div class="species-image-wrapper">
                             <img
