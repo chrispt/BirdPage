@@ -446,6 +446,14 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
+            text-decoration: none;
+            transition: background 0.2s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .detection-item:hover {
+            background: var(--input-bg);
+            transform: translateX(4px);
         }
 
         .detection-item:last-child {
@@ -2416,13 +2424,17 @@
                     const confInfo = getConfidenceInfo(confidence);
 
                     return `
-                        <div class="detection-item">
+                        <a href="https://app.birdweather.com/detections/${det.id}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="detection-item"
+                           onclick="event.stopPropagation()">
                             <span class="detection-item-time">${formatRelativeTime(timestamp)}</span>
                             <span class="detection-item-confidence">${(confidence * 100).toFixed(1)}%</span>
                             <span class="detection-item-certainty" style="background: ${confInfo.color}20; color: ${confInfo.color}">
                                 ${confInfo.label}
                             </span>
-                        </div>
+                        </a>
                     `;
                 }).join('');
 
