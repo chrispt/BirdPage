@@ -121,6 +121,25 @@
             50% { opacity: 0.5; }
         }
 
+        .status-dot.online {
+            background: #4ecca3;
+        }
+
+        .status-dot.stale {
+            background: #ffc107;
+            animation: pulse-warning 1.5s infinite;
+        }
+
+        .status-dot.offline {
+            background: #ff5252;
+            animation: none;
+        }
+
+        @keyframes pulse-warning {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+            50% { opacity: 0.8; box-shadow: 0 0 0 4px rgba(255, 193, 7, 0); }
+        }
+
         /* Card entry animations */
         @keyframes fadeInUp {
             from {
@@ -1579,8 +1598,11 @@
 
         <div class="status-bar">
             <div class="status-item">
-                <span class="status-dot"></span>
-                <span>Live Monitoring</span>
+                <span class="status-dot online" id="pucStatusDot"></span>
+                <span id="pucStatusLabel">Checking...</span>
+            </div>
+            <div class="status-item" id="locationItem">
+                <span id="locationDisplay">Loading...</span>
             </div>
             <div class="status-item">
                 <span>Last updated: <span id="lastUpdate">--</span></span>
@@ -1671,7 +1693,10 @@
             notificationToggle: null,
             birdModal: null,
             notificationBanner: null,
-            refreshBtn: null
+            refreshBtn: null,
+            pucStatusDot: null,
+            pucStatusLabel: null,
+            locationDisplay: null
         };
 
         // Initialize DOM cache and notification toggle state
@@ -1691,6 +1716,9 @@
             DOM.birdModal = document.getElementById('birdModal');
             DOM.notificationBanner = document.getElementById('notificationBanner');
             DOM.refreshBtn = document.getElementById('refreshBtn');
+            DOM.pucStatusDot = document.getElementById('pucStatusDot');
+            DOM.pucStatusLabel = document.getElementById('pucStatusLabel');
+            DOM.locationDisplay = document.getElementById('locationDisplay');
 
             // Initialize toggle states
             if (DOM.notificationToggle) {
@@ -1736,6 +1764,119 @@
             if (diffMins < 60) return `${diffMins} min${diffMins !== 1 ? 's' : ''} ago`;
             if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
             return formatDateTime(date);
+        }
+
+        function parseStationTimestamp(timestampStr) {
+            if (!timestampStr) return null;
+
+            // Format from API: "2026-01-13 at 08:49:09 EST"
+            // Remove "at" and timezone abbreviation
+            const cleaned = timestampStr
+                .replace(' at ', ' ')
+                .replace(/ [A-Z]{2,4}$/, '');
+
+            const date = new Date(cleaned);
+
+            if (isNaN(date.getTime())) {
+                // Fallback: try parsing date and time parts
+                const match = timestampStr.match(/(\d{4}-\d{2}-\d{2}).*?(\d{2}:\d{2}:\d{2})/);
+                if (match) {
+                    return new Date(`${match[1]}T${match[2]}`);
+                }
+                return null;
+            }
+
+            return date;
+        }
+
+        function updatePucStatus(latestDetectionAt) {
+            const statusDot = DOM.pucStatusDot || document.getElementById('pucStatusDot');
+            const statusLabel = DOM.pucStatusLabel || document.getElementById('pucStatusLabel');
+
+            if (!statusDot || !statusLabel) return;
+
+            if (!latestDetectionAt) {
+                statusDot.className = 'status-dot offline';
+                statusLabel.textContent = 'PUC Status Unknown';
+                return;
+            }
+
+            const lastDetection = parseStationTimestamp(latestDetectionAt);
+            if (!lastDetection) {
+                statusDot.className = 'status-dot offline';
+                statusLabel.textContent = 'PUC Status Unknown';
+                return;
+            }
+
+            const now = new Date();
+            const diffMinutes = (now - lastDetection) / (1000 * 60);
+
+            statusDot.classList.remove('online', 'stale', 'offline');
+
+            if (diffMinutes <= 30) {
+                statusDot.classList.add('online');
+                statusLabel.textContent = 'PUC Online';
+                statusLabel.title = `Last detection: ${formatRelativeTime(lastDetection)}`;
+            } else if (diffMinutes <= 60) {
+                statusDot.classList.add('stale');
+                statusLabel.textContent = 'PUC Stale';
+                statusLabel.title = `Last detection: ${formatRelativeTime(lastDetection)}`;
+            } else {
+                statusDot.classList.add('offline');
+                statusLabel.textContent = 'PUC Offline';
+                statusLabel.title = `Last detection: ${formatRelativeTime(lastDetection)}`;
+            }
+        }
+
+        function updateLocationDisplay(description) {
+            const locationDisplay = DOM.locationDisplay || document.getElementById('locationDisplay');
+
+            if (!locationDisplay) return;
+
+            if (!description) {
+                locationDisplay.textContent = 'Location unavailable';
+                return;
+            }
+
+            // Parse state from description ("Florida, United States")
+            const parts = description.split(',');
+            const state = parts.length >= 1 ? parts[0].trim() : null;
+
+            if (state) {
+                locationDisplay.textContent = `Live from ${state}`;
+            } else {
+                locationDisplay.textContent = 'Location unavailable';
+            }
+        }
+
+        async function fetchStationInfo() {
+            try {
+                const response = await fetch(
+                    `${API_BASE}/stations/${STATION_TOKEN}`,
+                    {
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(`Station API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                updatePucStatus(data.latestDetectionAt);
+                updateLocationDisplay(data.description);
+
+                return data;
+            } catch (error) {
+                console.error('Error fetching station info:', error);
+                const statusLabel = DOM.pucStatusLabel || document.getElementById('pucStatusLabel');
+                const locationDisplay = DOM.locationDisplay || document.getElementById('locationDisplay');
+                if (statusLabel) statusLabel.textContent = 'Status Unknown';
+                if (locationDisplay) locationDisplay.textContent = 'Location unavailable';
+            }
         }
 
         function updateCountdown() {
@@ -2034,16 +2175,19 @@
                 const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
                 const fromDate = twentyFourHoursAgo.toISOString();
 
-                // Fetch detections from last 24 hours
-                const response = await fetch(
-                    `${API_BASE}/stations/${STATION_TOKEN}/detections?limit=100&from=${fromDate}`,
-                    {
-                        headers: {
-                            'Accept': 'application/json'
-                        },
-                        priority: 'high'
-                    }
-                );
+                // Fetch station info and detections in parallel
+                const [stationInfoResult, response] = await Promise.all([
+                    fetchStationInfo(),
+                    fetch(
+                        `${API_BASE}/stations/${STATION_TOKEN}/detections?limit=100&from=${fromDate}`,
+                        {
+                            headers: {
+                                'Accept': 'application/json'
+                            },
+                            priority: 'high'
+                        }
+                    )
+                ]);
 
                 if (!response.ok) {
                     throw new Error(`API error: ${response.status}`);
