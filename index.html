@@ -2326,28 +2326,14 @@
             }
         }
 
-        function getCertaintyColor(certainty) {
-            const colors = {
-                'almost_certain': '#4ecca3',
-                'highly_likely': '#45b7aa',
-                'likely': '#7bc96f',
-                'uncertain': '#ffc107',
-                'unlikely': '#ff9800',
-                'unknown': '#888'
-            };
-            return colors[certainty] || colors.unknown;
-        }
-
-        function formatCertainty(certainty) {
-            const labels = {
-                'almost_certain': 'Almost Certain',
-                'highly_likely': 'Highly Likely',
-                'likely': 'Likely',
-                'uncertain': 'Uncertain',
-                'unlikely': 'Unlikely',
-                'unknown': 'Unknown'
-            };
-            return labels[certainty] || certainty;
+        function getConfidenceInfo(confidence) {
+            const percent = confidence * 100;
+            if (percent >= 90) {
+                return { label: 'Excellent', color: '#4caf50' };
+            } else if (percent >= 75) {
+                return { label: 'Good', color: '#4ecca3' };
+            }
+            return { label: 'Fair', color: '#ffc107' };
         }
 
         function toggleDetectionsList(speciesId) {
@@ -2427,15 +2413,14 @@
                 const detectionsListHtml = sortedDetections.map(det => {
                     const timestamp = new Date(det.timestamp);
                     const confidence = det.confidence || 0;
-                    const certainty = det.certainty || 'unknown';
-                    const certaintyColor = getCertaintyColor(certainty);
+                    const confInfo = getConfidenceInfo(confidence);
 
                     return `
                         <div class="detection-item">
                             <span class="detection-item-time">${formatRelativeTime(timestamp)}</span>
                             <span class="detection-item-confidence">${(confidence * 100).toFixed(1)}%</span>
-                            <span class="detection-item-certainty" style="background: ${certaintyColor}20; color: ${certaintyColor}">
-                                ${formatCertainty(certainty)}
+                            <span class="detection-item-certainty" style="background: ${confInfo.color}20; color: ${confInfo.color}">
+                                ${confInfo.label}
                             </span>
                         </div>
                     `;
