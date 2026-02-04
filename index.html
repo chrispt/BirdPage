@@ -1138,17 +1138,21 @@
 
         /* Settings Modal */
         .settings-modal {
-            max-width: 450px;
+            max-width: 480px;
             position: relative;
+            padding: 30px;
         }
 
         .settings-modal .modal-close {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            right: 20px;
             background: var(--card-bg);
             border: 1px solid var(--border);
             color: var(--text);
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem;
         }
 
         .settings-modal .modal-close:hover {
@@ -1158,32 +1162,36 @@
         }
 
         .settings-modal h2 {
-            margin: 0 0 10px 0;
+            margin: 0 0 15px 0;
+            padding-right: 40px;
             color: var(--text);
+            font-size: 1.5rem;
         }
 
-        .settings-modal p {
+        .settings-modal > p {
             color: var(--text-secondary);
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
 
         .settings-field {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .settings-field label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
             color: var(--text);
+            font-size: 0.95rem;
         }
 
         .settings-field input {
             width: 100%;
-            padding: 12px;
+            padding: 14px 16px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             background: var(--card-bg);
             color: var(--text);
             font-size: 1rem;
@@ -1193,28 +1201,33 @@
         .settings-field input:focus {
             outline: none;
             border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(78, 204, 163, 0.1);
         }
 
         .settings-toggle {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
+            padding: 16px 0;
             border-bottom: 1px solid var(--border);
-            margin-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .settings-toggle span {
+            font-weight: 500;
         }
 
         .settings-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 25px;
         }
 
         .settings-actions button {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
             font-size: 1rem;
@@ -1229,6 +1242,7 @@
 
         .settings-actions .test-btn:hover {
             border-color: var(--accent);
+            background: var(--bg-secondary);
         }
 
         .settings-actions .save-btn {
@@ -1238,24 +1252,37 @@
 
         .settings-actions .save-btn:hover {
             transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(78, 204, 163, 0.3);
         }
 
         .settings-status {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 8px;
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 10px;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .settings-status.success {
-            background: rgba(78, 204, 163, 0.2);
+            background: rgba(78, 204, 163, 0.15);
             color: #4ecca3;
         }
 
         .settings-status.error {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.15);
             color: #ef4444;
+        }
+
+        .settings-help {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .settings-help a {
+            color: var(--accent);
         }
 
         .modal-stats-grid {
@@ -1803,9 +1830,9 @@
 
             <div id="settingsStatus" class="settings-status" style="display: none;"></div>
 
-            <p style="margin-top: 20px; font-size: 0.85rem; color: var(--text-secondary);">
-                <a href="https://pushover.net" target="_blank" rel="noopener noreferrer" style="color: var(--accent);">Get Pushover</a> ($5 one-time) &bull; Create an app to get your App Token
-            </p>
+            <div class="settings-help">
+                <a href="https://pushover.net" target="_blank" rel="noopener noreferrer">Get Pushover</a> ($5 one-time) &bull; Create an app in your Pushover dashboard to get your App Token
+            </div>
         </div>
     </div>
 
