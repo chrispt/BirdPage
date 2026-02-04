@@ -2671,7 +2671,7 @@
 
                 return `
                     <div class="species-card" tabindex="0" role="button" aria-label="View details for ${species.common_name || species.commonName || 'Unknown Bird'}" onclick="openBirdModal('${speciesId}')" onkeydown="if(event.key==='Enter')openBirdModal('${speciesId}')">
-                        <div class="detection-count-badge">${count}</div>
+                        <div class="detection-count-badge" title="${count} detection${count !== 1 ? 's' : ''} in the last 24 hours">${count}</div>
                         <button class="card-watch-btn ${isSpeciesWatched(speciesId) ? 'watching' : ''}"
                                 onclick="toggleWatchFromCard('${speciesId}', event)"
                                 title="${isSpeciesWatched(speciesId) ? 'Remove from Watch List' : 'Add to Watch List'}"
