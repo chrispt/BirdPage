@@ -1112,6 +1112,136 @@
             background: rgba(239, 68, 68, 0.9);
         }
 
+        /* Settings button */
+        .settings-btn {
+            position: fixed;
+            top: 20px;
+            right: 180px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            color: var(--text);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .settings-btn:hover {
+            background: var(--accent);
+            color: #1a1a2e;
+        }
+
+        /* Settings Modal */
+        .settings-modal {
+            max-width: 450px;
+        }
+
+        .settings-modal h2 {
+            margin: 0 0 10px 0;
+            color: var(--text);
+        }
+
+        .settings-modal p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .settings-field {
+            margin-bottom: 15px;
+        }
+
+        .settings-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .settings-field input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .settings-field input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .settings-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 15px;
+        }
+
+        .settings-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .settings-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .settings-actions .test-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .settings-actions .test-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .settings-actions .save-btn {
+            background: var(--accent);
+            color: #1a1a2e;
+        }
+
+        .settings-actions .save-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .settings-status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .settings-status.success {
+            background: rgba(78, 204, 163, 0.2);
+            color: #4ecca3;
+        }
+
+        .settings-status.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
         .modal-stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1553,6 +1683,11 @@
         </label>
     </button>
 
+    <button class="settings-btn" onclick="openSettingsModal()" aria-label="Open settings">
+        <span aria-hidden="true">&#x2699;</span>
+        <span>Settings</span>
+    </button>
+
     <!-- Bird Details Modal -->
     <div id="birdModal" class="modal-overlay" onclick="closeBirdModal(event)" role="dialog" aria-modal="true" aria-labelledby="modalBirdName">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -1618,6 +1753,44 @@
             <span>&#x1F426;</span> <span id="notificationTitle">New Bird Detected!</span>
         </div>
         <div id="notificationBody" class="notification-banner-body"></div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal-overlay" onclick="closeSettingsModal(event)" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <div class="modal-content settings-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeSettingsModal()" aria-label="Close settings">&times;</button>
+            <h2 id="settingsTitle">&#x2699; Pushover Settings</h2>
+            <p>Get push notifications on your phone when watched birds appear, even when this page isn't open.</p>
+
+            <div class="settings-toggle">
+                <span>Enable Pushover Notifications</span>
+                <label class="mini-toggle">
+                    <input type="checkbox" id="pushoverEnabledToggle" onchange="togglePushoverEnabled()">
+                    <span class="mini-slider"></span>
+                </label>
+            </div>
+
+            <div class="settings-field">
+                <label for="pushoverUserKeyInput">User Key</label>
+                <input type="text" id="pushoverUserKeyInput" placeholder="Your Pushover User Key" autocomplete="off">
+            </div>
+
+            <div class="settings-field">
+                <label for="pushoverAppTokenInput">App Token</label>
+                <input type="text" id="pushoverAppTokenInput" placeholder="Your Pushover App Token" autocomplete="off">
+            </div>
+
+            <div class="settings-actions">
+                <button class="test-btn" onclick="testPushover()">&#x1F4E4; Test</button>
+                <button class="save-btn" onclick="savePushoverSettings()">&#x1F4BE; Save Settings</button>
+            </div>
+
+            <div id="settingsStatus" class="settings-status" style="display: none;"></div>
+
+            <p style="margin-top: 20px; font-size: 0.85rem; color: var(--text-secondary);">
+                <a href="https://pushover.net" target="_blank" rel="noopener noreferrer" style="color: var(--accent);">Get Pushover</a> ($5 one-time) &bull; Create an app to get your App Token
+            </p>
+        </div>
     </div>
 
     <div class="container">
@@ -1787,6 +1960,11 @@
         // Watch list for specific bird notifications
         let watchedSpeciesIds = new Set(JSON.parse(localStorage.getItem('watchedSpeciesIds') || '[]'));
         let notifiedWatchedSpecies = new Set();
+
+        // Pushover push notification settings
+        let pushoverEnabled = localStorage.getItem('pushoverEnabled') === 'true';
+        let pushoverUserKey = localStorage.getItem('pushoverUserKey') || '';
+        let pushoverAppToken = localStorage.getItem('pushoverAppToken') || '';
 
         // Apply night mode immediately if saved
         if (nightModeEnabled) {
@@ -2286,6 +2464,9 @@
             if ('Notification' in window && Notification.permission === 'granted') {
                 new Notification(title, { body: body });
             }
+
+            // Send to Pushover if enabled
+            sendPushoverNotification(title, body);
         }
 
         function hideNotification() {
@@ -2363,6 +2544,95 @@
                     }
                 }
             });
+        }
+
+        // ==================== PUSHOVER FUNCTIONS ====================
+        function openSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            document.getElementById('pushoverEnabledToggle').checked = pushoverEnabled;
+            document.getElementById('pushoverUserKeyInput').value = pushoverUserKey;
+            document.getElementById('pushoverAppTokenInput').value = pushoverAppToken;
+            document.getElementById('settingsStatus').style.display = 'none';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSettingsModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('settingsModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function togglePushoverEnabled() {
+            pushoverEnabled = document.getElementById('pushoverEnabledToggle').checked;
+        }
+
+        function savePushoverSettings() {
+            pushoverEnabled = document.getElementById('pushoverEnabledToggle').checked;
+            pushoverUserKey = document.getElementById('pushoverUserKeyInput').value.trim();
+            pushoverAppToken = document.getElementById('pushoverAppTokenInput').value.trim();
+
+            localStorage.setItem('pushoverEnabled', pushoverEnabled);
+            localStorage.setItem('pushoverUserKey', pushoverUserKey);
+            localStorage.setItem('pushoverAppToken', pushoverAppToken);
+
+            showSettingsStatus('Settings saved!', 'success');
+        }
+
+        function testPushover() {
+            const userKey = document.getElementById('pushoverUserKeyInput').value.trim();
+            const appToken = document.getElementById('pushoverAppTokenInput').value.trim();
+
+            if (!userKey || !appToken) {
+                showSettingsStatus('Please enter both User Key and App Token', 'error');
+                return;
+            }
+
+            showSettingsStatus('Sending test notification...', 'success');
+
+            const data = new FormData();
+            data.append('token', appToken);
+            data.append('user', userKey);
+            data.append('title', '🐦 BirdPage Test');
+            data.append('message', 'Pushover notifications are working!');
+
+            fetch('https://api.pushover.net/1/messages.json', {
+                method: 'POST',
+                body: data
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 1) {
+                    showSettingsStatus('Test notification sent! Check your phone.', 'success');
+                } else {
+                    showSettingsStatus('Error: ' + (result.errors ? result.errors.join(', ') : 'Unknown error'), 'error');
+                }
+            })
+            .catch(error => {
+                showSettingsStatus('Network error: ' + error.message, 'error');
+            });
+        }
+
+        function showSettingsStatus(message, type) {
+            const status = document.getElementById('settingsStatus');
+            status.textContent = message;
+            status.className = 'settings-status ' + type;
+            status.style.display = 'block';
+        }
+
+        function sendPushoverNotification(title, body) {
+            if (!pushoverEnabled || !pushoverUserKey || !pushoverAppToken) return;
+
+            const data = new FormData();
+            data.append('token', pushoverAppToken);
+            data.append('user', pushoverUserKey);
+            data.append('title', title);
+            data.append('message', body);
+
+            fetch('https://api.pushover.net/1/messages.json', {
+                method: 'POST',
+                body: data
+            }).catch(err => console.error('Pushover error:', err));
         }
 
         // ==================== WHAT'S NEW BOX ====================
