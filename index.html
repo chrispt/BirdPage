@@ -2520,7 +2520,7 @@
         function toggleWatchSpecies() {
             if (!currentModalSpecies) return;
 
-            const speciesId = currentModalSpecies.species.id;
+            const speciesId = String(currentModalSpecies.species.id); // Ensure string type
             const watchBtn = document.getElementById('modalWatchBtn');
 
             if (watchedSpeciesIds.has(speciesId)) {
@@ -2543,20 +2543,22 @@
         }
 
         function isSpeciesWatched(speciesId) {
-            return watchedSpeciesIds.has(speciesId);
+            // Convert to string for consistent comparison (API returns numbers, HTML passes strings)
+            return watchedSpeciesIds.has(String(speciesId));
         }
 
         function toggleWatchFromCard(speciesId, event) {
             event.stopPropagation();
 
             const btn = event.currentTarget;
+            const id = String(speciesId); // Ensure consistent string type
 
-            if (watchedSpeciesIds.has(speciesId)) {
-                watchedSpeciesIds.delete(speciesId);
+            if (watchedSpeciesIds.has(id)) {
+                watchedSpeciesIds.delete(id);
                 btn.classList.remove('watching');
                 btn.title = 'Add to Watch List';
             } else {
-                watchedSpeciesIds.add(speciesId);
+                watchedSpeciesIds.add(id);
                 btn.classList.add('watching');
                 btn.title = 'Remove from Watch List';
             }
@@ -2569,14 +2571,14 @@
             if (!notificationsEnabled) return;
             if (watchedSpeciesIds.size === 0) return;
 
-            // Get current species IDs from detections
-            const currentSpeciesIds = new Set(detections.map(d => d.species?.id).filter(Boolean));
+            // Get current species IDs from detections (as strings for consistent comparison)
+            const currentSpeciesIds = new Set(detections.map(d => String(d.species?.id)).filter(id => id !== 'undefined'));
 
             // Check each watched species
             watchedSpeciesIds.forEach(watchedId => {
                 if (currentSpeciesIds.has(watchedId) && !notifiedWatchedSpecies.has(watchedId)) {
                     // Found a watched species that hasn't been notified yet this cycle
-                    const detection = detections.find(d => d.species?.id === watchedId);
+                    const detection = detections.find(d => String(d.species?.id) === watchedId);
                     if (detection) {
                         const speciesName = detection.species?.common_name || detection.species?.commonName || 'Unknown Bird';
                         showNotification(
