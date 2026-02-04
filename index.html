@@ -2790,13 +2790,14 @@
                     throw new Error('Invalid response from API');
                 }
 
-                // Filter to ensure only last 24 hours and high certainty detections
+                // Filter to ensure only last 24 hours, high certainty, and >=75% confidence
                 const highCertaintyLevels = ['almost_certain', 'highly_likely', 'likely'];
                 const detections = data.detections.filter(d => {
                     const detectionDate = new Date(d.timestamp);
                     const isRecent = detectionDate >= twentyFourHoursAgo;
                     const isHighCertainty = highCertaintyLevels.includes(d.certainty);
-                    return isRecent && isHighCertainty;
+                    const isHighConfidence = (d.confidence || 0) >= 0.75;
+                    return isRecent && isHighCertainty && isHighConfidence;
                 });
 
                 currentDetections = detections;
