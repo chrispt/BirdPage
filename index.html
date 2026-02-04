@@ -1047,6 +1047,52 @@
             50% { box-shadow: 0 0 0 10px rgba(78, 204, 163, 0); }
         }
 
+        /* Watch button styles */
+        .watch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .watch-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .watch-btn.watching {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .watch-btn.watching:hover {
+            box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Watched species indicator on cards */
+        .watched-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(245, 158, 11, 0.95);
+            color: #1a1a2e;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 2;
+        }
+
         .modal-stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1531,6 +1577,13 @@
                 </div>
 
                 <div class="modal-section">
+                    <h3 class="modal-section-title"><span>&#x1F514;</span> Watch List</h3>
+                    <button id="modalWatchBtn" class="watch-btn" onclick="toggleWatchSpecies()">
+                        <span>&#x1F514;</span> Add to Watch List
+                    </button>
+                </div>
+
+                <div class="modal-section">
                     <a id="modalCornellLink" href="#" target="_blank" rel="noopener noreferrer" class="wiki-link" style="display:inline-flex; font-size: 1rem;">
                         <span>&#x1F4D6;</span> Learn more on All About Birds
                     </a>
@@ -1709,6 +1762,13 @@
         let currentModalSpecies = null;
         let previouslyFocusedElement = null;
 
+        // Page visibility tracking for timer accuracy
+        let pageHiddenTime = null;
+
+        // Watch list for specific bird notifications
+        let watchedSpeciesIds = new Set(JSON.parse(localStorage.getItem('watchedSpeciesIds') || '[]'));
+        let notifiedWatchedSpecies = new Set();
+
         // Apply night mode immediately if saved
         if (nightModeEnabled) {
             document.body.classList.add('night-mode');
@@ -1771,6 +1831,9 @@
 
             // Initialize What's New box state
             initWhatsNew();
+
+            // Add visibility change listener for timer accuracy when tab is backgrounded
+            document.addEventListener('visibilitychange', handleVisibilityChange);
         });
 
         function formatTime(date) {
@@ -1971,7 +2034,37 @@
                 clearInterval(countdownInterval);
             }
             countdownSeconds = 15 * 60;
+            pageHiddenTime = null;
             countdownInterval = setInterval(updateCountdown, 1000);
+        }
+
+        // Handle page visibility changes for accurate timer when tab is backgrounded
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                // Page is now hidden - record the time
+                pageHiddenTime = Date.now();
+            } else {
+                // Page is now visible - check elapsed time
+                if (pageHiddenTime) {
+                    const elapsedSeconds = Math.floor((Date.now() - pageHiddenTime) / 1000);
+                    const REFRESH_INTERVAL = 15 * 60; // 900 seconds
+
+                    if (elapsedSeconds >= REFRESH_INTERVAL) {
+                        // 15+ minutes elapsed while hidden - refresh immediately
+                        fetchData();
+                    } else {
+                        // Adjust countdown to account for elapsed time
+                        countdownSeconds = Math.max(0, countdownSeconds - elapsedSeconds);
+                        if (countdownSeconds <= 0) {
+                            fetchData();
+                        } else {
+                            // Update the display immediately
+                            updateCountdown();
+                        }
+                    }
+                }
+                pageHiddenTime = null;
+            }
         }
 
         // ==================== MODAL FUNCTIONS ====================
@@ -2011,6 +2104,18 @@
             playBtn.disabled = false;
             playBtn.innerHTML = '<span>&#x1F3B5;</span> Listen on Cornell';
             playBtn.classList.remove('playing');
+
+            // Update watch button state
+            const watchBtn = document.getElementById('modalWatchBtn');
+            if (watchBtn) {
+                if (isSpeciesWatched(speciesId)) {
+                    watchBtn.classList.add('watching');
+                    watchBtn.innerHTML = '<span>&#x1F515;</span> Remove from Watch List';
+                } else {
+                    watchBtn.classList.remove('watching');
+                    watchBtn.innerHTML = '<span>&#x1F514;</span> Add to Watch List';
+                }
+            }
 
             // Show modal
             modal.classList.add('active');
@@ -2168,6 +2273,60 @@
             (DOM.notificationBanner || document.getElementById('notificationBanner')).classList.remove('show');
         }
 
+        // ==================== WATCH LIST FUNCTIONS ====================
+        function toggleWatchSpecies() {
+            if (!currentModalSpecies) return;
+
+            const speciesId = currentModalSpecies.species.id;
+            const watchBtn = document.getElementById('modalWatchBtn');
+
+            if (watchedSpeciesIds.has(speciesId)) {
+                // Remove from watch list
+                watchedSpeciesIds.delete(speciesId);
+                watchBtn.classList.remove('watching');
+                watchBtn.innerHTML = '<span>&#x1F514;</span> Add to Watch List';
+            } else {
+                // Add to watch list
+                watchedSpeciesIds.add(speciesId);
+                watchBtn.classList.add('watching');
+                watchBtn.innerHTML = '<span>&#x1F515;</span> Remove from Watch List';
+            }
+
+            // Persist to localStorage
+            localStorage.setItem('watchedSpeciesIds', JSON.stringify([...watchedSpeciesIds]));
+
+            // Re-render cards to update visual indicator
+            renderCurrentView();
+        }
+
+        function isSpeciesWatched(speciesId) {
+            return watchedSpeciesIds.has(speciesId);
+        }
+
+        function checkForWatchedSpecies(detections) {
+            if (!notificationsEnabled) return;
+            if (watchedSpeciesIds.size === 0) return;
+
+            // Get current species IDs from detections
+            const currentSpeciesIds = new Set(detections.map(d => d.species?.id).filter(Boolean));
+
+            // Check each watched species
+            watchedSpeciesIds.forEach(watchedId => {
+                if (currentSpeciesIds.has(watchedId) && !notifiedWatchedSpecies.has(watchedId)) {
+                    // Found a watched species that hasn't been notified yet this cycle
+                    const detection = detections.find(d => d.species?.id === watchedId);
+                    if (detection) {
+                        const speciesName = detection.species?.common_name || detection.species?.commonName || 'Unknown Bird';
+                        showNotification(
+                            'Watched Bird Spotted!',
+                            `${speciesName} is at the feeder!`
+                        );
+                        notifiedWatchedSpecies.add(watchedId);
+                    }
+                }
+            });
+        }
+
         // ==================== WHAT'S NEW BOX ====================
         function toggleWhatsNew() {
             const box = document.getElementById('whatsNewBox');
@@ -2286,6 +2445,10 @@
 
                 // Check for new species (notifications)
                 checkForNewSpecies(detections);
+
+                // Check for watched species (notifications)
+                notifiedWatchedSpecies.clear();
+                checkForWatchedSpecies(detections);
 
                 // Render based on current view mode
                 renderCurrentView();
@@ -2471,6 +2634,7 @@
                 return `
                     <div class="species-card" tabindex="0" role="button" aria-label="View details for ${species.common_name || species.commonName || 'Unknown Bird'}" onclick="openBirdModal('${speciesId}')" onkeydown="if(event.key==='Enter')openBirdModal('${speciesId}')">
                         <div class="detection-count-badge">${count}</div>
+                        ${isSpeciesWatched(speciesId) ? '<div class="watched-badge">&#x1F514; Watching</div>' : ''}
                         <div class="species-image-wrapper">
                             <img
                                 class="species-image"
