@@ -1115,8 +1115,8 @@
         /* Settings button */
         .settings-btn {
             position: fixed;
-            top: 20px;
-            right: 180px;
+            top: 75px;
+            right: 20px;
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 10px;
@@ -1139,6 +1139,22 @@
         /* Settings Modal */
         .settings-modal {
             max-width: 450px;
+            position: relative;
+        }
+
+        .settings-modal .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .settings-modal .modal-close:hover {
+            background: rgba(239, 68, 68, 0.8);
+            color: #fff;
+            border-color: transparent;
         }
 
         .settings-modal h2 {
