@@ -1,0 +1,129 @@
+/* What's New Box */
+.whats-new-box {
+    background: linear-gradient(135deg, rgba(78, 204, 163, 0.15) 0%, rgba(69, 183, 170, 0.1) 100%);
+    border: 1px solid rgba(78, 204, 163, 0.3);
+    border-radius: 12px;
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+.whats-new-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.whats-new-header:hover {
+    background: rgba(78, 204, 163, 0.1);
+}
+
+.whats-new-box.hidden {
+    display: none;
+}
+
+.whats-new-close {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: var(--text-secondary);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease, color 0.3s ease;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.whats-new-close:hover {
+    background: rgba(255,82,82,0.3);
+    color: #ff5252;
+}
+
+.whats-new-close:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.whats-new-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #4ecca3;
+}
+
+.whats-new-badge {
+    background: #4ecca3;
+    color: #1a1a2e;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.whats-new-arrow {
+    color: #4ecca3;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.whats-new-box.expanded .whats-new-arrow {
+    transform: rotate(180deg);
+}
+
+.whats-new-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.whats-new-box.expanded .whats-new-content {
+    max-height: 600px;
+}
+
+.whats-new-list {
+    padding: 0 20px 20px 20px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.feature-item:last-child {
+    border-bottom: none;
+}
+
+.feature-icon {
+    font-size: 1.3rem;
+    min-width: 30px;
+    text-align: center;
+}
+
+.feature-info {
+    flex: 1;
+}
+
+.feature-name {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.feature-desc {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}

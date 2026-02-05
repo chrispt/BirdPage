@@ -1,0 +1,11 @@
+/* Main CSS - imports all component styles */
+@import './variables.css';
+@import './components/status-bar.css';
+@import './components/cards.css';
+@import './components/modal.css';
+@import './components/notifications.css';
+@import './components/settings.css';
+@import './components/skeleton.css';
+@import './components/toggles.css';
+@import './components/whats-new.css';
+@import './components/responsive.css';

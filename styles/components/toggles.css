@@ -1,0 +1,149 @@
+/* Fixed Corner Toggles */
+.corner-toggle {
+    position: fixed;
+    top: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 10px 16px;
+    border-radius: 25px;
+    border: 1px solid var(--card-border);
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.corner-toggle:hover {
+    border-color: var(--accent);
+    transform: scale(1.02);
+}
+
+.corner-toggle:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.corner-toggle:focus:not(:focus-visible) {
+    outline: none;
+}
+
+.corner-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.corner-toggle.left {
+    left: 20px;
+}
+
+.corner-toggle.right {
+    right: 20px;
+}
+
+.corner-toggle-label {
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.corner-toggle-icon {
+    font-size: 1.1rem;
+}
+
+/* Small toggle switch for corners */
+.mini-toggle {
+    position: relative;
+    width: 40px;
+    height: 22px;
+}
+
+.mini-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.mini-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.2);
+    transition: 0.3s;
+    border-radius: 22px;
+}
+
+.mini-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.mini-toggle input:checked + .mini-slider {
+    background-color: var(--accent);
+}
+
+.mini-toggle input:checked + .mini-slider:before {
+    transform: translateX(18px);
+}
+
+/* Notification Toggle */
+.notification-toggle {
+    position: relative;
+    width: 50px;
+    height: 26px;
+}
+
+.notification-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.notification-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.2);
+    transition: 0.4s;
+    border-radius: 26px;
+}
+
+.notification-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.notification-toggle input:checked + .notification-slider {
+    background-color: #4ecca3;
+}
+
+.notification-toggle input:checked + .notification-slider:before {
+    transform: translateX(24px);
+}

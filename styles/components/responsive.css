@@ -1,0 +1,272 @@
+/* Tablet styles */
+@media (max-width: 900px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .detections-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    header {
+        padding: 20px 0;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        gap: 10px;
+    }
+
+    .bird-icon {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 0.95rem;
+    }
+
+    .status-bar {
+        padding: 12px 15px;
+        gap: 12px;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .status-item {
+        font-size: 0.9rem;
+    }
+
+    .refresh-btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 15px 10px;
+    }
+
+    .stat-number {
+        font-size: 1.6rem;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+    }
+
+    .view-selector {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .view-dropdown {
+        width: 100%;
+        min-width: unset;
+        padding: 12px 15px;
+    }
+
+    .time-range-note {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .detections-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .species-card {
+        border-radius: 12px;
+    }
+
+    .species-image {
+        height: 200px;
+    }
+
+    .species-content {
+        padding: 15px;
+    }
+
+    .bird-name {
+        font-size: 1.1rem;
+    }
+
+    .scientific-name {
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+    }
+
+    .detection-count-badge {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    .wiki-link {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .detections-toggle {
+        padding: 12px 15px;
+    }
+
+    .detection-item {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    footer {
+        padding: 20px;
+        font-size: 0.85rem;
+    }
+
+    /* Corner toggles mobile */
+    .corner-toggle {
+        top: 10px;
+        padding: 8px 12px;
+    }
+
+    .corner-toggle.left {
+        left: 10px;
+    }
+
+    .corner-toggle.right {
+        right: 10px;
+    }
+
+    .corner-toggle-label {
+        display: none;
+    }
+
+    .corner-toggle-icon {
+        font-size: 1.2rem;
+    }
+
+    /* Modal mobile */
+    .modal-content {
+        margin: 10px;
+        max-height: 95vh;
+    }
+
+    .modal-image {
+        height: 200px;
+    }
+
+    .modal-body {
+        padding: 20px 15px;
+    }
+
+    .modal-bird-name {
+        font-size: 1.4rem;
+    }
+
+    .modal-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .notification-banner {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}
+
+/* Extra small mobile styles */
+@media (max-width: 380px) {
+    h1 {
+        font-size: 1.3rem;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .bird-icon {
+        font-size: 2rem;
+    }
+
+    .stat-number {
+        font-size: 1.4rem;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .species-card:hover {
+        transform: none;
+    }
+
+    .stat-card:hover {
+        transform: none;
+    }
+
+    .refresh-btn,
+    .detections-toggle,
+    .wiki-link {
+        min-height: 44px;
+    }
+
+    .detection-item {
+        min-height: 44px;
+    }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    header {
+        padding: 15px 0;
+        margin-bottom: 15px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-card {
+        padding: 10px;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+}

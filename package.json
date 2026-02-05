@@ -1,0 +1,25 @@
+{
+  "name": "birdpage",
+  "version": "1.0.0",
+  "description": "Real-time bird detection dashboard for BirdWeather stations",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrispt/BirdPage.git"
+  },
+  "keywords": ["birds", "birdweather", "dashboard"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chrispt/BirdPage/issues"
+  },
+  "homepage": "https://github.com/chrispt/BirdPage#readme",
+  "devDependencies": {
+    "vite": "^7.3.1"
+  }
+}

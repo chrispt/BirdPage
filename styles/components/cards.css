@@ -1,0 +1,289 @@
+/* Species Cards Grid */
+.detections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 20px;
+}
+
+/* Species Card */
+.species-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
+    position: relative;
+    cursor: pointer;
+    animation: fadeInUp 0.6s ease backwards;
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+    will-change: transform;
+}
+
+.species-card:nth-child(1) { animation-delay: 0.1s; }
+.species-card:nth-child(2) { animation-delay: 0.2s; }
+.species-card:nth-child(3) { animation-delay: 0.3s; }
+.species-card:nth-child(4) { animation-delay: 0.4s; }
+.species-card:nth-child(5) { animation-delay: 0.5s; }
+.species-card:nth-child(6) { animation-delay: 0.6s; }
+
+.species-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    z-index: 20;
+    pointer-events: none;
+}
+
+.species-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(78, 204, 163, 0.25), 0 0 0 1px rgba(78, 204, 163, 0.1);
+    border-color: var(--accent);
+}
+
+.species-card:hover::before {
+    animation: cardShine 0.6s ease forwards;
+}
+
+/* Detection Count Badge */
+.detection-count-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(78, 204, 163, 0.9);
+    color: #1a1a2e;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Species Image */
+.species-image-wrapper {
+    overflow: hidden;
+    position: relative;
+}
+
+.species-image {
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    background: var(--bg-secondary);
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.species-card:hover .species-image {
+    transform: scale(1.08);
+}
+
+/* Species Content */
+.species-content {
+    padding: 20px;
+}
+
+.bird-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+.scientific-name {
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+.species-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.meta-tag {
+    background: rgba(78, 204, 163, 0.2);
+    color: #4ecca3;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+/* Confidence Bar */
+.confidence-bar {
+    margin-top: 15px;
+}
+
+.confidence-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.confidence-track {
+    height: 6px;
+    background: var(--card-border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+/* Wiki Link */
+.wiki-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background: rgba(78, 204, 163, 0.1);
+    border-radius: 6px;
+    transition: background 0.3s ease;
+}
+
+.wiki-link:hover {
+    background: rgba(78, 204, 163, 0.25);
+    text-decoration: none;
+}
+
+/* Detections List */
+.detections-toggle {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--accent);
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.3s ease;
+}
+
+.detections-toggle:hover {
+    background: var(--card-bg-hover);
+}
+
+.detections-toggle .arrow {
+    transition: transform 0.3s ease;
+}
+
+.detections-toggle.expanded .arrow {
+    transform: rotate(180deg);
+}
+
+.detections-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.detections-list.expanded {
+    max-height: 1000px;
+}
+
+.detections-list-inner {
+    padding: 15px 0 0 0;
+    border-top: 1px solid var(--card-border);
+    margin-top: 15px;
+}
+
+.detection-item {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.detection-item:hover {
+    background: var(--bg-secondary);
+    transform: translateX(4px);
+}
+
+.detection-item:last-child {
+    margin-bottom: 0;
+}
+
+.detection-item-time {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.detection-item-confidence {
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.detection-item-certainty {
+    font-size: 0.8rem;
+    padding: 3px 8px;
+    border-radius: 10px;
+}
+
+/* Watch Button on Cards */
+.card-watch-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(30, 30, 50, 0.7);
+    color: #888;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.card-watch-btn:hover {
+    background: rgba(245, 158, 11, 0.9);
+    color: #1a1a2e;
+    transform: scale(1.1);
+}
+
+.card-watch-btn.watching {
+    background: rgba(245, 158, 11, 0.95);
+    color: #1a1a2e;
+}
+
+.card-watch-btn.watching:hover {
+    background: rgba(239, 68, 68, 0.9);
+}
