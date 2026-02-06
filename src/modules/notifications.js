@@ -31,8 +31,6 @@ export function initNotifications() {
  * Check for new species in detections and notify
  */
 export function checkForNewSpecies(detections) {
-    if (!store.get('notificationsEnabled')) return;
-
     const currentSpeciesIds = new Set(
         detections.map(d => d.species?.id).filter(Boolean)
     );
@@ -46,10 +44,12 @@ export function checkForNewSpecies(detections) {
                 const speciesName = detection.species?.common_name ||
                     detection.species?.commonName ||
                     'Unknown Bird';
-                showNotification(
-                    'New Species Detected!',
-                    `A ${speciesName} was just spotted at the feeder!`
-                );
+                const title = 'New Species Detected!';
+                const body = `A ${speciesName} was just spotted at the feeder!`;
+                if (store.get('notificationsEnabled')) {
+                    showNotification(title, body);
+                }
+                sendPushoverNotification(title, body);
             }
         }
     });
@@ -62,8 +62,6 @@ export function checkForNewSpecies(detections) {
  * Check for watched species in detections and notify
  */
 export function checkForWatchedSpecies(detections) {
-    if (!store.get('notificationsEnabled')) return;
-
     const watchedSpeciesIds = store.get('watchedSpeciesIds');
     if (watchedSpeciesIds.size === 0) return;
 
@@ -82,10 +80,12 @@ export function checkForWatchedSpecies(detections) {
                 const speciesName = detection.species?.common_name ||
                     detection.species?.commonName ||
                     'Unknown Bird';
-                showNotification(
-                    'Watched Bird Spotted!',
-                    `${speciesName} is at the feeder!`
-                );
+                const title = 'Watched Bird Spotted!';
+                const body = `${speciesName} is at the feeder!`;
+                if (store.get('notificationsEnabled')) {
+                    showNotification(title, body);
+                }
+                sendPushoverNotification(title, body);
                 notifiedWatchedSpecies.add(watchedId);
             }
         }
@@ -95,7 +95,8 @@ export function checkForWatchedSpecies(detections) {
 }
 
 /**
- * Show a notification (in-page banner + browser + Pushover)
+ * Show a notification (in-page banner + browser only).
+ * Pushover is sent separately by the caller when a bird event qualifies.
  */
 export function showNotification(title, body) {
     // Show in-page banner
@@ -116,9 +117,6 @@ export function showNotification(title, body) {
     if ('Notification' in window && Notification.permission === 'granted') {
         new Notification(title, { body: body });
     }
-
-    // Send to Pushover if enabled
-    sendPushoverNotification(title, body);
 }
 
 /**

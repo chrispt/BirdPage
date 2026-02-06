@@ -44,7 +44,7 @@ function handleContainerClick(event) {
             case 'toggle-watch':
                 event.stopPropagation();
                 if (speciesId) {
-                    toggleWatchFromCard(speciesId, event);
+                    toggleWatchFromCard(speciesId, event, actionElement);
                 }
                 return;
 

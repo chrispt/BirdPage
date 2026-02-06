@@ -58,13 +58,16 @@ export function toggleWatchSpecies() {
 
 /**
  * Toggle watch status from a card button
+ * @param {string|number} speciesId
+ * @param {Event} [event]
+ * @param {HTMLElement} [buttonElement] - The watch button (required when using event delegation)
  */
-export function toggleWatchFromCard(speciesId, event) {
+export function toggleWatchFromCard(speciesId, event, buttonElement) {
     if (event) {
         event.stopPropagation();
     }
 
-    const btn = event?.currentTarget;
+    const btn = buttonElement ?? event?.currentTarget;
     const id = String(speciesId);
     const watchedSpeciesIds = store.get('watchedSpeciesIds');
 
@@ -84,6 +87,11 @@ export function toggleWatchFromCard(speciesId, event) {
 
     // Update store (triggers localStorage persistence)
     store.set('watchedSpeciesIds', watchedSpeciesIds);
+
+    // Re-render cards so all cards stay in sync
+    if (renderCallback) {
+        renderCallback();
+    }
 }
 
 /**
