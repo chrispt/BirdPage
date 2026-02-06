@@ -16,23 +16,23 @@
 </head>
 <body>
     <!-- Corner Toggles -->
-    <button class="corner-toggle left" onclick="document.getElementById('notificationToggle').click()" aria-label="Toggle notifications">
+    <div class="corner-toggle left" onclick="var t=document.getElementById('notificationToggle');t.checked=!t.checked;toggleNotifications()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}" role="button" tabindex="0" aria-label="Toggle notifications">
         <span class="corner-toggle-icon" aria-hidden="true">&#x1F514;</span>
         <span class="corner-toggle-label">Notifications</span>
         <label class="mini-toggle" onclick="event.stopPropagation()">
             <input type="checkbox" id="notificationToggle" onchange="toggleNotifications()" aria-label="Enable notifications">
             <span class="mini-slider"></span>
         </label>
-    </button>
+    </div>
 
-    <button class="corner-toggle right" onclick="document.getElementById('nightModeToggle').click()" aria-label="Toggle night mode">
+    <div class="corner-toggle right" onclick="var t=document.getElementById('nightModeToggle');t.checked=!t.checked;toggleNightMode()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}" role="button" tabindex="0" aria-label="Toggle night mode">
         <span class="corner-toggle-icon" id="nightModeIcon" aria-hidden="true">&#x1F31E;</span>
         <span class="corner-toggle-label">Night Mode</span>
         <label class="mini-toggle" onclick="event.stopPropagation()">
             <input type="checkbox" id="nightModeToggle" onchange="toggleNightMode()" aria-label="Enable night mode">
             <span class="mini-slider"></span>
         </label>
-    </button>
+    </div>
 
     <button class="settings-btn" onclick="openSettingsModal()" aria-label="Open settings">
         <span aria-hidden="true">&#x2699;</span>
