@@ -4,11 +4,11 @@ import { NOTIFICATION_AUTO_HIDE_MS } from '../config/constants.js';
 import { sendPushoverNotification } from './pushover.js';
 
 /**
- * Toggle browser notifications on/off
+ * Toggle browser notifications on/off (called from settings modal)
  */
 export function toggleNotifications() {
-    const toggle = document.getElementById('notificationToggle');
-    const enabled = toggle.checked;
+    const toggle = document.getElementById('notificationsEnabledToggle');
+    const enabled = toggle ? toggle.checked : false;
 
     store.set('notificationsEnabled', enabled);
 
@@ -19,12 +19,11 @@ export function toggleNotifications() {
 }
 
 /**
- * Initialize notification toggle state
+ * Initialize notifications - request permission if already enabled
  */
 export function initNotifications() {
-    const toggle = DOM.notificationToggle || document.getElementById('notificationToggle');
-    if (toggle) {
-        toggle.checked = store.get('notificationsEnabled');
+    if (store.get('notificationsEnabled') && 'Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
     }
 }
 

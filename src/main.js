@@ -18,14 +18,12 @@ import { fetchDetections } from './api/detections.js';
 
 // Import modules
 import { startCountdown, handleVisibilityChange, setFetchDataCallback } from './modules/timer.js';
-import { initTheme, toggleNightMode } from './modules/theme.js';
+import { initTheme } from './modules/theme.js';
 import {
     initNotifications,
-    toggleNotifications,
     checkForNewSpecies,
     checkForWatchedSpecies,
-    clearNotifiedWatchedSpecies,
-    hideNotification
+    clearNotifiedWatchedSpecies
 } from './modules/notifications.js';
 import { initWhatsNew, toggleWhatsNew, dismissWhatsNew } from './modules/whatsNew.js';
 import {
@@ -41,11 +39,7 @@ import {
     setRenderCallback
 } from './modules/watchlist.js';
 import {
-    openSettingsModal,
-    closeSettingsModal,
-    savePushoverSettings,
-    testPushover,
-    togglePushoverEnabled
+    initSettingsEvents
 } from './modules/settings.js';
 
 // Import rendering
@@ -155,6 +149,9 @@ function init() {
     // Initialize notifications toggle
     initNotifications();
 
+    // Initialize settings modal event listeners
+    initSettingsEvents();
+
     // Initialize What's New box
     initWhatsNew();
 
@@ -178,8 +175,7 @@ function init() {
     }
 }
 
-// Export functions for global access (needed for inline handlers during transition)
-// These will be removed once all inline handlers are converted to event delegation
+// Export functions for global access (needed for remaining inline handlers)
 window.BirdPage = {
     // Modal functions
     openBirdModal,
@@ -190,20 +186,6 @@ window.BirdPage = {
     // Watch list
     toggleWatchSpecies,
     toggleWatchFromCard,
-
-    // Settings
-    openSettingsModal,
-    closeSettingsModal,
-    savePushoverSettings,
-    testPushover,
-    togglePushoverEnabled,
-
-    // Theme
-    toggleNightMode,
-
-    // Notifications
-    toggleNotifications,
-    hideNotification,
 
     // What's New
     toggleWhatsNew,

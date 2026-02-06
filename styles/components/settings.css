@@ -91,14 +91,49 @@
     box-shadow: 0 0 0 3px rgba(78, 204, 163, 0.1);
 }
 
+/* Settings Sections */
+.settings-section {
+    margin-bottom: 10px;
+}
+
+.settings-section-title {
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+    color: var(--text);
+}
+
+.settings-section-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 15px 0;
+}
+
+.settings-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+}
+
+.settings-info-text {
+    padding-left: 12px;
+    border-left: 2px solid var(--accent);
+    margin-top: 12px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.8;
+}
+
+.settings-info-text p {
+    margin: 0;
+}
+
 /* Settings Toggle */
 .settings-toggle {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 25px;
+    padding: 12px 0;
 }
 
 .settings-toggle span {

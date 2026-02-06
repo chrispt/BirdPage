@@ -1,23 +1,20 @@
 import { store } from '../state/store.js';
-import { DOM } from '../utils/dom.js';
 
 /**
  * Toggle night mode on/off
  */
 export function toggleNightMode() {
-    const toggle = DOM.nightModeToggle || document.getElementById('nightModeToggle');
-    const nightModeEnabled = toggle.checked;
-
-    store.set('nightModeEnabled', nightModeEnabled);
-
-    applyNightMode(nightModeEnabled);
+    const enabled = !store.get('nightModeEnabled');
+    store.set('nightModeEnabled', enabled);
+    applyNightMode(enabled);
 }
 
 /**
  * Apply night mode styles
  */
 export function applyNightMode(enabled) {
-    const icon = DOM.nightModeIcon || document.getElementById('nightModeIcon');
+    const icon = document.getElementById('nightModeIcon');
+    const btn = document.getElementById('nightModeBtn');
 
     if (enabled) {
         document.body.classList.add('night-mode');
@@ -25,6 +22,10 @@ export function applyNightMode(enabled) {
     } else {
         document.body.classList.remove('night-mode');
         if (icon) icon.textContent = '\u2600'; // Sun icon
+    }
+
+    if (btn) {
+        btn.setAttribute('aria-pressed', String(enabled));
     }
 }
 
@@ -35,16 +36,11 @@ export function initTheme() {
     const nightModeEnabled = store.get('nightModeEnabled');
 
     // Apply theme immediately
-    if (nightModeEnabled) {
-        document.body.classList.add('night-mode');
-    }
-
-    // Set toggle state
-    const toggle = DOM.nightModeToggle || document.getElementById('nightModeToggle');
-    if (toggle) {
-        toggle.checked = nightModeEnabled;
-    }
-
-    // Set icon
     applyNightMode(nightModeEnabled);
+
+    // Attach click listener to button
+    const btn = document.getElementById('nightModeBtn');
+    if (btn) {
+        btn.addEventListener('click', toggleNightMode);
+    }
 }

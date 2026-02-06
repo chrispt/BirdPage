@@ -15,26 +15,13 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%234ecca3' d='M85 35c-5-15-20-20-35-15-10 3-18 10-22 20-3 8-2 17 3 24 2 3 5 5 8 7l-8 14c-1 2 1 4 3 3l18-8c6 2 13 2 19-1 15-8 22-28 14-44zm-45 25c-4 0-7-3-7-7s3-7 7-7 7 3 7 7-3 7-7 7z'/%3E%3C/svg%3E">
 </head>
 <body>
-    <!-- Corner Toggles -->
-    <div class="corner-toggle left" onclick="var t=document.getElementById('notificationToggle');t.checked=!t.checked;toggleNotifications()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}" role="button" tabindex="0" aria-label="Toggle notifications">
-        <span class="corner-toggle-icon" aria-hidden="true">&#x1F514;</span>
-        <span class="corner-toggle-label">Notifications</span>
-        <label class="mini-toggle" onclick="event.stopPropagation()">
-            <input type="checkbox" id="notificationToggle" onchange="toggleNotifications()" aria-label="Enable notifications">
-            <span class="mini-slider"></span>
-        </label>
-    </div>
+    <!-- Night Mode Toggle -->
+    <button id="nightModeBtn" class="night-mode-btn" aria-label="Toggle night mode" aria-pressed="false">
+        <span id="nightModeIcon" aria-hidden="true">&#x2600;</span>
+        <span class="night-mode-label">Night Mode</span>
+    </button>
 
-    <div class="corner-toggle right" onclick="var t=document.getElementById('nightModeToggle');t.checked=!t.checked;toggleNightMode()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}" role="button" tabindex="0" aria-label="Toggle night mode">
-        <span class="corner-toggle-icon" id="nightModeIcon" aria-hidden="true">&#x1F31E;</span>
-        <span class="corner-toggle-label">Night Mode</span>
-        <label class="mini-toggle" onclick="event.stopPropagation()">
-            <input type="checkbox" id="nightModeToggle" onchange="toggleNightMode()" aria-label="Enable night mode">
-            <span class="mini-slider"></span>
-        </label>
-    </div>
-
-    <button class="settings-btn" onclick="openSettingsModal()" aria-label="Open settings">
+    <button id="settingsBtn" class="settings-btn" aria-label="Open settings">
         <span aria-hidden="true">&#x2699;</span>
         <span>Settings</span>
     </button>
@@ -99,7 +86,7 @@
 
     <!-- Notification Banner -->
     <div id="notificationBanner" class="notification-banner">
-        <button class="notification-close" onclick="hideNotification()">&times;</button>
+        <button class="notification-close" id="notificationCloseBtn">&times;</button>
         <div class="notification-banner-title">
             <span>&#x1F426;</span> <span id="notificationTitle">New Bird Detected!</span>
         </div>
@@ -107,33 +94,61 @@
     </div>
 
     <!-- Settings Modal -->
-    <div id="settingsModal" class="modal-overlay" onclick="closeSettingsModal(event)" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
-        <div class="modal-content settings-modal" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeSettingsModal()" aria-label="Close settings">&times;</button>
-            <h2 id="settingsTitle">&#x2699; Pushover Settings</h2>
-            <p>Get push notifications on your phone when watched birds appear, even when this page isn't open.</p>
+    <div id="settingsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <div class="modal-content settings-modal">
+            <button class="modal-close" id="settingsCloseBtn" aria-label="Close settings">&times;</button>
+            <h2 id="settingsTitle">&#x2699; Notifications &amp; Settings</h2>
 
-            <div class="settings-toggle">
-                <span>Enable Pushover Notifications</span>
-                <label class="mini-toggle">
-                    <input type="checkbox" id="pushoverEnabledToggle" onchange="togglePushoverEnabled()">
-                    <span class="mini-slider"></span>
-                </label>
+            <!-- Notifications Section -->
+            <div class="settings-section">
+                <h3 class="settings-section-title">&#x1F514; Notifications</h3>
+                <p class="settings-section-desc">Get alerted when new birds appear or watched birds are spotted.</p>
+
+                <div class="settings-toggle">
+                    <span>Enable Notifications</span>
+                    <label class="mini-toggle">
+                        <input type="checkbox" id="notificationsEnabledToggle">
+                        <span class="mini-slider"></span>
+                    </label>
+                </div>
+
+                <div id="notificationDetails" class="settings-info-text" style="display: none;">
+                    <p>&#x2705; New species alerts &mdash; notified when a never-before-seen bird visits</p>
+                    <p>&#x2705; Watched bird alerts &mdash; notified when a bird on your watch list appears</p>
+                </div>
             </div>
 
-            <div class="settings-field">
-                <label for="pushoverUserKeyInput">User Key</label>
-                <input type="text" id="pushoverUserKeyInput" placeholder="Your Pushover User Key" autocomplete="off">
-            </div>
+            <hr class="settings-divider">
 
-            <div class="settings-field">
-                <label for="pushoverAppTokenInput">App Token</label>
-                <input type="text" id="pushoverAppTokenInput" placeholder="Your Pushover App Token" autocomplete="off">
+            <!-- Pushover Section -->
+            <div class="settings-section">
+                <h3 class="settings-section-title">&#x1F4F1; Pushover</h3>
+                <p class="settings-section-desc">Get push notifications on your phone, even when this page isn't open.</p>
+
+                <div class="settings-toggle">
+                    <span>Enable Pushover</span>
+                    <label class="mini-toggle">
+                        <input type="checkbox" id="pushoverEnabledToggle">
+                        <span class="mini-slider"></span>
+                    </label>
+                </div>
+
+                <div id="pushoverDetails" style="display: none;">
+                    <div class="settings-field">
+                        <label for="pushoverUserKeyInput">User Key</label>
+                        <input type="text" id="pushoverUserKeyInput" placeholder="Your Pushover User Key" autocomplete="off">
+                    </div>
+
+                    <div class="settings-field">
+                        <label for="pushoverAppTokenInput">App Token</label>
+                        <input type="text" id="pushoverAppTokenInput" placeholder="Your Pushover App Token" autocomplete="off">
+                    </div>
+                </div>
             </div>
 
             <div class="settings-actions">
-                <button class="test-btn" onclick="testPushover()">&#x1F4E4; Test</button>
-                <button class="save-btn" onclick="savePushoverSettings()">&#x1F4BE; Save Settings</button>
+                <button class="test-btn" id="testPushoverBtn">&#x1F4E4; Test</button>
+                <button class="save-btn" id="saveSettingsBtn">&#x1F4BE; Save Settings</button>
             </div>
 
             <div id="settingsStatus" class="settings-status" style="display: none;"></div>

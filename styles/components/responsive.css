@@ -156,26 +156,15 @@
         font-size: 0.85rem;
     }
 
-    /* Corner toggles mobile */
-    .corner-toggle {
+    /* Night mode button mobile */
+    .night-mode-btn {
         top: 10px;
+        right: 10px;
         padding: 8px 12px;
     }
 
-    .corner-toggle.left {
-        left: 10px;
-    }
-
-    .corner-toggle.right {
-        right: 10px;
-    }
-
-    .corner-toggle-label {
+    .night-mode-label {
         display: none;
-    }
-
-    .corner-toggle-icon {
-        font-size: 1.2rem;
     }
 
     /* Modal mobile */

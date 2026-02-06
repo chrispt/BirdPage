@@ -23,10 +23,12 @@ export const DOM = {
     viewMode: null,
     sectionTitleText: null,
 
-    // Corner toggles
-    nightModeToggle: null,
+    // Night mode
+    nightModeBtn: null,
     nightModeIcon: null,
-    notificationToggle: null,
+
+    // Settings
+    settingsBtn: null,
 
     // Modals
     birdModal: null,
@@ -83,10 +85,12 @@ export function initDOMCache() {
     DOM.viewMode = document.getElementById('viewMode');
     DOM.sectionTitleText = document.getElementById('sectionTitleText');
 
-    // Corner toggles
-    DOM.nightModeToggle = document.getElementById('nightModeToggle');
+    // Night mode
+    DOM.nightModeBtn = document.getElementById('nightModeBtn');
     DOM.nightModeIcon = document.getElementById('nightModeIcon');
-    DOM.notificationToggle = document.getElementById('notificationToggle');
+
+    // Settings
+    DOM.settingsBtn = document.getElementById('settingsBtn');
 
     // Modals
     DOM.birdModal = document.getElementById('birdModal');
