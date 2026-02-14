@@ -133,6 +133,66 @@ async function fetchData() {
 }
 
 /**
+ * Set up event listeners for elements that previously used inline handlers
+ */
+function setupInlineEventListeners() {
+    // Bird modal overlay click-to-close
+    const birdModal = document.getElementById('birdModal');
+    if (birdModal) {
+        birdModal.addEventListener('click', (e) => closeBirdModal(e));
+    }
+
+    // Bird modal close button
+    const birdModalCloseBtn = document.getElementById('birdModalCloseBtn');
+    if (birdModalCloseBtn) {
+        birdModalCloseBtn.addEventListener('click', () => closeBirdModal());
+    }
+
+    // Modal action buttons
+    const modalPlayCall = document.getElementById('modalPlayCall');
+    if (modalPlayCall) {
+        modalPlayCall.addEventListener('click', playBirdCall);
+    }
+
+    const modalRangeMapBtn = document.getElementById('modalRangeMapBtn');
+    if (modalRangeMapBtn) {
+        modalRangeMapBtn.addEventListener('click', openRangeMap);
+    }
+
+    const modalWatchBtn = document.getElementById('modalWatchBtn');
+    if (modalWatchBtn) {
+        modalWatchBtn.addEventListener('click', toggleWatchSpecies);
+    }
+
+    // What's New header toggle
+    const whatsNewHeader = document.getElementById('whatsNewHeader');
+    if (whatsNewHeader) {
+        whatsNewHeader.addEventListener('click', toggleWhatsNew);
+    }
+
+    // What's New close button
+    const whatsNewCloseBtn = document.getElementById('whatsNewCloseBtn');
+    if (whatsNewCloseBtn) {
+        whatsNewCloseBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dismissWhatsNew();
+        });
+    }
+
+    // Refresh button
+    const refreshBtn = document.getElementById('refreshBtn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', fetchData);
+    }
+
+    // View mode selector
+    const viewMode = document.getElementById('viewMode');
+    if (viewMode) {
+        viewMode.addEventListener('change', changeViewMode);
+    }
+}
+
+/**
  * Initialize the application
  */
 function init() {
@@ -158,6 +218,9 @@ function init() {
     // Set up event delegation for cards
     setupEventDelegation();
 
+    // Set up event listeners for elements (replaces inline handlers)
+    setupInlineEventListeners();
+
     // Set up modal keyboard handling
     setupModalKeyboardHandling();
 
@@ -174,32 +237,6 @@ function init() {
         setTimeout(fetchData, 0);
     }
 }
-
-// Export functions for global access (needed for remaining inline handlers)
-window.BirdPage = {
-    // Modal functions
-    openBirdModal,
-    closeBirdModal,
-    playBirdCall,
-    openRangeMap,
-
-    // Watch list
-    toggleWatchSpecies,
-    toggleWatchFromCard,
-
-    // What's New
-    toggleWhatsNew,
-    dismissWhatsNew,
-
-    // View
-    changeViewMode,
-
-    // Data
-    fetchData
-};
-
-// Also expose on window for backwards compatibility with HTML onclick handlers
-Object.assign(window, window.BirdPage);
 
 // Initialize on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', init);

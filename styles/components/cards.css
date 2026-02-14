@@ -8,26 +8,27 @@
 /* Species Card */
 .species-card {
     background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
     overflow: hidden;
     border: 1px solid var(--card-border);
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
     position: relative;
     cursor: pointer;
-    animation: fadeInUp 0.6s ease backwards;
     content-visibility: auto;
     contain-intrinsic-size: 0 500px;
-    will-change: transform;
 }
 
-.species-card:nth-child(1) { animation-delay: 0.1s; }
-.species-card:nth-child(2) { animation-delay: 0.2s; }
-.species-card:nth-child(3) { animation-delay: 0.3s; }
-.species-card:nth-child(4) { animation-delay: 0.4s; }
-.species-card:nth-child(5) { animation-delay: 0.5s; }
-.species-card:nth-child(6) { animation-delay: 0.6s; }
+/* Only animate cards on initial page load */
+.initial-load .species-card {
+    animation: fadeInUp 0.6s ease backwards;
+}
+
+.initial-load .species-card:nth-child(1) { animation-delay: 0.1s; }
+.initial-load .species-card:nth-child(2) { animation-delay: 0.2s; }
+.initial-load .species-card:nth-child(3) { animation-delay: 0.3s; }
+.initial-load .species-card:nth-child(4) { animation-delay: 0.4s; }
+.initial-load .species-card:nth-child(5) { animation-delay: 0.5s; }
+.initial-load .species-card:nth-child(6) { animation-delay: 0.6s; }
 
 .species-card::before {
     content: '';
@@ -45,6 +46,7 @@
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 20px 50px rgba(78, 204, 163, 0.25), 0 0 0 1px rgba(78, 204, 163, 0.1);
     border-color: var(--accent);
+    will-change: transform;
 }
 
 .species-card:hover::before {
@@ -270,7 +272,6 @@
     justify-content: center;
     z-index: 3;
     transition: all 0.2s ease;
-    backdrop-filter: blur(4px);
 }
 
 .card-watch-btn:hover {

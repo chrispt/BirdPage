@@ -27,11 +27,11 @@
     </button>
 
     <!-- Bird Details Modal -->
-    <div id="birdModal" class="modal-overlay" onclick="closeBirdModal(event)" role="dialog" aria-modal="true" aria-labelledby="modalBirdName">
-        <div class="modal-content" onclick="event.stopPropagation()">
+    <div id="birdModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalBirdName">
+        <div class="modal-content">
             <div class="modal-header">
                 <img id="modalImage" class="modal-image" src="" alt="" loading="lazy" decoding="async">
-                <button class="modal-close" onclick="closeBirdModal()" aria-label="Close modal">&times;</button>
+                <button id="birdModalCloseBtn" class="modal-close" aria-label="Close modal">&times;</button>
             </div>
             <div class="modal-body">
                 <h2 id="modalBirdName" class="modal-bird-name"></h2>
@@ -56,21 +56,21 @@
 
                 <div class="modal-section">
                     <h3 class="modal-section-title"><span>&#x1F3B5;</span> Listen to Bird Call</h3>
-                    <button id="modalPlayCall" class="bird-call-btn" onclick="playBirdCall()">
+                    <button id="modalPlayCall" class="bird-call-btn">
                         <span>&#x1F3B5;</span> Listen on Cornell
                     </button>
                 </div>
 
                 <div class="modal-section">
                     <h3 class="modal-section-title"><span>&#x1F5FA;</span> Range Map</h3>
-                    <button id="modalRangeMapBtn" class="bird-call-btn" onclick="openRangeMap()">
+                    <button id="modalRangeMapBtn" class="bird-call-btn">
                         <span>&#x1F5FA;</span> View Range Map on Cornell
                     </button>
                 </div>
 
                 <div class="modal-section">
                     <h3 class="modal-section-title"><span>&#x1F514;</span> Watch List</h3>
-                    <button id="modalWatchBtn" class="watch-btn" onclick="toggleWatchSpecies()">
+                    <button id="modalWatchBtn" class="watch-btn">
                         <span>&#x1F514;</span> Add to Watch List
                     </button>
                 </div>
@@ -136,12 +136,12 @@
                 <div id="pushoverDetails" style="display: none;">
                     <div class="settings-field">
                         <label for="pushoverUserKeyInput">User Key</label>
-                        <input type="text" id="pushoverUserKeyInput" placeholder="Your Pushover User Key" autocomplete="off">
+                        <input type="password" id="pushoverUserKeyInput" placeholder="Your Pushover User Key" autocomplete="off">
                     </div>
 
                     <div class="settings-field">
                         <label for="pushoverAppTokenInput">App Token</label>
-                        <input type="text" id="pushoverAppTokenInput" placeholder="Your Pushover App Token" autocomplete="off">
+                        <input type="password" id="pushoverAppTokenInput" placeholder="Your Pushover App Token" autocomplete="off">
                     </div>
                 </div>
             </div>
@@ -170,7 +170,7 @@
 
         <!-- What's New Box -->
         <div id="whatsNewBox" class="whats-new-box">
-            <div class="whats-new-header" onclick="toggleWhatsNew()">
+            <div class="whats-new-header" id="whatsNewHeader">
                 <div class="whats-new-title">
                     <span aria-hidden="true">&#x2728;</span>
                     What's New
@@ -178,7 +178,7 @@
                 </div>
                 <div style="display: flex; align-items: center;">
                     <span class="whats-new-arrow" aria-hidden="true">&#x25BC;</span>
-                    <button class="whats-new-close" onclick="event.stopPropagation(); dismissWhatsNew()" aria-label="Dismiss What's New">&times;</button>
+                    <button class="whats-new-close" id="whatsNewCloseBtn" aria-label="Dismiss What's New">&times;</button>
                 </div>
             </div>
             <div class="whats-new-content">
@@ -271,7 +271,7 @@
             <div class="status-item">
                 <span>Next refresh in: <span id="countdown" class="countdown">15:00</span></span>
             </div>
-            <button class="refresh-btn" id="refreshBtn" onclick="fetchData()" aria-label="Refresh bird detection data">Refresh Now</button>
+            <button class="refresh-btn" id="refreshBtn" aria-label="Refresh bird detection data">Refresh Now</button>
         </div>
 
         <div class="stats-grid" aria-live="polite" aria-atomic="false">
@@ -299,7 +299,7 @@
 
         <div class="view-selector">
             <label for="viewMode">Sort by:</label>
-            <select id="viewMode" class="view-dropdown" onchange="changeViewMode()">
+            <select id="viewMode" class="view-dropdown">
                 <option value="recent">Most Recent</option>
                 <option value="mostDetected">Most Detected</option>
             </select>

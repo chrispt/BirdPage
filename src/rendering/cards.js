@@ -1,8 +1,12 @@
 import { store } from '../state/store.js';
 import { DOM } from '../utils/dom.js';
-import { formatRelativeTime } from '../utils/formatting.js';
+import { formatRelativeTime, escapeHtml } from '../utils/formatting.js';
 import { isSpeciesWatched } from '../modules/watchlist.js';
 import { getEmptyStateHTML } from './skeleton.js';
+
+const IMAGE_FALLBACK = 'https://via.placeholder.com/400x200?text=No+Image';
+
+let isInitialLoad = true;
 
 /**
  * Get confidence level info (label and color)
@@ -63,9 +67,9 @@ function buildSpeciesCardHTML(item) {
     const count = item.detections.length;
     const watched = isSpeciesWatched(speciesId);
 
-    // Sort detections by timestamp (most recent first)
+    // Sort detections by timestamp string (ISO strings sort lexicographically)
     const sortedDetections = [...item.detections].sort((a, b) =>
-        new Date(b.timestamp) - new Date(a.timestamp)
+        b.timestamp.localeCompare(a.timestamp)
     );
 
     // Build detections list HTML
@@ -73,9 +77,9 @@ function buildSpeciesCardHTML(item) {
         .map(det => buildDetectionItemHTML(det))
         .join('');
 
-    const commonName = species.common_name || species.commonName || 'Unknown Species';
-    const scientificName = species.scientific_name || species.scientificName || 'Unknown';
-    const imageUrl = species.image_url || species.imageUrl || 'https://via.placeholder.com/400x200?text=No+Image';
+    const commonName = escapeHtml(species.common_name || species.commonName || 'Unknown Species');
+    const scientificName = escapeHtml(species.scientific_name || species.scientificName || 'Unknown');
+    const imageUrl = escapeHtml(species.image_url || species.imageUrl || IMAGE_FALLBACK);
 
     return `
         <div class="species-card"
@@ -99,7 +103,6 @@ function buildSpeciesCardHTML(item) {
                     alt="${commonName}"
                     loading="lazy"
                     decoding="async"
-                    onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'"
                 >
             </div>
             <div class="species-content">
@@ -139,6 +142,21 @@ function buildSpeciesCardHTML(item) {
             </div>
         </div>
     `;
+}
+
+/**
+ * Set up image error handlers after rendering cards
+ */
+function setupImageErrorHandlers(container) {
+    container.querySelectorAll('.species-image').forEach(img => {
+        img.addEventListener('error', function handleError() {
+            if (!this.dataset.fallback) {
+                this.dataset.fallback = '1';
+                this.src = IMAGE_FALLBACK;
+            }
+            this.removeEventListener('error', handleError);
+        });
+    });
 }
 
 /**
@@ -194,10 +212,26 @@ export function renderSpeciesCards(detections, sortBy = 'recent') {
         speciesArray.sort((a, b) => b.latestTimestamp - a.latestTimestamp);
     }
 
+    // Apply initial-load class for entry animations on first render only
+    if (isInitialLoad) {
+        container.classList.add('initial-load');
+    }
+
     // Build HTML
     container.innerHTML = speciesArray
         .map(item => buildSpeciesCardHTML(item))
         .join('');
+
+    // Set up image error handlers (replaces inline onerror)
+    setupImageErrorHandlers(container);
+
+    // Remove initial-load class after animations complete
+    if (isInitialLoad) {
+        isInitialLoad = false;
+        setTimeout(() => {
+            container.classList.remove('initial-load');
+        }, 1200);
+    }
 }
 
 /**

@@ -59,8 +59,6 @@
 
 .stat-card {
     background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     padding: 25px;
     border-radius: 16px;
     text-align: center;

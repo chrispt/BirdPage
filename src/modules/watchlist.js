@@ -88,10 +88,7 @@ export function toggleWatchFromCard(speciesId, event, buttonElement) {
     // Update store (triggers localStorage persistence)
     store.set('watchedSpeciesIds', watchedSpeciesIds);
 
-    // Re-render cards so all cards stay in sync
-    if (renderCallback) {
-        renderCallback();
-    }
+    // Local DOM change is already applied above, skip full re-render
 }
 
 /**

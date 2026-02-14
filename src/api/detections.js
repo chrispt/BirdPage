@@ -14,9 +14,10 @@ import { fetchStationInfo } from './station.js';
  */
 export async function fetchDetections(hoursAgo = 24) {
     const now = new Date();
-    const fromDate = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000).toISOString();
+    const fromDateTime = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
+    const fromDateISO = fromDateTime.toISOString();
 
-    const url = `${API_BASE}/stations/${STATION_TOKEN}/detections?limit=100&from=${fromDate}`;
+    const url = `${API_BASE}/stations/${STATION_TOKEN}/detections?limit=100&from=${fromDateISO}`;
 
     // Fetch station info and detections in parallel
     const [stationResult, detectionsResult] = await Promise.all([
@@ -42,12 +43,10 @@ export async function fetchDetections(hoursAgo = 24) {
         };
     }
 
-    // Filter detections
-    const twentyFourHoursAgo = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
-
+    // Filter detections (reuse fromDateTime computed above)
     const filteredDetections = data.detections.filter(d => {
         const detectionDate = new Date(d.timestamp);
-        const isRecent = detectionDate >= twentyFourHoursAgo;
+        const isRecent = detectionDate >= fromDateTime;
         const isHighCertainty = HIGH_CERTAINTY_LEVELS.includes(d.certainty);
         const isHighConfidence = (d.confidence || 0) >= CONFIDENCE_THRESHOLD;
         return isRecent && isHighCertainty && isHighConfidence;

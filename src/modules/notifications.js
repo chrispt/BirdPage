@@ -3,6 +3,8 @@ import { DOM } from '../utils/dom.js';
 import { NOTIFICATION_AUTO_HIDE_MS } from '../config/constants.js';
 import { sendPushoverNotification } from './pushover.js';
 
+let notificationTimeout = null;
+
 /**
  * Toggle browser notifications on/off (called from settings modal)
  */
@@ -108,9 +110,15 @@ export function showNotification(title, body) {
     if (bodyEl) bodyEl.textContent = body;
     if (banner) banner.classList.add('show');
 
+    // Clear any existing auto-hide timeout to prevent stacking
+    if (notificationTimeout) {
+        clearTimeout(notificationTimeout);
+    }
+
     // Auto-hide after configured time
-    setTimeout(() => {
+    notificationTimeout = setTimeout(() => {
         hideNotification();
+        notificationTimeout = null;
     }, NOTIFICATION_AUTO_HIDE_MS);
 
     // Show browser notification if permitted
