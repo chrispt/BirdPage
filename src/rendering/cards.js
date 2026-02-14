@@ -79,7 +79,7 @@ function buildSpeciesCardHTML(item) {
 
     const commonName = escapeHtml(species.common_name || species.commonName || 'Unknown Species');
     const scientificName = escapeHtml(species.scientific_name || species.scientificName || 'Unknown');
-    const imageUrl = escapeHtml(species.image_url || species.imageUrl || IMAGE_FALLBACK);
+    const imageUrl = species.image_url || species.imageUrl || IMAGE_FALLBACK;
 
     return `
         <div class="species-card"
@@ -103,6 +103,7 @@ function buildSpeciesCardHTML(item) {
                     alt="${commonName}"
                     loading="lazy"
                     decoding="async"
+                    onerror="this.onerror=null;this.src='${IMAGE_FALLBACK}'"
                 >
             </div>
             <div class="species-content">
@@ -142,21 +143,6 @@ function buildSpeciesCardHTML(item) {
             </div>
         </div>
     `;
-}
-
-/**
- * Set up image error handlers after rendering cards
- */
-function setupImageErrorHandlers(container) {
-    container.querySelectorAll('.species-image').forEach(img => {
-        img.addEventListener('error', function handleError() {
-            if (!this.dataset.fallback) {
-                this.dataset.fallback = '1';
-                this.src = IMAGE_FALLBACK;
-            }
-            this.removeEventListener('error', handleError);
-        });
-    });
 }
 
 /**
@@ -221,9 +207,6 @@ export function renderSpeciesCards(detections, sortBy = 'recent') {
     container.innerHTML = speciesArray
         .map(item => buildSpeciesCardHTML(item))
         .join('');
-
-    // Set up image error handlers (replaces inline onerror)
-    setupImageErrorHandlers(container);
 
     // Remove initial-load class after animations complete
     if (isInitialLoad) {
