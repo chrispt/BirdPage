@@ -14,11 +14,11 @@ let isInitialLoad = true;
 export function getConfidenceInfo(confidence) {
     const percent = confidence * 100;
     if (percent >= 90) {
-        return { label: 'Excellent', color: '#4caf50' };
+        return { label: 'Excellent', color: '#3a7d5c' };
     } else if (percent >= 75) {
-        return { label: 'Good', color: '#4ecca3' };
+        return { label: 'Good', color: '#5ba87a' };
     }
-    return { label: 'Fair', color: '#ffc107' };
+    return { label: 'Fair', color: '#c4873a' };
 }
 
 /**
@@ -61,7 +61,7 @@ function buildDetectionItemHTML(detection) {
  * Build HTML for a single species card
  * Uses data attributes instead of inline onclick handlers
  */
-function buildSpeciesCardHTML(item) {
+function buildSpeciesCardHTML(item, isFeatured = false) {
     const species = item.species;
     const speciesId = species.id;
     const count = item.detections.length;
@@ -81,8 +81,10 @@ function buildSpeciesCardHTML(item) {
     const scientificName = escapeHtml(species.scientific_name || species.scientificName || 'Unknown');
     const imageUrl = species.image_url || species.imageUrl || IMAGE_FALLBACK;
 
+    const featuredClass = isFeatured ? ' species-card--featured' : '';
+
     return `
-        <div class="species-card"
+        <div class="species-card${featuredClass}"
              tabindex="0"
              role="button"
              aria-label="View details for ${commonName}"
@@ -94,7 +96,7 @@ function buildSpeciesCardHTML(item) {
                     data-action="toggle-watch"
                     title="${watched ? 'Remove from Watch List' : 'Add to Watch List'}"
                     aria-label="${watched ? 'Remove from Watch List' : 'Add to Watch List'}">
-                &#x1F514;
+                <i data-lucide="binoculars"></i>
             </button>
             <div class="species-image-wrapper">
                 <img
@@ -124,15 +126,13 @@ function buildSpeciesCardHTML(item) {
                     </div>
                 </div>
 
-                <p class="click-hint">Click for more details, bird calls & range maps</p>
-
                 <button
                     id="toggle-btn-${speciesId}"
                     class="detections-toggle"
                     data-species-id="${speciesId}"
                     data-action="toggle-detections">
                     <span>View all ${count} detection${count !== 1 ? 's' : ''}</span>
-                    <span class="arrow">&#x25BC;</span>
+                    <i class="arrow" data-lucide="chevron-down"></i>
                 </button>
 
                 <div id="detections-list-${speciesId}" class="detections-list">
@@ -205,7 +205,7 @@ export function renderSpeciesCards(detections, sortBy = 'recent') {
 
     // Build HTML
     container.innerHTML = speciesArray
-        .map(item => buildSpeciesCardHTML(item))
+        .map((item, index) => buildSpeciesCardHTML(item, index === 0))
         .join('');
 
     // Remove initial-load class after animations complete

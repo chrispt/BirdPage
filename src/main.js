@@ -103,6 +103,11 @@ async function fetchData() {
         // Render cards
         renderCurrentView();
 
+        // Re-render Lucide icons for dynamic content
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
         // Update last update time
         updateLastUpdateTime();
 
@@ -229,6 +234,11 @@ function init() {
 
     // Set up retry event listener
     window.addEventListener('birdpage:retry', fetchData);
+
+    // Initialize Lucide icons for static HTML
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
 
     // Initial data fetch
     if ('requestIdleCallback' in window) {

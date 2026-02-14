@@ -63,7 +63,7 @@ export function openBirdModal(speciesId) {
     const playBtn = DOM.modalPlayCall || document.getElementById('modalPlayCall');
     if (playBtn) {
         playBtn.disabled = false;
-        playBtn.innerHTML = '<span>&#x1F3B5;</span> Listen on Cornell';
+        playBtn.innerHTML = '<i data-lucide="volume-2"></i> Listen on Cornell';
         playBtn.classList.remove('playing');
     }
 
@@ -72,11 +72,16 @@ export function openBirdModal(speciesId) {
     if (watchBtn) {
         if (isSpeciesWatched(speciesId)) {
             watchBtn.classList.add('watching');
-            watchBtn.innerHTML = '<span>&#x1F515;</span> Remove from Watch List';
+            watchBtn.innerHTML = '<i data-lucide="binoculars"></i> Remove from Watch List';
         } else {
             watchBtn.classList.remove('watching');
-            watchBtn.innerHTML = '<span>&#x1F514;</span> Add to Watch List';
+            watchBtn.innerHTML = '<i data-lucide="binoculars"></i> Add to Watch List';
         }
+    }
+
+    // Re-render Lucide icons in modal
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 
     // Show modal

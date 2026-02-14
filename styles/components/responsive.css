@@ -8,21 +8,25 @@
         font-size: 2rem;
     }
 
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+    .ribbon-stats {
+        gap: 16px;
     }
 
-    .stat-card {
-        padding: 20px;
-    }
-
-    .stat-number {
-        font-size: 2rem;
+    .ribbon-stat-value {
+        font-size: 1.2rem;
     }
 
     .detections-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Featured card drops to single column on tablet */
+    .species-card--featured {
+        grid-column: span 1;
+    }
+
+    .species-card--featured .species-image {
+        height: 280px;
     }
 }
 
@@ -32,60 +36,78 @@
         padding: 10px;
     }
 
-    header {
-        padding: 20px 0;
-        margin-bottom: 20px;
+    /* Compact sticky header */
+    .header-inner {
+        padding: 10px 14px;
     }
 
     h1 {
-        font-size: 1.5rem;
-        gap: 10px;
+        font-size: 1.4rem;
     }
 
-    .bird-icon {
-        font-size: 1.8rem;
+    .brand-mark {
+        width: 28px;
+        height: 28px;
     }
 
     .subtitle {
-        font-size: 0.95rem;
+        font-size: 0.65rem;
     }
 
-    .status-bar {
-        padding: 12px 15px;
+    .header-btn-label {
+        display: none;
+    }
+
+    .header-btn {
+        padding: 6px 10px;
+        min-height: 36px;
+    }
+
+    .site-header::after {
+        height: 20px;
+    }
+
+    /* Ribbon wraps on mobile */
+    .field-ribbon {
+        padding: 12px 14px;
         gap: 12px;
-        justify-content: center;
-        text-align: center;
+        flex-direction: column;
+        align-items: stretch;
     }
 
-    .status-item {
-        font-size: 0.9rem;
+    .ribbon-status {
+        justify-content: center;
+        font-size: 0.85rem;
+    }
+
+    .ribbon-stats {
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .ribbon-stat-value {
+        font-size: 1.1rem;
+    }
+
+    .ribbon-stat-label {
+        font-size: 0.65rem;
+    }
+
+    .ribbon-meta {
+        justify-content: center;
+        flex-wrap: wrap;
+        font-size: 0.8rem;
     }
 
     .refresh-btn {
         width: 100%;
-        padding: 12px 20px;
-        font-size: 1rem;
-    }
-
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-
-    .stat-card {
-        padding: 15px 10px;
-    }
-
-    .stat-number {
-        font-size: 1.6rem;
-    }
-
-    .stat-label {
-        font-size: 0.8rem;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        min-height: 40px;
     }
 
     .section-title {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 
     .view-selector {
@@ -118,12 +140,16 @@
         height: 200px;
     }
 
+    .species-card--featured .species-image {
+        height: 200px;
+    }
+
     .species-content {
         padding: 15px;
     }
 
     .bird-name {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
 
     .scientific-name {
@@ -132,8 +158,9 @@
     }
 
     .detection-count-badge {
-        padding: 6px 12px;
-        font-size: 0.85rem;
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
     }
 
     .wiki-link {
@@ -156,17 +183,6 @@
         font-size: 0.85rem;
     }
 
-    /* Night mode button mobile */
-    .night-mode-btn {
-        top: 10px;
-        right: 10px;
-        padding: 8px 12px;
-    }
-
-    .night-mode-label {
-        display: none;
-    }
-
     /* Modal mobile */
     .modal-content {
         margin: 10px;
@@ -174,7 +190,7 @@
     }
 
     .modal-image {
-        height: 200px;
+        height: 220px;
     }
 
     .modal-body {
@@ -182,12 +198,16 @@
     }
 
     .modal-bird-name {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
 
     .modal-stats-grid {
         grid-template-columns: 1fr;
         gap: 10px;
+    }
+
+    .modal-actions-row {
+        flex-direction: column;
     }
 
     .notification-banner {
@@ -196,36 +216,42 @@
         left: 10px;
         max-width: none;
     }
+
+    /* Lucide icons scale on mobile */
+    .header-btn i[data-lucide] svg,
+    .header-btn svg {
+        width: 18px;
+        height: 18px;
+    }
 }
 
 /* Extra small mobile styles */
 @media (max-width: 380px) {
     h1 {
-        font-size: 1.3rem;
-        flex-direction: column;
-        gap: 5px;
+        font-size: 1.2rem;
     }
 
-    .bird-icon {
-        font-size: 2rem;
+    .header-brand {
+        gap: 8px;
     }
 
-    .stat-number {
-        font-size: 1.4rem;
+    .brand-mark {
+        width: 24px;
+        height: 24px;
     }
 
-    .stat-label {
-        font-size: 0.75rem;
+    .ribbon-stat-value {
+        font-size: 1rem;
+    }
+
+    .ribbon-stat-label {
+        font-size: 0.6rem;
     }
 }
 
 /* Touch-friendly improvements */
 @media (hover: none) and (pointer: coarse) {
     .species-card:hover {
-        transform: none;
-    }
-
-    .stat-card:hover {
         transform: none;
     }
 
@@ -242,20 +268,19 @@
 
 /* Landscape mobile */
 @media (max-height: 500px) and (orientation: landscape) {
-    header {
-        padding: 15px 0;
-        margin-bottom: 15px;
+    .site-header::after {
+        display: none;
     }
 
-    .stats-grid {
-        grid-template-columns: repeat(4, 1fr);
+    .header-inner {
+        padding: 8px 16px;
     }
 
-    .stat-card {
-        padding: 10px;
+    .ribbon-stats {
+        gap: 16px;
     }
 
-    .stat-number {
-        font-size: 1.5rem;
+    .ribbon-stat-value {
+        font-size: 1.1rem;
     }
 }

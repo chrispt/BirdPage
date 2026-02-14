@@ -1,7 +1,7 @@
 /* What's New Box */
 .whats-new-box {
-    background: linear-gradient(135deg, rgba(78, 204, 163, 0.15) 0%, rgba(69, 183, 170, 0.1) 100%);
-    border: 1px solid rgba(78, 204, 163, 0.3);
+    background: linear-gradient(135deg, rgba(58, 125, 92, 0.1) 0%, rgba(58, 125, 92, 0.05) 100%);
+    border: 1px solid rgba(58, 125, 92, 0.2);
     border-radius: 12px;
     margin-bottom: 25px;
     overflow: hidden;
@@ -17,7 +17,7 @@
 }
 
 .whats-new-header:hover {
-    background: rgba(78, 204, 163, 0.1);
+    background: rgba(58, 125, 92, 0.08);
 }
 
 .whats-new-box.hidden {
@@ -57,12 +57,12 @@
     gap: 10px;
     font-size: 1rem;
     font-weight: bold;
-    color: #4ecca3;
+    color: var(--accent);
 }
 
 .whats-new-badge {
-    background: #4ecca3;
-    color: #1a1a2e;
+    background: var(--accent);
+    color: #fff;
     font-size: 0.7rem;
     padding: 3px 8px;
     border-radius: 10px;
@@ -70,7 +70,7 @@
 }
 
 .whats-new-arrow {
-    color: #4ecca3;
+    color: var(--accent);
     font-size: 1.2rem;
     transition: transform 0.3s ease;
 }

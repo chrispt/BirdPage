@@ -7,35 +7,37 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://app.birdweather.com">
     <link rel="preconnect" href="https://static.cloudflareinsights.com">
     <link rel="dns-prefetch" href="https://app.birdweather.com">
     <link rel="dns-prefetch" href="https://via.placeholder.com">
+    <!-- Google Fonts: Libre Baskerville (serif), Source Sans 3 (sans-serif), DM Mono (mono) -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
     <title>The CPTs BirdWeather PUC</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%234ecca3' d='M85 35c-5-15-20-20-35-15-10 3-18 10-22 20-3 8-2 17 3 24 2 3 5 5 8 7l-8 14c-1 2 1 4 3 3l18-8c6 2 13 2 19-1 15-8 22-28 14-44zm-45 25c-4 0-7-3-7-7s3-7 7-7 7 3 7 7-3 7-7 7z'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%233a7d5c' d='M85 35c-5-15-20-20-35-15-10 3-18 10-22 20-3 8-2 17 3 24 2 3 5 5 8 7l-8 14c-1 2 1 4 3 3l18-8c6 2 13 2 19-1 15-8 22-28 14-44zm-45 25c-4 0-7-3-7-7s3-7 7-7 7 3 7 7-3 7-7 7z'/%3E%3C/svg%3E">
 </head>
 <body>
-    <!-- Night Mode Toggle -->
-    <button id="nightModeBtn" class="night-mode-btn" aria-label="Toggle night mode" aria-pressed="false">
-        <span id="nightModeIcon" aria-hidden="true">&#x2600;</span>
-        <span class="night-mode-label">Night Mode</span>
-    </button>
-
-    <button id="settingsBtn" class="settings-btn" aria-label="Open settings">
-        <span aria-hidden="true">&#x2699;</span>
-        <span>Settings</span>
-    </button>
+    <!-- SVG noise filter for paper texture -->
+    <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+        <filter id="noise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+        </filter>
+    </svg>
 
     <!-- Bird Details Modal -->
     <div id="birdModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalBirdName">
         <div class="modal-content">
             <div class="modal-header">
                 <img id="modalImage" class="modal-image" src="" alt="" loading="lazy" decoding="async">
-                <button id="birdModalCloseBtn" class="modal-close" aria-label="Close modal">&times;</button>
+                <div class="modal-name-overlay">
+                    <h2 id="modalBirdName" class="modal-bird-name"></h2>
+                    <p id="modalScientificName" class="modal-scientific-name"></p>
+                </div>
+                <button id="birdModalCloseBtn" class="modal-close" aria-label="Close modal"><i data-lucide="x"></i></button>
             </div>
             <div class="modal-body">
-                <h2 id="modalBirdName" class="modal-bird-name"></h2>
-                <p id="modalScientificName" class="modal-scientific-name"></p>
 
                 <div class="modal-section">
                     <div class="modal-stats-grid">
@@ -54,30 +56,23 @@
                     </div>
                 </div>
 
-                <div class="modal-section">
-                    <h3 class="modal-section-title"><span>&#x1F3B5;</span> Listen to Bird Call</h3>
-                    <button id="modalPlayCall" class="bird-call-btn">
-                        <span>&#x1F3B5;</span> Listen on Cornell
-                    </button>
-                </div>
-
-                <div class="modal-section">
-                    <h3 class="modal-section-title"><span>&#x1F5FA;</span> Range Map</h3>
-                    <button id="modalRangeMapBtn" class="bird-call-btn">
-                        <span>&#x1F5FA;</span> View Range Map on Cornell
-                    </button>
-                </div>
-
-                <div class="modal-section">
-                    <h3 class="modal-section-title"><span>&#x1F514;</span> Watch List</h3>
+                <div class="modal-actions">
+                    <div class="modal-actions-row">
+                        <button id="modalPlayCall" class="bird-call-btn">
+                            <i data-lucide="volume-2"></i> Listen on Cornell
+                        </button>
+                        <button id="modalRangeMapBtn" class="bird-call-btn">
+                            <i data-lucide="map"></i> View Range Map
+                        </button>
+                    </div>
                     <button id="modalWatchBtn" class="watch-btn">
-                        <span>&#x1F514;</span> Add to Watch List
+                        <i data-lucide="binoculars"></i> Add to Watch List
                     </button>
                 </div>
 
                 <div class="modal-section">
-                    <a id="modalCornellLink" href="#" target="_blank" rel="noopener noreferrer" class="wiki-link" style="display:inline-flex; font-size: 1rem;">
-                        <span>&#x1F4D6;</span> Learn more on All About Birds
+                    <a id="modalCornellLink" href="#" target="_blank" rel="noopener noreferrer" class="modal-learn-more">
+                        Learn more on All About Birds &rarr;
                     </a>
                 </div>
             </div>
@@ -86,9 +81,9 @@
 
     <!-- Notification Banner -->
     <div id="notificationBanner" class="notification-banner">
-        <button class="notification-close" id="notificationCloseBtn">&times;</button>
+        <button class="notification-close" id="notificationCloseBtn"><i data-lucide="x"></i></button>
         <div class="notification-banner-title">
-            <span>&#x1F426;</span> <span id="notificationTitle">New Bird Detected!</span>
+            <i data-lucide="bird"></i> <span id="notificationTitle">New Bird Detected!</span>
         </div>
         <div id="notificationBody" class="notification-banner-body"></div>
     </div>
@@ -96,12 +91,12 @@
     <!-- Settings Modal -->
     <div id="settingsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
         <div class="modal-content settings-modal">
-            <button class="modal-close" id="settingsCloseBtn" aria-label="Close settings">&times;</button>
-            <h2 id="settingsTitle">&#x2699; Notifications &amp; Settings</h2>
+            <button class="modal-close" id="settingsCloseBtn" aria-label="Close settings"><i data-lucide="x"></i></button>
+            <h2 id="settingsTitle"><i data-lucide="settings" style="width:20px;height:20px;vertical-align:middle;display:inline"></i> Notifications &amp; Settings</h2>
 
             <!-- Notifications Section -->
             <div class="settings-section">
-                <h3 class="settings-section-title">&#x1F514; Notifications</h3>
+                <h3 class="settings-section-title"><i data-lucide="bell" style="width:16px;height:16px;display:inline;vertical-align:middle"></i> Notifications</h3>
                 <p class="settings-section-desc">Get alerted when new birds appear or watched birds are spotted.</p>
 
                 <div class="settings-toggle">
@@ -122,7 +117,7 @@
 
             <!-- Pushover Section -->
             <div class="settings-section">
-                <h3 class="settings-section-title">&#x1F4F1; Pushover</h3>
+                <h3 class="settings-section-title"><i data-lucide="smartphone" style="width:16px;height:16px;display:inline;vertical-align:middle"></i> Pushover</h3>
                 <p class="settings-section-desc">Get push notifications on your phone, even when this page isn't open.</p>
 
                 <div class="settings-toggle">
@@ -147,8 +142,8 @@
             </div>
 
             <div class="settings-actions">
-                <button class="test-btn" id="testPushoverBtn">&#x1F4E4; Test</button>
-                <button class="save-btn" id="saveSettingsBtn">&#x1F4BE; Save Settings</button>
+                <button class="test-btn" id="testPushoverBtn">Test</button>
+                <button class="save-btn" id="saveSettingsBtn">Save Settings</button>
             </div>
 
             <div id="settingsStatus" class="settings-status" style="display: none;"></div>
@@ -159,26 +154,42 @@
         </div>
     </div>
 
-    <div class="container">
-        <header>
-            <h1>
-                <span class="bird-icon">&#x1F426;</span>
-                The CPTs BirdWeather PUC
-            </h1>
-            <p class="subtitle">Station #19553 - Live Bird Detections</p>
-        </header>
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="header-brand">
+                <svg class="brand-mark" viewBox="0 0 100 100" width="40" height="40" aria-hidden="true">
+                    <path fill="currentColor" d="M85 35c-5-15-20-20-35-15-10 3-18 10-22 20-3 8-2 17 3 24 2 3 5 5 8 7l-8 14c-1 2 1 4 3 3l18-8c6 2 13 2 19-1 15-8 22-28 14-44zm-45 25c-4 0-7-3-7-7s3-7 7-7 7 3 7 7-3 7-7 7z"/>
+                </svg>
+                <div>
+                    <h1>The CPTs BirdWeather PUC</h1>
+                    <p class="subtitle">Station #19553 &middot; Live Bird Detections</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="nightModeBtn" class="header-btn" aria-label="Toggle night mode" aria-pressed="false">
+                    <i id="nightModeIcon" data-lucide="sun" aria-hidden="true"></i>
+                    <span class="header-btn-label">Night Mode</span>
+                </button>
+                <button id="settingsBtn" class="header-btn" aria-label="Open settings">
+                    <i data-lucide="settings" aria-hidden="true"></i>
+                    <span class="header-btn-label">Settings</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
+    <div class="container">
         <!-- What's New Box -->
         <div id="whatsNewBox" class="whats-new-box">
             <div class="whats-new-header" id="whatsNewHeader">
                 <div class="whats-new-title">
-                    <span aria-hidden="true">&#x2728;</span>
+                    <i data-lucide="sparkles" aria-hidden="true"></i>
                     What's New
                     <span class="whats-new-badge">10 Features</span>
                 </div>
                 <div style="display: flex; align-items: center;">
-                    <span class="whats-new-arrow" aria-hidden="true">&#x25BC;</span>
-                    <button class="whats-new-close" id="whatsNewCloseBtn" aria-label="Dismiss What's New">&times;</button>
+                    <i class="whats-new-arrow" data-lucide="chevron-down" aria-hidden="true"></i>
+                    <button class="whats-new-close" id="whatsNewCloseBtn" aria-label="Dismiss What's New"><i data-lucide="x"></i></button>
                 </div>
             </div>
             <div class="whats-new-content">
@@ -257,44 +268,42 @@
             </div>
         </div>
 
-        <div class="status-bar">
-            <div class="status-item">
+        <!-- Field Conditions Ribbon -->
+        <div class="field-ribbon">
+            <div class="ribbon-status">
                 <span class="status-dot online" id="pucStatusDot"></span>
                 <span id="pucStatusLabel">Checking...</span>
-            </div>
-            <div class="status-item" id="locationItem">
+                <span class="ribbon-sep"></span>
                 <span id="locationDisplay">Loading...</span>
             </div>
-            <div class="status-item">
-                <span>Last updated: <span id="lastUpdate">--</span></span>
+            <div class="ribbon-stats" aria-live="polite" aria-atomic="false">
+                <div class="ribbon-stat">
+                    <span class="ribbon-stat-value" id="totalDetections" aria-label="Total detections in last 24 hours">--</span>
+                    <span class="ribbon-stat-label">Detections</span>
+                </div>
+                <div class="ribbon-stat">
+                    <span class="ribbon-stat-value" id="uniqueSpecies" aria-label="Number of unique species">--</span>
+                    <span class="ribbon-stat-label">Species</span>
+                </div>
+                <div class="ribbon-stat">
+                    <span class="ribbon-stat-value" id="latestTime" aria-label="Time of latest detection">--</span>
+                    <span class="ribbon-stat-label">Latest</span>
+                </div>
+                <div class="ribbon-stat">
+                    <span class="ribbon-stat-value" id="topConfidence" aria-label="Highest detection confidence">--</span>
+                    <span class="ribbon-stat-label">Top Match</span>
+                </div>
             </div>
-            <div class="status-item">
-                <span>Next refresh in: <span id="countdown" class="countdown">15:00</span></span>
-            </div>
-            <button class="refresh-btn" id="refreshBtn" aria-label="Refresh bird detection data">Refresh Now</button>
-        </div>
-
-        <div class="stats-grid" aria-live="polite" aria-atomic="false">
-            <div class="stat-card">
-                <div class="stat-number" id="totalDetections" aria-label="Total detections in last 24 hours">--</div>
-                <div class="stat-label">Detections (24h)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="uniqueSpecies" aria-label="Number of unique species">--</div>
-                <div class="stat-label">Unique Species</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="latestTime" aria-label="Time of latest detection">--</div>
-                <div class="stat-label">Latest Detection</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="topConfidence" aria-label="Highest detection confidence">--</div>
-                <div class="stat-label">Top Confidence</div>
+            <div class="ribbon-meta">
+                <span>Updated: <span id="lastUpdate">--</span></span>
+                <span class="ribbon-sep"></span>
+                <span>Next: <span id="countdown" class="countdown">15:00</span></span>
+                <button class="refresh-btn" id="refreshBtn" aria-label="Refresh bird detection data">Refresh</button>
             </div>
         </div>
 
         <h2 class="section-title">
-            <span>&#x1F50A;</span> <span id="sectionTitleText">Species Detected</span>
+            <i data-lucide="radio" style="width:20px;height:20px"></i> <span id="sectionTitleText">Species Detected</span>
         </h2>
 
         <div class="view-selector">
@@ -318,6 +327,9 @@
         <p>Data provided by <a href="https://birdweather.com" target="_blank" rel="noopener noreferrer">BirdWeather</a></p>
         <p>Updates automatically every 15 minutes</p>
     </footer>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 
     <!-- Main application script -->
     <script type="module" src="/src/main.js"></script>

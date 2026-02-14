@@ -18,10 +18,16 @@ export function applyNightMode(enabled) {
 
     if (enabled) {
         document.body.classList.add('night-mode');
-        if (icon) icon.textContent = '\uD83C\uDF19'; // Moon icon
+        if (icon) {
+            icon.setAttribute('data-lucide', 'moon');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
     } else {
         document.body.classList.remove('night-mode');
-        if (icon) icon.textContent = '\u2600'; // Sun icon
+        if (icon) {
+            icon.setAttribute('data-lucide', 'sun');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
     }
 
     if (btn) {

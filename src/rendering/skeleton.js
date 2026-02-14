@@ -39,7 +39,7 @@ export function getSkeletonGridHTML() {
 export function getEmptyStateHTML() {
     return `
         <div class="loading">
-            <p style="font-size: 2rem; margin-bottom: 10px;">🐦</p>
+            <p style="margin-bottom: 10px;"><i data-lucide="bird" style="width:40px;height:40px;color:var(--accent)"></i></p>
             <p>No bird detections in the last 24 hours.</p>
             <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 10px;">Check back later or try refreshing.</p>
         </div>

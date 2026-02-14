@@ -3,8 +3,8 @@
     position: fixed;
     top: 20px;
     right: 20px;
-    background: linear-gradient(135deg, #4ecca3 0%, #45b7aa 100%);
-    color: #1a1a2e;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    color: #fff;
     padding: 15px 20px;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
@@ -37,7 +37,7 @@
     right: 10px;
     background: rgba(0,0,0,0.2);
     border: none;
-    color: #1a1a2e;
+    color: #fff;
     width: 24px;
     height: 24px;
     border-radius: 50%;
