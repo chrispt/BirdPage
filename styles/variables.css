@@ -1,9 +1,9 @@
 /* CSS Custom Properties */
 :root {
     /* Font Stacks */
-    --font-display: 'Libre Baskerville', Georgia, serif;
-    --font-body: 'Source Sans 3', -apple-system, sans-serif;
-    --font-mono: 'DM Mono', monospace;
+    --font-display: 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
 
     --bg-primary: #faf6f0;
     --bg-secondary: #f0ebe3;
