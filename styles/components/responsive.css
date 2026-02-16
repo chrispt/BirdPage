@@ -26,7 +26,7 @@
     }
 
     .species-card--featured .species-image {
-        height: 280px;
+        aspect-ratio: 4 / 3;
     }
 }
 
@@ -137,11 +137,11 @@
     }
 
     .species-image {
-        height: 200px;
+        aspect-ratio: 1 / 1;
     }
 
     .species-card--featured .species-image {
-        height: 200px;
+        aspect-ratio: 1 / 1;
     }
 
     .species-content {
