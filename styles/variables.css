@@ -29,7 +29,7 @@ body.night-mode {
     --accent-warm: #d4983f;
     --text-primary: #e8e4df;
     --text-secondary: #9a9488;
-    --card-bg: rgba(255,255,255,0.03);
+    --card-bg: rgba(255,255,255,0.04);
     --card-border: rgba(255,255,255,0.08);
     --card-bg-hover: rgba(255,255,255,0.05);
     --border: rgba(255,255,255,0.08);
@@ -183,10 +183,20 @@ h2 {
 
 footer {
     text-align: center;
-    padding: 30px;
+    padding: 40px 30px 30px;
     color: var(--text-secondary);
-    border-top: 1px solid var(--card-border);
-    margin-top: 40px;
+    border-top: none;
+    margin-top: 60px;
+}
+
+footer::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--accent);
+    margin: 0 auto 20px;
+    opacity: 0.4;
 }
 
 footer a {

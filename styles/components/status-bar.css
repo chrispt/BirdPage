@@ -55,8 +55,9 @@
 .ribbon-stat-label {
     font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     color: var(--text-secondary);
+    font-variant: small-caps;
 }
 
 .ribbon-meta {

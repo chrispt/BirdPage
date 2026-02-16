@@ -109,8 +109,10 @@ function buildSpeciesCardHTML(item, isFeatured = false) {
                 >
             </div>
             <div class="species-content">
+                ${isFeatured ? '<div class="featured-label">Featured Detection</div>' : ''}
                 <div class="bird-name">${commonName}</div>
                 <div class="scientific-name">${scientificName}</div>
+                <div class="species-divider"></div>
 
                 <div class="species-meta">
                     <span class="meta-tag">Last seen: ${formatRelativeTime(item.latestTimestamp)}</span>
