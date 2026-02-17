@@ -37,17 +37,18 @@ export const STORAGE_KEYS = {
 // Cornell All About Birds URLs
 export const CORNELL_BASE_URL = 'https://www.allaboutbirds.org/guide';
 
+function toSlug(name) {
+    return name.replace(/\s+/g, '_');
+}
+
 export function getCornellGuideUrl(commonName) {
-    const slug = commonName.replace(/\s+/g, '_');
-    return `${CORNELL_BASE_URL}/${slug}`;
+    return `${CORNELL_BASE_URL}/${toSlug(commonName)}`;
 }
 
 export function getCornellSoundsUrl(commonName) {
-    const slug = commonName.replace(/\s+/g, '_');
-    return `${CORNELL_BASE_URL}/${slug}/sounds`;
+    return `${CORNELL_BASE_URL}/${toSlug(commonName)}/sounds`;
 }
 
 export function getCornellMapUrl(commonName) {
-    const slug = commonName.replace(/\s+/g, '_');
-    return `${CORNELL_BASE_URL}/${slug}/maps-range`;
+    return `${CORNELL_BASE_URL}/${toSlug(commonName)}/maps-range`;
 }

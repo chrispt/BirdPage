@@ -2,6 +2,8 @@
  * API client with error handling
  */
 
+import { escapeHtml } from '../utils/formatting.js';
+
 /**
  * Custom error class for API errors
  */
@@ -73,11 +75,5 @@ export function sanitizeErrorMessage(message) {
     if (typeof message !== 'string') {
         return 'An unknown error occurred';
     }
-    // Basic HTML entity encoding
-    return message
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    return escapeHtml(message);
 }

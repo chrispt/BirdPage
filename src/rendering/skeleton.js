@@ -2,6 +2,8 @@
  * Skeleton loading HTML templates
  */
 
+import { escapeHtml } from '../utils/formatting.js';
+
 /**
  * Get skeleton card HTML
  */
@@ -50,12 +52,7 @@ export function getEmptyStateHTML() {
  * Get error state HTML
  */
 export function getErrorStateHTML(errorMessage) {
-    // Sanitize error message
-    const safeMessage = String(errorMessage)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+    const safeMessage = escapeHtml(String(errorMessage));
 
     return `
         <div class="error">

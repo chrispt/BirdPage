@@ -3,6 +3,7 @@ import { DOM } from '../utils/dom.js';
 import { formatRelativeTime } from '../utils/formatting.js';
 import { getCornellGuideUrl, getCornellSoundsUrl, getCornellMapUrl } from '../config/constants.js';
 import { isSpeciesWatched } from './watchlist.js';
+import { closeSettingsModal } from './settings.js';
 
 /**
  * Open the bird details modal for a species
@@ -206,5 +207,3 @@ function trapFocusInModal(modal, e) {
     }
 }
 
-// Import closeSettingsModal for keyboard handling
-import { closeSettingsModal } from './settings.js';

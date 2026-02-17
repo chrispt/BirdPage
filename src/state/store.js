@@ -54,13 +54,6 @@ class Store {
     }
 
     /**
-     * Get the entire state object (read-only snapshot)
-     */
-    getState() {
-        return { ...this._state };
-    }
-
-    /**
      * Get a specific state value
      */
     get(key) {

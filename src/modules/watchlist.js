@@ -36,15 +36,20 @@ export function toggleWatchSpecies() {
         watchedSpeciesIds.delete(speciesId);
         if (watchBtn) {
             watchBtn.classList.remove('watching');
-            watchBtn.innerHTML = '<span>&#x1F514;</span> Add to Watch List';
+            watchBtn.innerHTML = '<i data-lucide="binoculars"></i> Add to Watch List';
         }
     } else {
         // Add to watch list
         watchedSpeciesIds.add(speciesId);
         if (watchBtn) {
             watchBtn.classList.add('watching');
-            watchBtn.innerHTML = '<span>&#x1F515;</span> Remove from Watch List';
+            watchBtn.innerHTML = '<i data-lucide="binoculars"></i> Remove from Watch List';
         }
+    }
+
+    // Re-render Lucide icons in modal
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 
     // Update store (triggers localStorage persistence)

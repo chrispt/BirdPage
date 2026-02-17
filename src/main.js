@@ -114,21 +114,14 @@ async function fetchData() {
         // Restart countdown
         startCountdown();
 
-        // Reset refresh button
-        if (refreshBtn) {
-            refreshBtn.classList.remove('loading');
-            refreshBtn.disabled = false;
-            refreshBtn.textContent = 'Refresh Now';
-        }
-
     } catch (error) {
         console.error('Error fetching data:', error);
 
         if (detectionsContainer) {
             detectionsContainer.innerHTML = getErrorStateHTML(error.message);
         }
-
-        // Reset refresh button on error
+    } finally {
+        // Reset refresh button
         if (refreshBtn) {
             refreshBtn.classList.remove('loading');
             refreshBtn.disabled = false;
