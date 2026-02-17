@@ -2,6 +2,7 @@ import { DOM } from '../utils/dom.js';
 import { openBirdModal } from '../modules/modal.js';
 import { toggleWatchFromCard } from '../modules/watchlist.js';
 import { toggleDetectionsList } from '../rendering/cards.js';
+import { IMAGE_FALLBACK } from '../config/constants.js';
 
 /**
  * Set up event delegation for the detections container
@@ -20,6 +21,14 @@ export function setupEventDelegation() {
 
     // Keyboard event delegation for accessibility
     container.addEventListener('keydown', handleContainerKeydown);
+
+    // Image error fallback (capture phase — error events don't bubble)
+    container.addEventListener('error', (e) => {
+        if (e.target.tagName === 'IMG' && !e.target.dataset.fallback) {
+            e.target.dataset.fallback = 'true';
+            e.target.src = IMAGE_FALLBACK;
+        }
+    }, true);
 }
 
 /**

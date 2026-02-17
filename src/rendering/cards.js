@@ -4,8 +4,7 @@ import { formatRelativeTime, escapeHtml } from '../utils/formatting.js';
 import { isSpeciesWatched } from '../modules/watchlist.js';
 import { groupDetectionsBySpecies, sortSpeciesData } from '../api/detections.js';
 import { getEmptyStateHTML } from './skeleton.js';
-
-const IMAGE_FALLBACK = 'https://via.placeholder.com/400x200?text=No+Image';
+import { IMAGE_FALLBACK } from '../config/constants.js';
 
 let isInitialLoad = true;
 
@@ -106,7 +105,6 @@ function buildSpeciesCardHTML(item, isFeatured = false) {
                     alt="${commonName}"
                     loading="lazy"
                     decoding="async"
-                    onerror="this.onerror=null;this.src='${IMAGE_FALLBACK}'"
                 >
             </div>
             <div class="species-content">
@@ -160,57 +158,31 @@ export function renderSpeciesCards(detections, sortBy = 'recent') {
         return;
     }
 
-    // Group detections by species using shared utility
+    // Group and augment in a single pass
     const speciesMap = groupDetectionsBySpecies(detections);
 
-    // Augment each entry with highestConfidence and latestTimestamp
-    const augmentedMap = {};
+    // Store species data for modal access (keyed by speciesId)
+    const speciesDataMap = {};
     for (const [speciesId, entry] of speciesMap) {
-        let highestConfidence = 0;
-        let latestTimestamp = null;
-
-        for (const detection of entry.detections) {
-            const confidence = detection.confidence || 0;
-            if (confidence > highestConfidence) {
-                highestConfidence = confidence;
-            }
-            const timestamp = new Date(detection.timestamp);
-            if (!latestTimestamp || timestamp > latestTimestamp) {
-                latestTimestamp = timestamp;
-            }
-        }
-
-        augmentedMap[speciesId] = {
-            species: entry.species,
-            detections: entry.detections,
-            highestConfidence,
-            latestTimestamp
-        };
+        speciesDataMap[speciesId] = entry;
     }
+    store.set('speciesDataMap', speciesDataMap);
 
-    // Store species data globally for modal access
-    store.set('speciesDataMap', augmentedMap);
-
-    // Sort using shared utility, then augment with computed fields
-    const sortedEntries = sortSpeciesData(speciesMap, sortBy);
-    const speciesArray = sortedEntries.map(entry => augmentedMap[entry.species.id]);
+    // Sort
+    const speciesArray = sortSpeciesData(speciesMap, sortBy);
 
     // Apply initial-load class for entry animations on first render only
     if (isInitialLoad) {
         container.classList.add('initial-load');
     }
 
-    // Build HTML
     container.innerHTML = speciesArray
         .map((item, index) => buildSpeciesCardHTML(item, index === 0))
         .join('');
 
-    // Remove initial-load class after animations complete
     if (isInitialLoad) {
         isInitialLoad = false;
-        setTimeout(() => {
-            container.classList.remove('initial-load');
-        }, 1200);
+        setTimeout(() => container.classList.remove('initial-load'), 1200);
     }
 }
 

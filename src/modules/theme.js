@@ -1,4 +1,5 @@
 import { store } from '../state/store.js';
+import { refreshIcons } from '../utils/icons.js';
 
 /**
  * Toggle night mode on/off
@@ -20,13 +21,13 @@ export function applyNightMode(enabled) {
         document.body.classList.add('night-mode');
         if (icon) {
             icon.setAttribute('data-lucide', 'moon');
-            if (typeof lucide !== 'undefined') lucide.createIcons();
+            refreshIcons();
         }
     } else {
         document.body.classList.remove('night-mode');
         if (icon) {
             icon.setAttribute('data-lucide', 'sun');
-            if (typeof lucide !== 'undefined') lucide.createIcons();
+            refreshIcons();
         }
     }
 

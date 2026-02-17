@@ -12,7 +12,6 @@
     <link rel="preconnect" href="https://app.birdweather.com">
     <link rel="preconnect" href="https://static.cloudflareinsights.com">
     <link rel="dns-prefetch" href="https://app.birdweather.com">
-    <link rel="dns-prefetch" href="https://via.placeholder.com">
     <!-- Google Fonts: Inter (sans-serif), JetBrains Mono (mono) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <title>The CPTs BirdWeather PUC</title>
@@ -323,13 +322,17 @@
         </div>
     </div>
 
+    <noscript>
+        <div style="text-align:center;padding:2rem;font-family:system-ui,sans-serif">
+            <p><strong>JavaScript Required</strong></p>
+            <p>BirdPage needs JavaScript enabled to display real-time bird detections.</p>
+        </div>
+    </noscript>
+
     <footer>
         <p>Data provided by <a href="https://birdweather.com" target="_blank" rel="noopener noreferrer">BirdWeather</a></p>
         <p>Updates automatically every 15 minutes</p>
     </footer>
-
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 
     <!-- Main application script -->
     <script type="module" src="/src/main.js"></script>

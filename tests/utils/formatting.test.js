@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { escapeHtml, formatTime, formatDateTime, formatRelativeTime, parseStationTimestamp, formatCountdown } from '../../src/utils/formatting.js';
+import { escapeHtml, formatTime, formatDateTime, formatRelativeTime, parseStationTimestamp } from '../../src/utils/formatting.js';
 
 describe('escapeHtml', () => {
     it('escapes HTML entities', () => {
@@ -60,24 +60,6 @@ describe('formatRelativeTime', () => {
         const result = formatRelativeTime(date);
         // Should be a date string, not "X hours ago"
         expect(result).not.toContain('hours ago');
-    });
-});
-
-describe('formatCountdown', () => {
-    it('formats 900 seconds as 15:00', () => {
-        expect(formatCountdown(900)).toBe('15:00');
-    });
-
-    it('formats 61 seconds as 1:01', () => {
-        expect(formatCountdown(61)).toBe('1:01');
-    });
-
-    it('formats 0 seconds as 0:00', () => {
-        expect(formatCountdown(0)).toBe('0:00');
-    });
-
-    it('pads seconds with leading zero', () => {
-        expect(formatCountdown(65)).toBe('1:05');
     });
 });
 

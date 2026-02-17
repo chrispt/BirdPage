@@ -1,7 +1,10 @@
 // API Configuration
-export const STATION_TOKEN = 'mxrqeMuQJYrXp2NeQRcfEnLB';
+export const STATION_TOKEN = import.meta.env.VITE_STATION_TOKEN || 'mxrqeMuQJYrXp2NeQRcfEnLB';
 export const API_BASE = 'https://app.birdweather.com/api/v1';
 export const PUSHOVER_API_URL = 'https://api.pushover.net/1/messages.json';
+
+// Image Fallback (inline SVG avoids external dependency)
+export const IMAGE_FALLBACK = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect fill='%23f0f0f0' width='400' height='200'/%3E%3Ctext x='200' y='105' text-anchor='middle' fill='%23999' font-family='system-ui,sans-serif' font-size='14'%3ENo Image Available%3C/text%3E%3C/svg%3E";
 
 // Timing Configuration
 export const REFRESH_INTERVAL_SECONDS = 15 * 60; // 15 minutes

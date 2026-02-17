@@ -50,6 +50,9 @@ import { getSkeletonGridHTML, getErrorStateHTML } from './rendering/skeleton.js'
 // Import events
 import { setupEventDelegation } from './events/delegation.js';
 
+// Import icons
+import { refreshIcons } from './utils/icons.js';
+
 /**
  * Main data fetch function
  */
@@ -103,10 +106,8 @@ async function fetchData() {
         // Render cards
         renderCurrentView();
 
-        // Re-render Lucide icons for dynamic content
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
+        // Re-render icons for dynamic content
+        refreshIcons();
 
         // Update last update time
         updateLastUpdateTime();
@@ -228,10 +229,8 @@ function init() {
     // Set up retry event listener
     window.addEventListener('birdpage:retry', fetchData);
 
-    // Initialize Lucide icons for static HTML
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
+    // Initialize icons for static HTML
+    refreshIcons();
 
     // Initial data fetch
     if ('requestIdleCallback' in window) {

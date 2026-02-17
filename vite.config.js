@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 const cspContent = [
   "default-src 'none'",
   "script-src 'self' https://static.cloudflareinsights.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' https://app.birdweather.com https://media.birdweather.com https://via.placeholder.com data:",
+  "img-src 'self' https://app.birdweather.com https://media.birdweather.com data:",
   "connect-src 'self' https://app.birdweather.com https://api.pushover.net https://static.cloudflareinsights.com",
   "media-src 'self' https://media.birdweather.com",
   "font-src 'self'",
@@ -13,6 +14,11 @@ const cspContent = [
 
 export default defineConfig({
   root: '.',
+  resolve: {
+    alias: {
+      'lucide': resolve('node_modules/lucide/dist/esm/lucide/src/lucide.js')
+    }
+  },
   build: {
     outDir: 'dist',
     sourcemap: false

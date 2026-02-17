@@ -1,9 +1,10 @@
 import { store } from '../state/store.js';
 import { DOM } from '../utils/dom.js';
 import { formatRelativeTime } from '../utils/formatting.js';
-import { getCornellGuideUrl, getCornellSoundsUrl, getCornellMapUrl } from '../config/constants.js';
+import { getCornellGuideUrl, getCornellSoundsUrl, getCornellMapUrl, IMAGE_FALLBACK } from '../config/constants.js';
 import { isSpeciesWatched } from './watchlist.js';
 import { closeSettingsModal } from './settings.js';
+import { refreshIcons } from '../utils/icons.js';
 
 /**
  * Open the bird details modal for a species
@@ -24,7 +25,7 @@ export function openBirdModal(speciesId) {
     // Set image
     const modalImage = DOM.modalImage || document.getElementById('modalImage');
     if (modalImage) {
-        modalImage.src = species.image_url || species.imageUrl || 'https://via.placeholder.com/400x300?text=No+Image';
+        modalImage.src = species.image_url || species.imageUrl || IMAGE_FALLBACK;
         modalImage.alt = species.common_name || species.commonName || 'Bird';
     }
 
@@ -80,10 +81,7 @@ export function openBirdModal(speciesId) {
         }
     }
 
-    // Re-render Lucide icons in modal
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
+    refreshIcons();
 
     // Show modal
     if (modal) {

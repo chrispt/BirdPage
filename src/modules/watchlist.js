@@ -1,5 +1,6 @@
 import { store } from '../state/store.js';
 import { DOM } from '../utils/dom.js';
+import { refreshIcons } from '../utils/icons.js';
 
 // Will be set by main.js to avoid circular dependency
 let renderCallback = null;
@@ -29,31 +30,26 @@ export function toggleWatchSpecies() {
 
     const speciesId = String(currentModalSpecies.species.id);
     const watchBtn = DOM.modalWatchBtn || document.getElementById('modalWatchBtn');
-    const watchedSpeciesIds = store.get('watchedSpeciesIds');
+    const newWatched = new Set(store.get('watchedSpeciesIds'));
 
-    if (watchedSpeciesIds.has(speciesId)) {
-        // Remove from watch list
-        watchedSpeciesIds.delete(speciesId);
+    if (newWatched.has(speciesId)) {
+        newWatched.delete(speciesId);
         if (watchBtn) {
             watchBtn.classList.remove('watching');
             watchBtn.innerHTML = '<i data-lucide="binoculars"></i> Add to Watch List';
         }
     } else {
-        // Add to watch list
-        watchedSpeciesIds.add(speciesId);
+        newWatched.add(speciesId);
         if (watchBtn) {
             watchBtn.classList.add('watching');
             watchBtn.innerHTML = '<i data-lucide="binoculars"></i> Remove from Watch List';
         }
     }
 
-    // Re-render Lucide icons in modal
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
+    refreshIcons();
 
-    // Update store (triggers localStorage persistence)
-    store.set('watchedSpeciesIds', watchedSpeciesIds);
+    // New Set reference ensures store detects the change and persists
+    store.set('watchedSpeciesIds', newWatched);
 
     // Re-render cards to update visual indicator
     if (renderCallback) {
@@ -74,26 +70,24 @@ export function toggleWatchFromCard(speciesId, event, buttonElement) {
 
     const btn = buttonElement ?? event?.currentTarget;
     const id = String(speciesId);
-    const watchedSpeciesIds = store.get('watchedSpeciesIds');
+    const newWatched = new Set(store.get('watchedSpeciesIds'));
 
-    if (watchedSpeciesIds.has(id)) {
-        watchedSpeciesIds.delete(id);
+    if (newWatched.has(id)) {
+        newWatched.delete(id);
         if (btn) {
             btn.classList.remove('watching');
             btn.title = 'Add to Watch List';
         }
     } else {
-        watchedSpeciesIds.add(id);
+        newWatched.add(id);
         if (btn) {
             btn.classList.add('watching');
             btn.title = 'Remove from Watch List';
         }
     }
 
-    // Update store (triggers localStorage persistence)
-    store.set('watchedSpeciesIds', watchedSpeciesIds);
-
-    // Local DOM change is already applied above, skip full re-render
+    // New Set reference ensures store detects the change and persists
+    store.set('watchedSpeciesIds', newWatched);
 }
 
 /**

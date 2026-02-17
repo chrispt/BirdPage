@@ -74,9 +74,11 @@ export function checkForWatchedSpecies(detections) {
 
     const notifiedWatchedSpecies = store.get('notifiedWatchedSpecies');
 
-    // Check each watched species
+    // Check each watched species — build a new Set to ensure store detects changes
+    const newNotified = new Set(notifiedWatchedSpecies);
+
     watchedSpeciesIds.forEach(watchedId => {
-        if (currentSpeciesIds.has(watchedId) && !notifiedWatchedSpecies.has(watchedId)) {
+        if (currentSpeciesIds.has(watchedId) && !newNotified.has(watchedId)) {
             const detection = detections.find(d => String(d.species?.id) === watchedId);
             if (detection) {
                 const speciesName = detection.species?.common_name ||
@@ -88,12 +90,12 @@ export function checkForWatchedSpecies(detections) {
                     showNotification(title, body);
                 }
                 sendPushoverNotification(title, body);
-                notifiedWatchedSpecies.add(watchedId);
+                newNotified.add(watchedId);
             }
         }
     });
 
-    store.set('notifiedWatchedSpecies', notifiedWatchedSpecies);
+    store.set('notifiedWatchedSpecies', newNotified);
 }
 
 /**

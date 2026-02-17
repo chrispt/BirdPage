@@ -17,31 +17,36 @@ export function setFetchDataCallback(callback) {
 }
 
 /**
- * Update the countdown display
+ * Update the countdown DOM element without modifying state
+ */
+function displayCountdown() {
+    const el = DOM.countdown || document.getElementById('countdown');
+    if (!el) return;
+
+    const minutes = Math.floor(countdownSeconds / 60);
+    const seconds = countdownSeconds % 60;
+
+    if (minutes > 0) {
+        el.textContent = `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+    } else {
+        el.textContent = `${seconds}s`;
+    }
+}
+
+/**
+ * Tick the countdown: display, then decrement
  */
 function updateCountdown() {
-    const el = DOM.countdown || document.getElementById('countdown');
-
     if (countdownSeconds <= 0) {
+        const el = DOM.countdown || document.getElementById('countdown');
         if (el) el.textContent = 'Refreshing...';
         countdownSeconds = REFRESH_INTERVAL_SECONDS;
 
-        // Trigger data fetch
         if (fetchDataCallback) {
             fetchDataCallback();
         }
     } else {
-        const minutes = Math.floor(countdownSeconds / 60);
-        const seconds = countdownSeconds % 60;
-
-        if (el) {
-            if (minutes > 0) {
-                el.textContent = `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
-            } else {
-                el.textContent = `${seconds}s`;
-            }
-        }
-
+        displayCountdown();
         countdownSeconds--;
     }
 }
@@ -96,8 +101,8 @@ export function handleVisibilityChange() {
                         fetchDataCallback();
                     }
                 } else {
-                    // Update the display immediately
-                    updateCountdown();
+                    // Update display only — don't decrement again
+                    displayCountdown();
                 }
             }
         }

@@ -32,22 +32,13 @@ describe('groupDetectionsBySpecies', () => {
 });
 
 describe('sortSpeciesData', () => {
+    // Use groupDetectionsBySpecies to build the Map so latestTimestamp is computed
     const createMap = () => {
-        const map = new Map();
-        map.set(1, {
-            species: { id: 1 },
-            detections: [
-                { timestamp: '2026-01-01T10:00:00Z' },
-                { timestamp: '2026-01-01T11:00:00Z' },
-            ]
-        });
-        map.set(2, {
-            species: { id: 2 },
-            detections: [
-                { timestamp: '2026-01-01T12:00:00Z' },
-            ]
-        });
-        return map;
+        return groupDetectionsBySpecies([
+            { species: { id: 1 }, timestamp: '2026-01-01T10:00:00Z', confidence: 0.8 },
+            { species: { id: 1 }, timestamp: '2026-01-01T11:00:00Z', confidence: 0.9 },
+            { species: { id: 2 }, timestamp: '2026-01-01T12:00:00Z', confidence: 0.7 },
+        ]);
     };
 
     it('sorts by count descending', () => {

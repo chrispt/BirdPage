@@ -61,9 +61,9 @@ export async function fetchDetections(hoursAgo = 24) {
 }
 
 /**
- * Group detections by species
+ * Group detections by species, computing aggregate stats in a single pass
  * @param {Array} detections - Array of detection objects
- * @returns {Map} Map of speciesId -> { species, detections }
+ * @returns {Map} Map of speciesId -> { species, detections, highestConfidence, latestTimestamp }
  */
 export function groupDetectionsBySpecies(detections) {
     const speciesMap = new Map();
@@ -75,11 +75,24 @@ export function groupDetectionsBySpecies(detections) {
         if (!speciesMap.has(speciesId)) {
             speciesMap.set(speciesId, {
                 species: detection.species,
-                detections: []
+                detections: [],
+                highestConfidence: 0,
+                latestTimestamp: null
             });
         }
 
-        speciesMap.get(speciesId).detections.push(detection);
+        const entry = speciesMap.get(speciesId);
+        entry.detections.push(detection);
+
+        const confidence = detection.confidence || 0;
+        if (confidence > entry.highestConfidence) {
+            entry.highestConfidence = confidence;
+        }
+
+        const timestamp = new Date(detection.timestamp);
+        if (!entry.latestTimestamp || timestamp > entry.latestTimestamp) {
+            entry.latestTimestamp = timestamp;
+        }
     });
 
     return speciesMap;
@@ -89,20 +102,19 @@ export function groupDetectionsBySpecies(detections) {
  * Sort species data for display
  * @param {Map} speciesMap - Map from groupDetectionsBySpecies
  * @param {string} sortMode - 'recent' or 'count'
- * @returns {Array} Sorted array of { species, detections }
+ * @returns {Array} Sorted array of { species, detections, highestConfidence, latestTimestamp }
  */
 export function sortSpeciesData(speciesMap, sortMode = 'recent') {
     const speciesArray = Array.from(speciesMap.values());
 
     if (sortMode === 'count') {
-        // Sort by detection count (descending)
         return speciesArray.sort((a, b) => b.detections.length - a.detections.length);
     }
 
-    // Sort by most recent detection (default)
+    // Sort by most recent detection using pre-computed latestTimestamp
     return speciesArray.sort((a, b) => {
-        const aLatest = new Date(a.detections[0]?.timestamp || 0);
-        const bLatest = new Date(b.detections[0]?.timestamp || 0);
+        const aLatest = a.latestTimestamp || new Date(0);
+        const bLatest = b.latestTimestamp || new Date(0);
         return bLatest - aLatest;
     });
 }
