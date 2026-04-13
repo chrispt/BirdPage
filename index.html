@@ -45,8 +45,8 @@
                             <div class="modal-stat-label">Detections (24h)</div>
                         </div>
                         <div class="modal-stat">
-                            <div id="modalHighestConf" class="modal-stat-value">0%</div>
-                            <div class="modal-stat-label">Match Confidence</div>
+                            <div id="modalHighestConf" class="modal-stat-value">--</div>
+                            <div class="modal-stat-label">Detection Score</div>
                         </div>
                         <div class="modal-stat">
                             <div id="modalLastSeen" class="modal-stat-value">--</div>
@@ -238,8 +238,8 @@
                     <div class="feature-item">
                         <span class="feature-icon">&#x2705;</span>
                         <div class="feature-info">
-                            <div class="feature-name">Clearer Confidence Labels</div>
-                            <div class="feature-desc">Detection confidence now shows Excellent, Good, or Fair based on match quality</div>
+                            <div class="feature-name">Detection Score</div>
+                            <div class="feature-desc">Now uses BirdWeather's composite score (0-10) with Excellent, Good, or Fair quality labels</div>
                         </div>
                     </div>
                     <div class="feature-item">
@@ -289,8 +289,8 @@
                     <span class="ribbon-stat-label">Latest</span>
                 </div>
                 <div class="ribbon-stat">
-                    <span class="ribbon-stat-value" id="topConfidence" aria-label="Highest detection confidence">--</span>
-                    <span class="ribbon-stat-label">Top Match</span>
+                    <span class="ribbon-stat-value" id="topConfidence" aria-label="Highest detection score">--</span>
+                    <span class="ribbon-stat-label">Top Score</span>
                 </div>
             </div>
             <div class="ribbon-meta">

@@ -16,9 +16,9 @@ export function updateStats(detections) {
         ? formatTime(new Date(latestDetection.timestamp))
         : '--';
 
-    // Get top confidence
-    const topConfidence = detections.length > 0
-        ? Math.max(...detections.map(d => d.confidence || 0))
+    // Get top score (BirdWeather composite score, 0-10)
+    const topScore = detections.length > 0
+        ? Math.max(...detections.map(d => d.score || 0))
         : 0;
 
     // Update DOM
@@ -37,8 +37,8 @@ export function updateStats(detections) {
         latestTimeEl.textContent = latestTime;
     }
     if (topConfidenceEl) {
-        topConfidenceEl.textContent = topConfidence > 0
-            ? `${(topConfidence * 100).toFixed(0)}%`
+        topConfidenceEl.textContent = topScore > 0
+            ? topScore.toFixed(1)
             : '--';
     }
 }

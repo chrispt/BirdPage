@@ -142,20 +142,47 @@
     font-weight: 600;
 }
 
-/* Confidence Bar */
-.confidence-bar {
+/* Score Bar */
+.score-bar {
     margin-top: 15px;
 }
 
-.confidence-label {
+.score-label {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 5px;
     font-size: 0.85rem;
     color: var(--text-secondary);
 }
 
-.confidence-track {
+.score-value-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.score-number {
+    font-weight: bold;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.score-max {
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+.score-tier {
+    font-size: 0.7rem;
+    padding: 2px 7px;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-left: 4px;
+}
+
+.score-track {
     height: 3px;
     background: var(--card-border);
     border-radius: 2px;
@@ -163,15 +190,14 @@
     position: relative;
 }
 
-.confidence-fill {
+.score-fill {
     height: 100%;
-    background: var(--accent);
     border-radius: 2px;
-    transition: width 0.5s ease;
+    transition: width 0.5s ease, background 0.3s ease;
     position: relative;
 }
 
-.confidence-fill::after {
+.score-fill::after {
     content: '';
     position: absolute;
     right: -3px;
@@ -179,7 +205,7 @@
     transform: translateY(-50%);
     width: 8px;
     height: 8px;
-    background: var(--accent);
+    background: inherit;
     border-radius: 50%;
     box-shadow: 0 0 0 2px var(--card-bg);
 }
@@ -279,13 +305,13 @@
     font-size: 0.9rem;
 }
 
-.detection-item-confidence {
+.detection-item-score {
     color: var(--accent);
     font-size: 0.85rem;
     font-weight: bold;
 }
 
-.detection-item-certainty {
+.detection-item-label {
     font-size: 0.8rem;
     padding: 3px 8px;
     border-radius: 10px;

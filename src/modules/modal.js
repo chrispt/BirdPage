@@ -1,7 +1,7 @@
 import { store } from '../state/store.js';
 import { DOM } from '../utils/dom.js';
 import { formatRelativeTime } from '../utils/formatting.js';
-import { getCornellGuideUrl, getCornellSoundsUrl, getCornellMapUrl, IMAGE_FALLBACK } from '../config/constants.js';
+import { getCornellGuideUrl, getCornellSoundsUrl, getCornellMapUrl, IMAGE_FALLBACK, SCORE_TIERS } from '../config/constants.js';
 import { isSpeciesWatched } from './watchlist.js';
 import { closeSettingsModal } from './settings.js';
 import { refreshIcons } from '../utils/icons.js';
@@ -48,7 +48,12 @@ export function openBirdModal(speciesId) {
         modalDetectionCount.textContent = speciesData.detections.length;
     }
     if (modalHighestConf) {
-        modalHighestConf.textContent = `${(speciesData.highestConfidence * 100).toFixed(0)}%`;
+        const score = speciesData.highestScore;
+        let tierLabel = SCORE_TIERS.POOR.label;
+        if (score >= SCORE_TIERS.EXCELLENT.min) tierLabel = SCORE_TIERS.EXCELLENT.label;
+        else if (score >= SCORE_TIERS.GOOD.min) tierLabel = SCORE_TIERS.GOOD.label;
+        else if (score >= SCORE_TIERS.FAIR.min) tierLabel = SCORE_TIERS.FAIR.label;
+        modalHighestConf.textContent = `${score.toFixed(1)} — ${tierLabel}`;
     }
     if (modalLastSeen) {
         modalLastSeen.textContent = formatRelativeTime(speciesData.latestTimestamp);

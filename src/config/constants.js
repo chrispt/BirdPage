@@ -15,15 +15,15 @@ export const STALE_THRESHOLD_MINUTES = 30;
 export const OFFLINE_THRESHOLD_MINUTES = 60;
 
 // Detection Filtering
-export const CONFIDENCE_THRESHOLD = 0.75; // 75%
+export const SCORE_THRESHOLD = 6.0; // Minimum BirdWeather composite score (0-10)
 export const HIGH_CERTAINTY_LEVELS = ['almost_certain', 'highly_likely', 'likely'];
 
-// Confidence Level Display Configuration
-export const CONFIDENCE_LEVELS = {
-    ALMOST_CERTAIN: { min: 0.9, label: 'Almost Certain', color: '#4ecca3' },
-    HIGHLY_LIKELY: { min: 0.75, label: 'Highly Likely', color: '#45b7aa' },
-    LIKELY: { min: 0.5, label: 'Likely', color: '#f59e0b' },
-    UNCERTAIN: { min: 0, label: 'Uncertain', color: '#a8a8a8' }
+// Score Display Configuration (BirdWeather composite score, 0-10 scale)
+export const SCORE_TIERS = {
+    EXCELLENT: { min: 8.0, label: 'Excellent', color: '#3a7d5c' },
+    GOOD: { min: 6.0, label: 'Good', color: '#5ba87a' },
+    FAIR: { min: 4.0, label: 'Fair', color: '#c4873a' },
+    POOR: { min: 0, label: 'Poor', color: '#a8a8a8' }
 };
 
 // LocalStorage Keys

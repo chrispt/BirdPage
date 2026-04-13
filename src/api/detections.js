@@ -2,7 +2,7 @@ import {
     API_BASE,
     STATION_TOKEN,
     HIGH_CERTAINTY_LEVELS,
-    CONFIDENCE_THRESHOLD
+    SCORE_THRESHOLD
 } from '../config/constants.js';
 import { fetchWithErrorHandling } from './client.js';
 import { fetchStationInfo } from './station.js';
@@ -48,8 +48,8 @@ export async function fetchDetections(hoursAgo = 24) {
         const detectionDate = new Date(d.timestamp);
         const isRecent = detectionDate >= fromDateTime;
         const isHighCertainty = HIGH_CERTAINTY_LEVELS.includes(d.certainty);
-        const isHighConfidence = (d.confidence || 0) >= CONFIDENCE_THRESHOLD;
-        return isRecent && isHighCertainty && isHighConfidence;
+        const meetsScoreThreshold = (d.score || 0) >= SCORE_THRESHOLD;
+        return isRecent && isHighCertainty && meetsScoreThreshold;
     });
 
     return {
@@ -63,7 +63,7 @@ export async function fetchDetections(hoursAgo = 24) {
 /**
  * Group detections by species, computing aggregate stats in a single pass
  * @param {Array} detections - Array of detection objects
- * @returns {Map} Map of speciesId -> { species, detections, highestConfidence, latestTimestamp }
+ * @returns {Map} Map of speciesId -> { species, detections, highestScore, latestTimestamp }
  */
 export function groupDetectionsBySpecies(detections) {
     const speciesMap = new Map();
@@ -76,7 +76,7 @@ export function groupDetectionsBySpecies(detections) {
             speciesMap.set(speciesId, {
                 species: detection.species,
                 detections: [],
-                highestConfidence: 0,
+                highestScore: 0,
                 latestTimestamp: null
             });
         }
@@ -84,9 +84,9 @@ export function groupDetectionsBySpecies(detections) {
         const entry = speciesMap.get(speciesId);
         entry.detections.push(detection);
 
-        const confidence = detection.confidence || 0;
-        if (confidence > entry.highestConfidence) {
-            entry.highestConfidence = confidence;
+        const score = detection.score || 0;
+        if (score > entry.highestScore) {
+            entry.highestScore = score;
         }
 
         const timestamp = new Date(detection.timestamp);
@@ -102,7 +102,7 @@ export function groupDetectionsBySpecies(detections) {
  * Sort species data for display
  * @param {Map} speciesMap - Map from groupDetectionsBySpecies
  * @param {string} sortMode - 'recent' or 'count'
- * @returns {Array} Sorted array of { species, detections, highestConfidence, latestTimestamp }
+ * @returns {Array} Sorted array of { species, detections, highestScore, latestTimestamp }
  */
 export function sortSpeciesData(speciesMap, sortMode = 'recent') {
     const speciesArray = Array.from(speciesMap.values());

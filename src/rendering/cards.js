@@ -4,21 +4,18 @@ import { formatRelativeTime, escapeHtml } from '../utils/formatting.js';
 import { isSpeciesWatched } from '../modules/watchlist.js';
 import { groupDetectionsBySpecies, sortSpeciesData } from '../api/detections.js';
 import { getEmptyStateHTML } from './skeleton.js';
-import { IMAGE_FALLBACK } from '../config/constants.js';
+import { IMAGE_FALLBACK, SCORE_TIERS } from '../config/constants.js';
 
 let isInitialLoad = true;
 
 /**
- * Get confidence level info (label and color)
+ * Get score tier info (label and color) from BirdWeather composite score (0-10)
  */
-export function getConfidenceInfo(confidence) {
-    const percent = confidence * 100;
-    if (percent >= 90) {
-        return { label: 'Excellent', color: '#3a7d5c' };
-    } else if (percent >= 75) {
-        return { label: 'Good', color: '#5ba87a' };
-    }
-    return { label: 'Fair', color: '#c4873a' };
+export function getScoreInfo(score) {
+    if (score >= SCORE_TIERS.EXCELLENT.min) return SCORE_TIERS.EXCELLENT;
+    if (score >= SCORE_TIERS.GOOD.min) return SCORE_TIERS.GOOD;
+    if (score >= SCORE_TIERS.FAIR.min) return SCORE_TIERS.FAIR;
+    return SCORE_TIERS.POOR;
 }
 
 /**
@@ -39,8 +36,8 @@ export function toggleDetectionsList(speciesId) {
  */
 function buildDetectionItemHTML(detection) {
     const timestamp = new Date(detection.timestamp);
-    const confidence = detection.confidence || 0;
-    const confInfo = getConfidenceInfo(confidence);
+    const score = detection.score || 0;
+    const scoreInfo = getScoreInfo(score);
 
     return `
         <a href="https://app.birdweather.com/detections/${detection.id}"
@@ -49,9 +46,9 @@ function buildDetectionItemHTML(detection) {
            class="detection-item"
            data-action="external-link">
             <span class="detection-item-time">${formatRelativeTime(timestamp)}</span>
-            <span class="detection-item-confidence">${(confidence * 100).toFixed(1)}%</span>
-            <span class="detection-item-certainty" style="background: ${confInfo.color}20; color: ${confInfo.color}">
-                ${confInfo.label}
+            <span class="detection-item-score">${score.toFixed(1)}</span>
+            <span class="detection-item-label" style="background: ${scoreInfo.color}20; color: ${scoreInfo.color}">
+                ${scoreInfo.label}
             </span>
         </a>
     `;
@@ -117,13 +114,19 @@ function buildSpeciesCardHTML(item, isFeatured = false) {
                     <span class="meta-tag">Last seen: ${formatRelativeTime(item.latestTimestamp)}</span>
                 </div>
 
-                <div class="confidence-bar">
-                    <div class="confidence-label">
-                        <span>Match Confidence</span>
-                        <span>${(item.highestConfidence * 100).toFixed(1)}%</span>
+                <div class="score-bar">
+                    <div class="score-label">
+                        <span>Detection Score</span>
+                        <span class="score-value-group">
+                            <span class="score-number">${item.highestScore.toFixed(1)}</span>
+                            <span class="score-max">/ 10</span>
+                            <span class="score-tier" style="background: ${getScoreInfo(item.highestScore).color}20; color: ${getScoreInfo(item.highestScore).color}">
+                                ${getScoreInfo(item.highestScore).label}
+                            </span>
+                        </span>
                     </div>
-                    <div class="confidence-track">
-                        <div class="confidence-fill" style="width: ${item.highestConfidence * 100}%"></div>
+                    <div class="score-track">
+                        <div class="score-fill" style="width: ${item.highestScore * 10}%; background: ${getScoreInfo(item.highestScore).color}"></div>
                     </div>
                 </div>
 
