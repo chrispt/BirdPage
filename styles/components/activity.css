@@ -140,66 +140,6 @@
     white-space: nowrap;
 }
 
-/* ─── Day-of-week horizontal bar chart ─── */
-
-.activity-day-chart {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 12px;
-}
-
-.activity-day-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.activity-day-label {
-    width: 32px;
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    color: var(--text-secondary);
-    text-align: right;
-    flex-shrink: 0;
-}
-
-.activity-day-track {
-    flex: 1;
-    height: 18px;
-    background: var(--card-bg);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.activity-day-fill {
-    height: 100%;
-    width: var(--bar-width, 0%);
-    background: var(--accent);
-    border-radius: 4px;
-    transition: width 0.5s ease;
-    opacity: 0.7;
-}
-
-.activity-row--peak .activity-day-fill {
-    background: var(--accent-warm);
-    opacity: 1;
-}
-
-.activity-day-count {
-    width: 24px;
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    color: var(--text-secondary);
-    text-align: right;
-    flex-shrink: 0;
-}
-
-.activity-row--peak .activity-day-count {
-    color: var(--accent-warm);
-    font-weight: 600;
-}
-
 /* ─── Footnote ─── */
 
 .activity-footnote {

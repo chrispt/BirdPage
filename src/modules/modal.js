@@ -255,8 +255,11 @@ export async function toggleActivityAnalysis() {
         return;
     }
 
+    const ANALYSIS_DAYS = 14;
+    const totalWindows = ANALYSIS_DAYS * 2; // 12-hour windows
+
     // Show loading
-    content.innerHTML = buildActivityLoadingHTML(0, 7);
+    content.innerHTML = buildActivityLoadingHTML(0, totalWindows);
 
     // Abort any previous fetch
     const prevController = store.get('activityAbortController');
@@ -267,7 +270,7 @@ export async function toggleActivityAnalysis() {
 
     try {
         const { detections, possibleTruncation } = await fetchHistoricalDetections(speciesId, {
-            days: 7,
+            days: ANALYSIS_DAYS,
             signal: controller.signal,
             onProgress: (completed, total) => {
                 // Update loading progress if still visible

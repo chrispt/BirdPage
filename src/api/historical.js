@@ -2,34 +2,37 @@ import { API_BASE, STATION_TOKEN } from '../config/constants.js';
 import { fetchWithErrorHandling } from './client.js';
 
 const DELAY_MS = 300;
+const WINDOW_HOURS = 12;
 
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
- * Fetch historical detections for a specific species using sliding 24-hour windows.
- * Makes one API request per day going back `days` days.
+ * Fetch historical detections for a specific species using sliding time windows.
+ * Uses 12-hour windows to stay under the API's 100-result cap per request.
  *
  * @param {string} speciesId - The species ID to filter for
  * @param {Object} options
- * @param {number} options.days - Number of days to look back (default: 7)
+ * @param {number} options.days - Number of days to look back (default: 14)
  * @param {AbortSignal} options.signal - AbortController signal for cancellation
  * @param {function} options.onProgress - Called with (completedRequests, totalRequests)
  * @returns {Promise<{detections: Array, possibleTruncation: boolean}>}
  */
-export async function fetchHistoricalDetections(speciesId, { days = 7, signal, onProgress } = {}) {
+export async function fetchHistoricalDetections(speciesId, { days = 14, signal, onProgress } = {}) {
     const allDetections = [];
     let possibleTruncation = false;
     const now = new Date();
 
-    for (let dayOffset = 0; dayOffset < days; dayOffset++) {
+    const totalWindows = days * (24 / WINDOW_HOURS);
+
+    for (let windowIndex = 0; windowIndex < totalWindows; windowIndex++) {
         if (signal?.aborted) {
             throw new DOMException('Aborted', 'AbortError');
         }
 
-        const windowStart = new Date(now.getTime() - (dayOffset + 1) * 24 * 60 * 60 * 1000);
-        const windowEnd = new Date(now.getTime() - dayOffset * 24 * 60 * 60 * 1000);
+        const windowStart = new Date(now.getTime() - (windowIndex + 1) * WINDOW_HOURS * 60 * 60 * 1000);
+        const windowEnd = new Date(now.getTime() - windowIndex * WINDOW_HOURS * 60 * 60 * 1000);
         const fromISO = windowStart.toISOString();
         const url = `${API_BASE}/stations/${STATION_TOKEN}/detections?limit=100&from=${fromISO}`;
 
@@ -39,13 +42,11 @@ export async function fetchHistoricalDetections(speciesId, { days = 7, signal, o
         });
 
         if (error) {
-            // If aborted, re-throw so callers can distinguish
             if (error.message?.includes('abort')) {
                 throw new DOMException('Aborted', 'AbortError');
             }
-            // Skip failed windows but continue
-            console.warn(`Historical fetch failed for day -${dayOffset + 1}:`, error.message);
-            onProgress?.(dayOffset + 1, days);
+            console.warn(`Historical fetch failed for window ${windowIndex + 1}:`, error.message);
+            onProgress?.(windowIndex + 1, totalWindows);
             continue;
         }
 
@@ -64,10 +65,10 @@ export async function fetchHistoricalDetections(speciesId, { days = 7, signal, o
             allDetections.push(...speciesDetections);
         }
 
-        onProgress?.(dayOffset + 1, days);
+        onProgress?.(windowIndex + 1, totalWindows);
 
         // Polite delay between requests (skip after last)
-        if (dayOffset < days - 1) {
+        if (windowIndex < totalWindows - 1) {
             await delay(DELAY_MS);
         }
     }
