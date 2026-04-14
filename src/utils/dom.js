@@ -58,7 +58,11 @@ export const DOM = {
     notificationBody: null,
 
     // What's New
-    whatsNewBox: null
+    whatsNewBox: null,
+
+    // Activity Analysis
+    modalActivityToggle: null,
+    modalActivityContent: null
 };
 
 /**
@@ -121,6 +125,10 @@ export function initDOMCache() {
 
     // What's New
     DOM.whatsNewBox = document.getElementById('whatsNewBox');
+
+    // Activity Analysis
+    DOM.modalActivityToggle = document.getElementById('modalActivityToggle');
+    DOM.modalActivityContent = document.getElementById('modalActivityContent');
 }
 
 /**
