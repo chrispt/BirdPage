@@ -33,7 +33,11 @@ const initialState = {
 
     // Notification Tracking (session only, not persisted)
     previousSpeciesIds: new Set(),
-    notifiedWatchedSpecies: new Set()
+    notifiedWatchedSpecies: new Set(),
+
+    // Activity Analysis (session only)
+    activityCache: {},
+    activityAbortController: null
 };
 
 // Keys that should be persisted to localStorage

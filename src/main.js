@@ -31,7 +31,8 @@ import {
     closeBirdModal,
     playBirdCall,
     openRangeMap,
-    setupModalKeyboardHandling
+    setupModalKeyboardHandling,
+    toggleActivityAnalysis
 } from './modules/modal.js';
 import {
     toggleWatchSpecies,
@@ -161,6 +162,23 @@ function setupInlineEventListeners() {
     const modalWatchBtn = document.getElementById('modalWatchBtn');
     if (modalWatchBtn) {
         modalWatchBtn.addEventListener('click', toggleWatchSpecies);
+    }
+
+    // Activity analysis toggle
+    const modalActivityToggle = document.getElementById('modalActivityToggle');
+    if (modalActivityToggle) {
+        modalActivityToggle.addEventListener('click', toggleActivityAnalysis);
+    }
+
+    // Activity retry (delegated since button is dynamically rendered)
+    const modalActivityContent = document.getElementById('modalActivityContent');
+    if (modalActivityContent) {
+        modalActivityContent.addEventListener('click', (e) => {
+            if (e.target.closest('[data-action="retry-activity"]')) {
+                toggleActivityAnalysis(); // collapse
+                toggleActivityAnalysis(); // re-expand triggers fresh fetch
+            }
+        });
     }
 
     // What's New header toggle

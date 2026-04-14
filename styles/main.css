@@ -3,6 +3,7 @@
 @import './components/status-bar.css';
 @import './components/cards.css';
 @import './components/modal.css';
+@import './components/activity.css';
 @import './components/notifications.css';
 @import './components/settings.css';
 @import './components/skeleton.css';

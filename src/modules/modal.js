@@ -1,10 +1,19 @@
 import { store } from '../state/store.js';
 import { DOM } from '../utils/dom.js';
 import { formatRelativeTime } from '../utils/formatting.js';
-import { getCornellGuideUrl, getCornellSoundsUrl, getCornellMapUrl, IMAGE_FALLBACK, SCORE_TIERS } from '../config/constants.js';
+import { getCornellGuideUrl, getCornellSoundsUrl, getCornellMapUrl, IMAGE_FALLBACK, SCORE_TIERS, REFRESH_INTERVAL_SECONDS } from '../config/constants.js';
 import { isSpeciesWatched } from './watchlist.js';
 import { closeSettingsModal } from './settings.js';
 import { refreshIcons } from '../utils/icons.js';
+import { fetchHistoricalDetections } from '../api/historical.js';
+import {
+    buildActivityChartsHTML,
+    buildActivityLoadingHTML,
+    buildActivityEmptyHTML,
+    buildActivityErrorHTML
+} from '../rendering/activityChart.js';
+
+const CACHE_TTL_MS = REFRESH_INTERVAL_SECONDS * 1000;
 
 /**
  * Open the bird details modal for a species
@@ -86,6 +95,9 @@ export function openBirdModal(speciesId) {
         }
     }
 
+    // Reset activity section to collapsed
+    resetActivitySection();
+
     refreshIcons();
 
     // Show modal
@@ -106,6 +118,13 @@ export function openBirdModal(speciesId) {
  */
 export function closeBirdModal(event) {
     if (event && event.target !== event.currentTarget) return;
+
+    // Abort any in-flight activity fetch
+    const controller = store.get('activityAbortController');
+    if (controller) {
+        controller.abort();
+        store.set('activityAbortController', null);
+    }
 
     const modal = DOM.birdModal || document.getElementById('birdModal');
     if (modal) {
@@ -186,6 +205,107 @@ export function setupModalKeyboardHandling() {
             trapFocusInModal(settingsModal, e);
         }
     });
+}
+
+/**
+ * Reset the activity section to its collapsed state
+ */
+function resetActivitySection() {
+    const toggle = DOM.modalActivityToggle || document.getElementById('modalActivityToggle');
+    const content = DOM.modalActivityContent || document.getElementById('modalActivityContent');
+
+    if (toggle) toggle.classList.remove('expanded');
+    if (content) {
+        content.classList.remove('expanded');
+        content.innerHTML = '';
+    }
+}
+
+/**
+ * Toggle the activity analysis panel — fetch data if needed, then show/hide
+ */
+export async function toggleActivityAnalysis() {
+    const currentSpecies = store.get('currentModalSpecies');
+    if (!currentSpecies) return;
+
+    const toggle = DOM.modalActivityToggle || document.getElementById('modalActivityToggle');
+    const content = DOM.modalActivityContent || document.getElementById('modalActivityContent');
+    if (!toggle || !content) return;
+
+    const isExpanded = toggle.classList.contains('expanded');
+
+    // Collapse
+    if (isExpanded) {
+        toggle.classList.remove('expanded');
+        content.classList.remove('expanded');
+        return;
+    }
+
+    // Expand
+    toggle.classList.add('expanded');
+    content.classList.add('expanded');
+
+    const speciesId = currentSpecies.species.id;
+
+    // Check cache
+    const cache = store.get('activityCache');
+    const cached = cache[speciesId];
+    if (cached && (Date.now() - cached.fetchedAt) < CACHE_TTL_MS) {
+        renderActivityResult(content, cached.detections, cached.possibleTruncation);
+        return;
+    }
+
+    // Show loading
+    content.innerHTML = buildActivityLoadingHTML(0, 7);
+
+    // Abort any previous fetch
+    const prevController = store.get('activityAbortController');
+    if (prevController) prevController.abort();
+
+    const controller = new AbortController();
+    store.set('activityAbortController', controller);
+
+    try {
+        const { detections, possibleTruncation } = await fetchHistoricalDetections(speciesId, {
+            days: 7,
+            signal: controller.signal,
+            onProgress: (completed, total) => {
+                // Update loading progress if still visible
+                if (content.classList.contains('expanded')) {
+                    content.innerHTML = buildActivityLoadingHTML(completed, total);
+                }
+            }
+        });
+
+        // Cache the result
+        const updatedCache = { ...store.get('activityCache') };
+        updatedCache[speciesId] = { detections, possibleTruncation, fetchedAt: Date.now() };
+        store.set('activityCache', updatedCache);
+
+        // Verify we're still showing the same species
+        const stillCurrent = store.get('currentModalSpecies');
+        if (stillCurrent?.species?.id !== speciesId) return;
+
+        renderActivityResult(content, detections, possibleTruncation);
+
+    } catch (err) {
+        if (err.name === 'AbortError') return; // User closed modal, nothing to do
+        console.error('Activity analysis failed:', err);
+        content.innerHTML = buildActivityErrorHTML(err.message);
+    } finally {
+        store.set('activityAbortController', null);
+    }
+}
+
+/**
+ * Render activity charts or empty state into the content container
+ */
+function renderActivityResult(content, detections, possibleTruncation) {
+    if (detections.length === 0) {
+        content.innerHTML = buildActivityEmptyHTML();
+    } else {
+        content.innerHTML = buildActivityChartsHTML(detections, possibleTruncation);
+    }
 }
 
 /**
