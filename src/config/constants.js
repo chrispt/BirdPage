@@ -15,13 +15,13 @@ export const STALE_THRESHOLD_MINUTES = 30;
 export const OFFLINE_THRESHOLD_MINUTES = 60;
 
 // Detection Filtering
-export const SCORE_THRESHOLD = 6.0; // Minimum BirdWeather composite score (0-10)
+export const SCORE_THRESHOLD = 7.0; // Minimum BirdWeather composite score (0-10)
 export const HIGH_CERTAINTY_LEVELS = ['almost_certain', 'highly_likely', 'likely'];
 
 // Score Display Configuration (BirdWeather composite score, 0-10 scale)
 export const SCORE_TIERS = {
     EXCELLENT: { min: 8.0, label: 'Excellent', color: '#3a7d5c' },
-    GOOD: { min: 6.0, label: 'Good', color: '#5ba87a' },
+    GOOD: { min: 7.0, label: 'Good', color: '#5ba87a' },
     FAIR: { min: 4.0, label: 'Fair', color: '#c4873a' },
     POOR: { min: 0, label: 'Poor', color: '#a8a8a8' }
 };
