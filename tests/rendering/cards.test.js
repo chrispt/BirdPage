@@ -20,13 +20,13 @@ describe('getScoreInfo', () => {
         expect(result.color).toBe('#5ba87a');
     });
 
-    it('returns Good for exactly 6.0', () => {
-        const result = getScoreInfo(6.0);
+    it('returns Good for exactly 7.0', () => {
+        const result = getScoreInfo(7.0);
         expect(result.label).toBe('Good');
     });
 
-    it('returns Fair for score >= 4.0 and < 6.0', () => {
-        const result = getScoreInfo(5.0);
+    it('returns Fair for score >= 4.0 and < 7.0', () => {
+        const result = getScoreInfo(6.0);
         expect(result.label).toBe('Fair');
         expect(result.color).toBe('#c4873a');
     });
