@@ -88,11 +88,9 @@ async function fetchData() {
             updatePucStatus(stationInfo.latestDetectionAt);
         }
 
-        // Update location from first detection
-        if (rawDetections && rawDetections.length > 0) {
-            const firstDetection = rawDetections[0];
-            updateLocationDisplay(firstDetection.lat, firstDetection.lon);
-        }
+        // Update location from the station record, falling back to detection coordinates
+        updateLocationDisplay(stationInfo, rawDetections)
+            .catch(err => console.error('Error updating location display:', err));
 
         // Update stats
         updateStats(detections);

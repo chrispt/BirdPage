@@ -1,6 +1,6 @@
 import { DOM } from '../utils/dom.js';
 import { formatTime, formatRelativeTime, parseStationTimestamp } from '../utils/formatting.js';
-import { formatLocationDisplay } from '../utils/location.js';
+import { resolveLocationDisplay } from '../utils/location.js';
 import { STALE_THRESHOLD_MINUTES, OFFLINE_THRESHOLD_MINUTES } from '../config/constants.js';
 
 /**
@@ -96,12 +96,15 @@ export function updatePucStatus(latestDetectionAt) {
 }
 
 /**
- * Update the location display
+ * Update the location display from the station record, falling back to
+ * the most recent detection's coordinates
+ * @param {object|null} stationInfo - Station record from the BirdWeather API
+ * @param {Array} rawDetections - Unfiltered detections, most recent first
  */
-export function updateLocationDisplay(lat, lon) {
+export async function updateLocationDisplay(stationInfo, rawDetections) {
     const locationDisplay = DOM.locationDisplay || document.getElementById('locationDisplay');
 
     if (!locationDisplay) return;
 
-    locationDisplay.textContent = formatLocationDisplay(lat, lon);
+    locationDisplay.textContent = await resolveLocationDisplay(stationInfo, rawDetections);
 }
